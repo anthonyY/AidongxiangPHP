@@ -1,0 +1,86 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>充值</title>
+<style>
+    body{
+        padding-bottom: 90px;
+        background-color: #f0f0f5; 
+        position: relative;
+    }
+
+</style>
+<html>
+<body>
+       <div class="wallet">
+           <img src=" <?php echo ROOT_PATH.UPLOAD_PATH.'images/portrait.png' ;?>" alt="">
+           <div class="font_color_055773 name"><?php echo $top_up['top_content']?></div>
+           <div class="rechargeable">
+               <p>现有余额：￥<?php echo $user['amount']?></p>
+               <?php if($moneys_array){?>
+               <table cellspacing="0">
+                   <tr>
+                       <td class="on"><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[0]?></span></a></td>
+                       <td><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[1]?></span></a></td>
+                   </tr>
+                   <tr>
+                       <td><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[2]?></span></a></td>
+                       <td><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[3]?></span></a></td>
+                   </tr>
+                   <tr>
+                       <td><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[4]?></span></a></td>
+                       <td><a href="javascript:(0)">￥<span><?php echo (float)$moneys_array[5]?></span></a></td>
+                   </tr>
+               </table>
+               <?php }?>
+           </div>
+           <div class="thank"><?php echo $top_up['bottom_content']?></div>
+           <br>
+           <button onclick="recharge()">充值</button> 
+       </div>
+</body>   
+</html>
+<script>
+$("table td").on("click",function(){
+    $(this).addClass('on').siblings().removeClass('on');
+    $(this).parents().siblings().children().removeClass('on');
+})
+
+function recharge(){
+	var price = $('.on>a>span').html();
+	var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxRecharge'));?>";
+	$.post(url,{price:price},function(result){
+		console.log(result);
+		if(result.code == 200){
+			WeixinJSBridge.invoke(
+					'getBrandWCPayRequest',
+					result,
+					function(res){
+						WeixinJSBridge.log(res.err_msg);
+						// alert(res.err_code+res.err_desc+res.err_msg);
+						if (res.err_msg.indexOf("ok") != -1) {
+							if (page_id) {
+								// 跳已完成页面
+								window.location.href = "";
+							}
+							else {
+								// 跳填写名片页面
+								window.location.href = "";
+							}
+						}
+					}
+				);	
+			return false;
+		}else{
+			alert(result.message);
+			return false;
+		}
+	},'json');
+	
+}
+</script>
+
+

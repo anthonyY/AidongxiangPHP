@@ -1,0 +1,100 @@
+<style>
+	.pagination ul li{
+		margin-left:5px;
+	}
+</style>
+<?php if ($this->pageCount): ?>
+<?php 
+$arr =array();
+foreach($condition as $k => $v){
+	if($v){
+         $arr[$k] =$v;
+    }
+}
+//	print_r($arr);die;
+$url_get='';
+if(count($condition['where'])>0){//提交的where参数用get参数传递 by Waydy
+	foreach($condition['where'] as $k=>$v){
+		if($url_get==''){
+			$url_get='?'.$k.'='.$v;
+		}else{
+			$url_get.='&'.$k.'='.$v;
+		}
+	}
+}
+?>
+    <div class="pagination pagination-centered">
+        <ul>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a <?php
+                			 if(isset($this->previous)){ 
+                			 	     $arr['page'] =$this->first;                			 	                 					
+                					echo 'href="'.$this->url($this->route,$arr).$url_get.'"';}
+                		?>>首页</a>
+			</li>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->previous)){ 
+                				    $arr['page']=$this->previous;               				
+                				echo 'href="'. $this->url($this->route, $arr).$url_get.'"';
+               			 }
+                		?>>上一页</a></li>
+
+
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $page): ?>
+            		<?php $arr['page'] = $page; ?>
+                <li <?php echo $page == $this->current ? 'class="active"' : ''; ?>><a <?php if($page != $this->current){ echo 'href="'.$this->url($this->route, $arr).$url_get.'"';} ?>>
+                        <?php echo $page; ?>
+                    </a></li>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->next)){
+                	$arr['page'] = $this->next;
+                	echo 'href="'. $this->url($this->route, $arr).$url_get.'"'; }
+                	?>>下一页</a></li>
+            <!-- Last page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->next)){
+                	$arr['page'] = $this->last;
+                	echo 'href="'. $this->url($this->route, $arr).$url_get.'"';}?>>尾页</a>
+			</li>
+        </ul>
+    </div>
+<script type="text/javascript">
+var url = '<?php echo $this->url($this->route,$arr)?>';
+var url_get = '<?php echo $url_get;?>';
+var page = $("#page").val();
+
+
+function strnum(str,val)
+{
+	var str=str;
+	var start=str.lastIndexOf('/p')+2;
+	var sub=str.substring(start,str.length);
+	var reg=new RegExp('^[0-9]+$','g'); 
+	if(reg.test(sub))
+	{
+		str.replace(str.substring(start,str.length),'');
+		str=str.substring(0,start)+val;
+
+	}
+	else
+	{
+		var last=str.indexOf('/',start);
+		str=str.substring(0,start)+val+str.substring(last,str.length);
+	}
+	window.location.href = str+url_get;
+
+}
+
+function submitPage(){
+	var page = $("#page").val();
+	 strnum(url,page);
+	 
+}
+
+</script>    
+    
+<?php endif; ?>

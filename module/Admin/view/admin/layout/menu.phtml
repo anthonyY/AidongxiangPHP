@@ -1,0 +1,327 @@
+<style>
+.up-icon{
+    width: 100px;
+    height: 30px;
+    margin-top: 10px !important;
+    position: relative !important;
+    z-index: 3 !important;
+    background: url('<?php echo $this->basePath().'/adminStyle/template/images/icon/upload.png';?>') no-repeat center;
+    background-size: 100px 30px !important;
+}
+</style>
+
+<?php
+//var_dump($_SESSION['role_nb_admin_manage']);die;
+$role = $_SESSION['role_nb_admin_manage'];
+if(isset($_SESSION['role_nb_admin_manage']) && $_SESSION['role_nb_admin_manage']){
+$menu = array(
+    array(
+        'show' => $role == 'all' || count(array_diff(array('Index'), $role)) < 1,
+        'icon' => 'logo.png',
+        'child'  => array(
+            array(
+                'childModule' => '主页',
+                'controller'  => 'Index',
+                'router'      => $this->url('admin', array('controller' => 'Index','action' => 'index')),
+                'show' => true,
+            ),
+        ),
+    ),
+    array(
+        'show' => $role == 'all' || count(array_diff(array('Index-addList'), $role)) < 1,
+        'icon' => '添加icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '新增',
+                'controller'  => 'Index',
+                'router'      => $this->url('admin', array('controller' => 'Index','action' => 'addList')),
+                'show' => true,
+            ),
+        ),
+    ),
+    array(
+        'show' => $role == 'all' || count(array_diff(array('ContentList-videoList', 'ContentList-videoList2','ContentList-coursesList','ContentList-teacherList','Ads-relation','System-sendWord','ContentList-share'), $role)) < 7,
+        'icon' => '内容列表icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '内容列表',
+                'controller'  => 'Manage',
+                'router'      => $this->url('admin', array('controller'=> 'Manage', 'action' => 'contentList')),
+                'show' => ($role == 'all') || count(array_diff(array('ContentList-videoList', 'ContentList-videoList2','ContentList-coursesList','ContentList-teacherList','Ads-relation','System-sendWord','ContentList-share'), $role)) < 7 ? true : false,
+            ),
+        ),
+    ),
+    array(
+        'show' => $role == 'all' || count(array_diff(array('Comment'), $role)) < 1,
+        'icon' => '评价管理icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '评论管理',
+                'controller'  => 'Comment',
+                'router'      => $this->url('admin', array('controller'=> 'Comment', 'action' => 'index')),
+                'show' =>   true,
+            ),
+        ),
+    ),
+    array(
+        'show' => $role == 'all' || count(array_diff(array('Feedback'), $role)) < 1,
+        'icon' => '意见反馈icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '意见反馈',
+                'controller'  => 'Feedback',
+                'router'      => $this->url('admin', array('controller'=> 'Feedback', 'action' => 'index')),
+                'show' => ($role == 'all') || in_array('Feedback', $role) ? true : false,
+            ),
+        ),
+    ),
+    array(
+        'show' => $role == 'all' || count(array_diff(array('User'), $role)) < 1,
+        'icon' => '用户管理icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '用户管理',
+                'controller'  => 'User',
+                'router'      => $this->url('admin', array('controller'=> 'User', 'action' => 'index')),
+                'show' =>   true,
+            ),
+        ),
+    ),
+    /*array(
+        'show' => $role == 'all' || count(array_diff(array('User'), $role)) < 1,
+        'icon' => '用户管理icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '详情列表',
+                'controller'  => 'Detail',
+                'router'      => $this->url('admin', array('controller'=> 'Detail', 'action' => 'index')),
+                'show' =>   true,
+            ),
+        ),
+    ),*/
+  
+    
+    array(
+        'show' => $role == 'all' || count(array_diff(array('Order'), $role)) < 1,
+        'icon' => '财务管理icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '财务管理',
+                'controller'  => 'Order',
+                'router'      => $this->url('admin', array('controller'=> 'Order', 'action' => 'index')),
+                'show' => ($role == 'all') || in_array('Order', $role) ? true : false,
+            ),
+        ),
+    ),
+   
+    array(
+        'show' => $role == 'all' || count(array_diff(array('System-userHelp', 'System-userJob', 'System-system','System-marketing', 'System-distribution', 'System-userHelp2', 'System-category', 'System-setMember','System-index','System-setTopUp','System-protocol','System-role','System-roleList',), $role)) < 11,
+        'icon' => '设置icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '系统设置',
+                'controller'  => 'System',
+                'router'      => $this->url('admin', array('controller'=> 'Manage', 'action' => 'index')),
+                'show' => ($role == 'all') || count(array_diff(array('System-userHelp', 'System-userJob', 'System-system','System-marketing','System-distribution','System-userHelp2', 'System-category', 'System-setMember','System-index','System-setTopUp','System-protocol','System-role','System-roleList',), $role)) < 11 ? true : false,
+            ),
+        ),
+    ),
+
+    array(
+        'show' => $role == 'all' || count(array_diff(array('GroupMember'), $role)) < 1,
+        'icon' => '集团会员icon.png',
+        'child'  => array(
+            array(
+                'childModule' => '集团会员',
+                'controller'  => 'GroupMember',
+                'router'      => $this->url('admin', array('controller'=> 'GroupMember', 'action' => 'index')),
+                'show' => ($role == 'all') || in_array('GroupMember', $role) ? true : false,
+            ),
+        ),
+    ),
+);
+}else{
+    $menu = array();
+}
+?>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse"
+               data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="<?php echo $this->url('admin', array('controller' => 'index')) ?>">
+                <span>一起聚餐后台</span>
+            </a>
+            <!-- user dropdown starts -->
+            <div class="btn-group pull-right">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="icon-user"></i>
+                    <span class="hidden-phone"><?php echo $_SESSION['role_nb_admin_name'] ?></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                     <li><a href="#" data-toggle="modal" data-target="#myModalPassword">修改密码</a></li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="<?php echo $this->url('admin',array('controller' => 'admin', 'action'=>'logout'));?>">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <!-- 菜单 -->
+    <div class="row-fluid">
+        <!-- left menu starts -->
+        <div class="span2 main-menu-span">
+            <div class="well nav-collapse sidebar-nav">
+                <ul class="nav nav-tabs nav-stacked main-menu">
+        <?php foreach($menu as $key =>$val) {?>                   
+            <?php foreach($val['child'] as $v) {?>
+                    <li class="">
+                        <a class="ajax-link" href="<?php echo $v['router'];?>"<?php echo $key?'':'style="text-align:center;"'?>>
+                        <?php if(!$key){?>
+                        <img src="<?php echo $this->basepath().'/adminStyle/images/'.$val['icon'];?>"  width="60" height="60" alt="">
+                        <?php }else{?>
+                        <img src="<?php echo $this->basepath().'/adminStyle/images/'.$val['icon'];?>"  width="16" height="16" alt="">
+<!--                             <i class="icon-home"></i> -->
+                            <span class="hidden-tablet"><?php echo $v['childModule'];?><?php echo isset($v['count']) ? '('.$v['count'].')' : '';?></span>
+                       <?php }?>
+                        </a>
+                    </li>
+            <?php }?>
+        <?php  }?>
+                    <!--
+                    <li class="">
+                        <a class="ajax-link" href="<?php echo $this->url('api-common', array('controller'=> 'Plan', 'action' => 'adsStatus'));?>"<?php echo $key?'':'style="text-align:center;"'?>>
+                        <img src="<?php echo $this->basepath().'/adminStyle/images/集团会员icon.png';?>"  width="16" height="16" alt="">
+                            <span class="hidden-tablet"><?php echo '定时任务轮播图';?></span>
+                        </a>
+                    </li>
+
+               <li class="">
+                        <a class="ajax-link" href="<?php echo $this->url('api-common', array('controller'=> 'Plan', 'action' => 'aduioStatus'));?>"<?php echo $key?'':'style="text-align:center;"'?>>
+                        <img src="<?php echo $this->basepath().'/adminStyle/images/集团会员icon.png';?>"  width="16" height="16" alt="">
+                            <span class="hidden-tablet"><?php echo '定时任务课程';?></span>
+                        </a>
+                    </li>
+      -->
+                </ul>
+            </div>
+        </div>
+        <div id="content" class="span10">
+            <?php echo $this->main;?>
+        </div>
+    </div>
+    <hr>
+    <footer>
+        <p class="pull-left">
+            &copy;
+            <a href="#" target="_blank"><?php echo PRODUCT_NAME;?>管理后台</a>
+            2017
+        </p>
+<?php /*
+        <p class="pull-right">
+            Powered by:
+            <a href="#" onclick="window.open('http://www.aiitec.com/')">爱特安为</a>
+        </p>
+*/?>
+    </footer>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal hide" id="myModalPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 300px;height: 305px;margin-top: -150px;top:45%;left:57%;overflow:visible;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true">
+                &times;
+				</button>
+				<div class="modal-title" id="myModalLabel">
+					<h3 style="text-align: center;">修改密码</h3>
+				</div>
+				<div class="modal-body">
+					<div class="mobile fm">
+						<label class="n-fl n-ll">旧密码：</label>
+						<input type="password" name="o-password" value="" >
+					</div>
+					<div class="pass fm">
+						<label class="n-fl">新密码：</label>
+						<input class="c-inp" type="password" name="n-password">
+					</div>
+					<div class="npass fm">
+						<label class="n-fl n-ll">再一次输入新密码：</label>
+						<input class="c-inp" type="password" name="tn-password">
+					</div>
+				</div>
+				<div class="remind" style="width: 100%; text-align: center;"></div>
+            
+            
+			</div><!-- /.modal-content -->
+			<div class="modal-footer">
+			    <button type="button" class="btn btn-primary fn" onclick="fn()">确定</button>
+				<button type="button" class="btn btn-default fn" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal -->
+	</div> 
+</div>
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript">
+        function h()
+        {
+            $(".remind").hide();
+        }
+
+        function j()
+        {
+            window.location.href="<?php echo $this->url('admin', array('controller' => 'admin','action' => 'logout'));?>";
+        }
+        function fn(){
+            var old = $.trim($("input[name='o-password']").val());
+            var new1 = $.trim($("input[name='n-password']").val());
+            var tnew = $.trim($("input[name='tn-password']").val());
+            var data = {old:old, new1:new1, tnew:tnew};
+            $(".remind").html("");
+            for(var p in data)
+            {
+                if(data[p]=='')
+                {
+                    $(".remind").show();
+                    $(".remind").html("<span style='color:red;'>请将字段填写完整</span>");
+                    setTimeout("h()",1000);
+                    return false;
+                }
+            }
+
+            $.post("<?php echo $this->url('admin', array('controller' => 'Admin', 'action' => 'change'));?>",data, function(d){
+                if(d.code==400)
+                {
+                    $(".remind").show();
+                    $(".remind").html("<span style='color:red;'>"+d.message+"</span>");
+                    setTimeout("h()",1000);
+                }
+                else if(d.code==200)
+                {
+                    $(".remind").show();
+                    alert(d.message+",请重新登录");
+//                     $(".remind").html(d.message+",请重新登录");
+                    var m= setTimeout("h()",500);
+                    clearTimeout(m);
+                    setTimeout("j()",500);
+
+                }
+            },'json')
+
+        }
+    </script>

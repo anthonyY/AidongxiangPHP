@@ -1,0 +1,271 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/home.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/api-request.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/weui.min.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/weui.css">
+<script src="<?php echo ROOT_PATH;?>webStyle/js/city-picker.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/jquery-weui.min.css">
+<script src="<?php echo ROOT_PATH;?>webStyle/js/jquery-weui.min.js"></script>
+<title>餐饮导师</title>
+<style>
+
+</style>
+<html>
+<body>
+    <div class="bgb"></div>
+    <div class="tutor_list" id="tutor_list">
+        <ul>
+        
+        </ul>
+    </div>
+    <!-- 完善资料 -->
+    <div class="perfect_data">
+    	<div class="title">
+    		可试听,请完善资料
+    	</div>
+    		<ul class="present_detail">
+                <li>
+                    <div>手机号码：<input id="mobile" type="text" placeholder="请输入您的手机号码" maxlength="11"></div>
+                </li>
+                <li>
+                    <div>短信验证：<input id="captcha" type="text" placeholder="请输入短信验证码"><a href="javascript:(0);" class="gain_verification">获取验证码</a></div>
+
+
+                </li>
+                <li class="select">
+                    <a href="javascript:(0);" id="showPicker">
+                    <div>职位：
+                    <span id='position' position_id="<?php echo $user['current_position_id'] ? $user['current_position_id'] : 0?>">
+                      <?php echo $user['position_name']?>
+                    </span></div></a>
+                </li>
+                <li class="select">
+                    <div>地区：<input class="weui_input" type="text" value="" id='region' style="text-align:right"/></div>
+                </li>
+            </ul>
+            <div>
+            <ul class="operation">
+
+                <li><a href="javascript:(0);" class="affirm"><p>完成</p></a></li>
+            </ul>
+    		</div>
+    </div>
+</body>   
+</html>
+<script>
+$("#region").cityPicker({
+   title: "选择省市",
+   showDistrict: false,
+ }); 
+var is_perfect = '<?php echo $is_perfect?>';
+var API_URL = '<?php echo API_URL?>';
+
+var position = '<?php echo  isset($user['position']) && $user['position'] ? $user['position'] : ""?>'
+var content = '<?php echo isset($user['position_id']) && $user['position_id'] ? $user['position_id'] : "";?>';
+position = JSON.parse(position);
+content = JSON.parse(content);
+$('#showPicker').on('click', function () {
+    weui.picker(position, {
+        onChange: function (result) {
+        	$(".picker_title").html("选择职位");            	
+        },
+        onConfirm: function (result) {
+           var text = result[0];
+           $("#position").html(content[text]);
+           $("#position").attr('position_id',text);
+        }
+    });
+});
+
+$('.affirm').click(function(){
+	var mobile = $('#mobile').val();
+	var captcha = $('#captcha').val();
+// 	var region_id = $('#region').attr('region_id');
+	var region_id = $("#region").val();
+	var position_id = $('#position').attr('position_id');
+	if(!mobile){
+	    alert('请输入手机号码！');
+	    return false;
+	}else{
+	    if(!isMobile(mobile)){
+	        alert('手机号码格式不正确！');
+	        return false;
+		}
+	}
+	if(!captcha){
+		alert('请输入手机验证码！');
+	    return false;
+	}
+	if(!position_id){
+		alert('请选择职位！');
+        return false;
+	}
+	if(!region_id){
+		alert('请选择地区！');
+        return false;
+	}
+
+	checkCaptcha();
+});
+
+var flat = true;
+$(".gain_verification").on("click",function(){
+	var mobile = $('#mobile').val();
+	if(!isMobile(mobile))
+	{
+	    alert('请输入正确的手机号码');
+	    return false;
+	}
+	if(flat){
+    	sendCaptcha();
+    	flat = false;
+        var setTime;
+        var time=60;
+        setTime=setInterval(function(){
+            if(time<=0){
+            	flat = true;
+                clearInterval(setTime);
+                 $(".gain_verification").text("获取验证码");
+                $(".gain_verification").css("background-color","#055773");
+                return false;
+            }
+            time--;
+            $(".gain_verification").text(time+'s');
+            $(".gain_verification").css("background-color","#cccccc");
+        },1000);
+    }
+})
+
+function sendCaptcha()
+{
+	var mobile = $('#mobile').val();
+	if(!isMobile(mobile))
+	{
+	    alert('请输入正确的手机号码');
+	    return false;
+	}
+	var json = GetJson('SMSCode');
+	json.q.a = 1;
+	json.q.type = 1;
+	json.q.userId = '<?php echo $_SESSION['user_id']?>';
+	json.q.mobile = $('#mobile').val();
+	json.json = JSON.stringify(json);
+	$.post(API_URL,json,function(data)
+	{
+		if(data.q.s == 0)
+		{
+// 			$('#captcha').val(data.q.code);
+		}
+		else
+		{
+			alert(data.q.d);
+		}
+	},"json");
+}
+
+function checkCaptcha(){
+	var code = $('#captcha').val();
+	if(!code){
+	    alert("请输入验证码");
+	    return;
+	}
+	var json = GetJson('SMSCode');
+	json.q.a = 2;
+	json.q.type = 1;
+	json.q.userId = '<?php echo $_SESSION['user_id']?>';
+	json.q.mobile = $('#mobile').val();
+	json.q.w = new Object();
+	json.q.w.code = code;
+	json.json = JSON.stringify(json);
+	$.post(API_URL,json,function(data)
+	{
+		if(data.q.s == 0)
+		{
+			var mobile = $('#mobile').val();
+// 			var region_id = $('#region').attr('region_id');
+			var region_id = $("#region").val();
+			var position_id = $('#position').attr('position_id');
+			$.post("<?php echo $this->url('web-common',array('controller' => 'user','action' => 'ajaxUpdateUserInfo'));?>",{mobile : mobile,position_id:position_id,region_id:region_id},function(result){
+				if(result.code == 200){
+					$('.perfect_data').hide();
+				    $('.bgb').hide();
+				}else{
+				    alert(result.message);
+				}
+			},'json');
+		}else{
+		    alert(data.q.d);
+		}
+	},"json");
+}
+
+var finished = false;
+var page = 1;
+getTutorList();
+function getTutorList(type){
+	 if (finished && type == 2) {
+         return false;
+     }
+     if(type == 1){
+    	 page = 1;
+     }
+     finished = true;
+     var url = "<?php echo $this->url('web-common', array('controller' => 'tutor', 'action' => 'ajaxGetTutorList'))?>";
+     $.post(url,
+    	 {page:page},
+    	 function(data){
+  	    	 if(data.code == 200){
+  	  	    	  var list = data.list;
+  	    		  var dom = $("#tutor_list ul");
+	              var li = '';            
+	                  if (list.length > 0) {
+		                  url = '<?php echo $this->url('web-common', array('controller' => 'tutor', 'action' => 'details'));?>'
+	                      $.each(list,function(i,v){
+	                         li += '<li>';
+	                         li += '<a href="'+url+'?id='+v.id+'">';
+	                         li += '<img src="'+v.head_icon+'" alt="">';
+	                         li += '<div class="">'+v.name+'：'+v.signature+'</div>';
+	                         li += '</div>';
+	                         li += '</a></li>';
+	                      });
+	                      if(type == 1){
+	                     	 $('#tutor_list ul li').remove();
+	                      }  
+	                      $("#tutor_list ul").append(li);
+	                      finished = false;
+	                      page ++;
+	                  }else{
+	                	  if(type == 1){
+    	                 	 $('#tutor_list ul li').remove();
+    	                  }
+    	              }
+	              }
+	              else {
+	                  if(type == 1){
+	                 	 $('#tutor_list ul li').remove();
+	                  }
+	              }
+     },'json');
+}
+
+function loadmore(obj){
+    var scrollTop = $(obj).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = window.innerHeight;
+    if (scrollHeight - scrollTop - windowHeight<=50 ) {
+    	getTutorList(2);
+    }
+};
+$(window).scroll(function (){
+    if (loadmore) {
+        loadmore($(this));
+    }
+});
+
+//wx.ready(function(){
+//	 shareData = {title: '一起聚餐 | 中国5000万餐饮人的学习平台',desc: '学习改变命运 | 让餐饮赞美生命',imgUrl: '<?php //echo 'http://'.$_SERVER['HTTP_HOST'].ROOT_PATH?>//webStyle/images/nightbird_log.png'};
+//	 share(shareData);
+//});
+</script>

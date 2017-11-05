@@ -1,0 +1,48 @@
+<!-- 	列表 -->
+     <div class="row-fluid sortable">
+		<div class=" span12">
+			<div class="box-content form-horizontal">
+<!-- 			  <fieldset> -->
+				<legend class="lg_title">
+					<span>课程信息：</span>
+				</legend>
+               <?php foreach($list as $k=>$v){?>
+            	<div class="control-group" style="margin:0">
+					<label class="control-label">
+					       <img src="<?php echo $v['img_path']?($this->basepath().'/'.UPLOAD_PATH.'thumb/640X640X4/'.$v['img_path']):$v['head_icon']?>" width="100" height="100">
+					</label>
+					<div class="controls">
+						<label><?php echo $v['name'];?>
+						<div style="float: right;margin-right: 10px;color:#369BD7;"><?php echo $v['delete']?'隐藏':'显示';?></div>
+						<div style="float: right;margin-right: 10px;"><?php echo $v['timestamp'];?></div>
+						</label>
+						<div><?php echo $v['content'];?></div>
+					</div>
+				</div>
+				<legend class="lg_title" >
+				</legend>
+		  <?php }?>
+        <div class="page-control">
+        <div class="pagination pagination-centered">
+        <?php  if($page_info['pagesInRange']){if($page_info['previous']){?>
+		       <ul><li class="disabled"><a>首页</a></li><li class="disabled"><a>上一页</a></li>
+		   <?php }else{?> 
+		    	<ul><li><a href="javascript:rewardList(1,<?php echo $where['type']?>);">首页</a></li><li><a href="javascript:rewardList('<?php echo $page_info['page_1'].','.$where['type'];?>');">上一页</a>
+		    <?php }foreach ($page_info['pagesInRange'] as $i=>$val){if($val==$page_info['page']){?>
+			    		 <li class="active"><a><?php echo $val;?></a></li>
+	    	 <?php }else{?> 
+			    		 <li><a href="javascript:rewardList('<?php echo $val.','.$where['type'];?>');"><?php echo $val;?></a></li>
+			    <?php }}if($page_info['net']){?>
+		        <ul><li class="disabled"><a>下一页</a></li><li class="disabled"><a>尾页</a></li>
+		 <?php }else{?> 
+		    	<ul><li><a href="javascript:rewardList('<?php echo $page_info['page_2'].','.$where['type'];?>');">下一页</a></li><li><a href="javascript:rewardList('<?php echo $page_info['total'].','.$where['type'];?>');">尾页</a></li>
+		    <?php }}?>
+        <?php // echo $this->paginationControl($paginator, 'Sliding', 'page',array('route' =>'admin','condition'=>$condition));?>
+       </div>
+       </div>
+    </div>
+      <!--/span-->
+</div>
+</div>
+<!-- 列表 -->
+	

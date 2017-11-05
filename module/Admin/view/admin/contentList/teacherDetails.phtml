@@ -1,0 +1,225 @@
+<style>
+.form-horizontal .controls {
+	margin-left: 140px;
+}
+.controls input {
+    padding: 8px;
+}
+
+	.form-horizontal .control-label {
+		text-align: left;
+	}
+	.select-top {
+ border:1px solid #ccc;
+ color:#969292;
+     border-radius: 3px;
+     width: 287px;
+     padding:  8.5px  8.5px 8.5px 3px;
+}
+	.control-group-border {
+		border-bottom: 1px solid #ccc;
+	}
+	.control-label>img {
+		margin: 0 10px;
+		width: 18px;
+		height: 18px;
+		border: none;
+		vertical-align: bottom;
+	}
+	.admin-role span{
+	 margin-right: 40px;
+	}
+</style>
+
+<script type="text/javascript" src="<?php echo $this->basePath();?>/adminStyle/template/js/thescript.js"></script>
+<script src="<?php echo $this->basePath();?>/adminStyle/template/upload/ajaxfileupload.js"></script>
+<script type="text/javascript">
+	var uploader = '<?php echo $this->url('admin',array('controller' => 'common', 'action'=>'uploadImage'));?>';//图片上传地址
+</script>
+<div id="content" class="span10">
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-content">
+				<form action="" method="post" class="form-horizontal" id="submitForm">
+					<fieldset>
+						<legend class="lg_title">
+							<?php if($id){?>
+							     <span>内容列表-导师详情</span>
+							<?php }else{?>
+							     <span>内容列表-新增导师</span>
+							<?php }?>
+						</legend>
+						<h3><span>导师信息</span></h3>
+						<br>
+						<section style="overflow: hidden;">
+							<div style="float: left;">
+								<div class="control-group">
+									<label class="control-label">导师名称：</label>
+									<div class="controls">
+										<input name="name" id="name" required="required" class="input-xlarge" type="text" value="<?php echo $list ? $list['name'] : '';?>"
+											placeholder="请输入管理员姓名">
+											<br><span style="color:#777777">请设置导师名称，建议8个字内</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">个性签名：</label>
+									<div class="controls">
+										<div><textarea name="signature" id="signature" placeholder="请设置个性签名" style="resize:none;width:710px;height:55px;"><?php echo $list ? $list['signature'] : '';?></textarea></div>
+									    <span style="color:#777777">请设置导师个性签名，建议30个字内</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">导师头衔：</label>
+									<div class="controls">
+										<input name="title" id="title" required="required"class="input-xlarge" type="text" placeholder="请设置导师头衔" value="<?php echo $list ? $list['title'] : '';?>">
+										<br><span style="color:#777777">请设置导师头衔</span>
+									</div>
+								</div>
+
+								<div>
+									<label class="control-label">导师封面：</label>
+									<div class="controls portraits">
+										<div style="border: 2px solid #ccc; width: 250px">
+											<img class="show_img" id="img_0" width="250" height="140" border="1" src="<?php echo  $this->basePath().(isset($list['img']) && $list['img'] ? '/'.UPLOAD_PATH.$list['img'] :'/images/portrait.png');?>" alt="">
+											<!-- 图片路径是否正确? -->
+										</div>
+										<br><span>（注：像素750*420或者宽高比与此相同）</span>
+										<div style="display: none;">
+											<input type="hidden" id="img_id_0" name="img_id" value="<?php if(isset($list['head_icon']) && $list['head_icon']){echo $list['head_icon'];} ?>" />
+											<input id="img_path_0" type="hidden" name="img_path" value="<?php if(isset($list['img']) && $list['img']){echo $list['img'];} ?>"/>
+											<!-- <input type="file" accept="" id="uploadImage"
+                                                capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img0" name="Filedata[]" onchange="return ajaxFileUpload('0');"/>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div>
+									<label class="control-label">导师头像：</label>
+									<div class="controls portraits">
+										<div style="border: 2px solid #ccc; width: 250px">
+											<img class="show_img" id="img_1" width="250" height="140" border="1" src="<?php echo  $this->basePath().(isset($list['details_img_path']) && $list['details_img_path'] ? '/'.UPLOAD_PATH.$list['details_img_path'] :'/images/portrait.png');?>" alt="">
+											<!-- 图片路径是否正确? -->
+										</div>
+										<br><span>（注：像素120x120或者宽高比与此相同）</span>
+										<div style="display: none;">
+											<input type="hidden" id="img_id_1" name="img_id_1" value="<?php if(isset($list['details_img']) && $list['details_img']){echo $list['details_img'];} ?>" />
+											<input id="img_path_1" type="hidden" name="img_path_1" value="<?php if(isset($list['details_img_path']) && $list['details_img_path']){echo $list['details_img_path'];} ?>"/>
+											<!-- <input type="file" accept="" id="uploadImage"
+                                                capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img1" name="Filedata[]" onchange="return ajaxFileUpload('1');"/>
+										</div>
+									</div>
+								</div>
+								<label class="control-label">是否首页显示：</label>
+								<div class="controls">
+    								<div class="control-group">
+    								<?php if($list){?>
+    									<input name="is_show" type="radio" id="y_recommend" <?php if($list['is_show']==1){?>checked="checked"<?php }?> value="1"/> 是
+    									<input name="is_show" type="radio" id="n_recommend" <?php if($list['is_show']==2){?>checked="checked"<?php }?>value="2"/> 否
+    								<?php }else{?>
+    								    <input name="is_show" type="radio" id="y_recommend" checked="checked" value="1"/> 是
+    									<input name="is_show" type="radio" id="n_recommend" value="2"/> 否
+    								<?php }?>
+    								</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label">老师介绍：</label>
+									<div class="controls">
+										<div><textarea placeholder="请设置导师介绍" name="synopsis" id="synopsis" style="resize:none;width:710px;height:150px;"><?php echo $list ? $list['synopsis'] : '';?></textarea></div>
+									    <span style="color:#777777">请设置导师介绍，建议300个字内</span>
+									</div>
+								</div>
+							</div>
+						</section>
+						<div class="control-group">
+							<label class="control-label" for="focusedInput"></label>
+							<div class="controls" style="margin-top: 10px;">
+								<input name="id"  type="hidden" value="<?php echo $id ? $id : 0; ?>" />
+								<input type="hidden" name="add" value="<?php echo $add ? $add : 0 ?>"/>
+								<div class="controls" style="margin-top: 10px;">
+									<input name="sb" class="btn btn-large btn-primary" type="submit" id="submit-button"
+										value="保存" />
+									<input class="btn btn-large btn-primary resetHref" type="reset" value="取消" />
+									
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(".resetHref").click(function(){
+    location.href = '<?php echo $this->url('admin',array('controller'=>'ContentList','action'=>'teacherList'));?>';
+});
+var url = '<?php echo $this->url('admin', array('controller' =>'System', 'action' => 'ajaxAdminRole'));?>';
+function getAdminList(id) {
+  if (url) {
+    $.post(url, {id:id},function (data) {
+    	adminTemplate(data, 'admin_list');
+    
+    },"json");
+  }
+}
+
+function adminTemplate(data,container) {
+	var content = '';
+	console.log(data);
+	  $.each(data, function(key,val){
+	    template = '<div class="control-group control-group-border">';
+	    template += '<span>'+key+'</span>';
+	    template += '</div>';
+	    content += template;
+	  });
+	  if (content) {
+	    $("#" + container).append(content);
+	  }
+}
+</script>
+<script type="text/javascript">
+
+$("#submit-button").click(function(){
+    var path = $("#img_path_0").val();
+	var details_path = $("#img_path_1").val();
+    var name = $("#name").val();
+    var signature = $("#signature").val();
+    var title = $("#title").val();
+    var synopsis = $("#synopsis").val();
+    if(!path){
+	    alert('导师头像不能为空');
+	    return false;
+    }
+	if(!details_path){
+		alert('导师详情头像不能为空');
+		return false;
+	}
+    if(!name){
+    	alert('姓名不能为空'); // message.js
+    	return false;
+    }
+    if(!signature){
+    	alert('个性签名不能为空'); // message.js
+    	return false;
+    }
+    if(!title){
+    	alert('导师头衔不能为空'); // message.js
+    	return false;
+    }
+    if(!synopsis){
+    	alert('导师介绍不能为空'); // message.js
+    	return false;
+    }
+   
+    $("#submitForm").submit();
+ });
+	
+//上传封面
+$(".show_img").click(function () {
+	$(this).parent().parent().find(".img").click();
+})
+
+</script>

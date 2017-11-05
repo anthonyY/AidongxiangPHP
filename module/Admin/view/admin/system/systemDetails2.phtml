@@ -1,0 +1,87 @@
+<style>
+.controls {
+    margin: 5px 0;
+}
+</style>
+<!-- <ul class="breadcrumb"> -->
+<!--     <li><span>系统通知</span></li> -->
+<!--     <li><span>/</span></li> -->
+<!--     <li>查看</li> -->
+<!-- </ul> -->
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>通知信息：</span>
+            </legend>
+            <form id="myForm" class="form-horizontal" method="post" action="">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">通知标题：</label>
+                    <div class="controls">
+						<label><?php echo $info ? $info['title'] : '';?></label>
+					</div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">通知对象：</label>
+                      <div class="controls">
+						<label><?php echo $info && $info['position'] ? $position[$info['position']]['name'] : '全部';?></label>
+					</div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">发送时间：</label>
+                    <div class="controls">
+						<label><?php echo $info ? $info['send_time'] : '';?></label>
+					</div>
+                </div>
+            	<div>
+				    <label class="control-label">通知封面：</label>
+					<div class="controls portraits">
+						<div style="border: 2px solid #ccc; width: 200px">
+							<img id="show_image_1" width="250" height="125 border="1" src="<?php echo isset($info['image']) ? $this->basePath().'/'.UPLOAD_PATH.$info['image'] : $this->basePath().'/'.UPLOAD_PATH.'/201703/24/170859_1450.jpg';?>" alt="">
+							<!-- 图片路径是否正确? -->
+						</div>
+					</div>
+			     </div>
+			     
+               <div class="control-group">
+		            <label class="control-label">通知概要：</label>
+		             <div class="controls">
+						<label><?php echo $info ? $info['outline'] : "";?></label>
+					</div>
+			     </div>
+            
+                <div class="control-group">
+                    <label class="col-md-2 control-label">跳转类型：</label>
+                     <div class="controls">
+						<label><?php echo $info && $jump ? $jump[$info['type']] : "";?></label>
+					</div>
+                </div>
+
+            <div id="Material_1" class="classMaterial  <?php echo $info && $info['type']==1?'':'hide'?>">
+               <div class="control-group">
+		            <label class="control-label">通知详情：</label>
+		               <div class="controls">
+						<label><?php echo $info?$info['content']:''?></label>
+					  </div>
+			     </div>
+            </div>
+            <div id="Material_2" class="classMaterial <?php echo $info && in_array($info['type'], array('2','3','4','5'))?'':'hide'?>">
+                <div class="control-group">
+                    <label class="col-md-2 control-label titles"><?php  if($info){if($info['type']==2){echo '选择音频：';}elseif($info['type']==3){echo '选择视频：';}elseif($info['type']==4){echo '选择音频包：';}elseif($info['type']==5){echo '选择视频包：';}}?></label>
+                     <div class="controls">
+						<label><?php echo $info && $info['audio'] ? $info['audio']['title'] : '';?></label>
+					</div>
+                </div>
+            </div>
+            <div id="Material_6" class="classMaterial <?php echo $info && $info['type']==6 ?'':'hide'?>">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">链接地址：</label>
+                      <div class="controls">
+						<label><?php echo $info?$info['link']:''?></label>
+					  </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>我的佣金</title>
+<style>
+  body{
+    padding-bottom: 60px;
+    background-color: #efeff4; 
+    position: relative;
+  }
+
+</style>
+<html>
+<body>
+  <div class="wallet">
+    <div class="head_portrait">
+      <img src="<?php echo $data['img_path'] ? ROOT_PATH.UPLOAD_PATH.$data['img_path'] : $data['head_icon'];?>" alt="">
+    </div>
+    <div class="balance">
+        <div class="balance__get">￥<?php echo $data['brokerage']?>
+        </div>
+        <div class="balance__info">
+          <?php if(isset($data['brokerage']) && $data['brokerage'] > 0){?>
+             哇！你的佣金不少耶！你已带动<?php echo $data['stair_num']?>个小伙伴学习^_^
+          <?php } else {?>
+             Oh,钱袋子还空空如也......
+          <?php }?>
+        </div>
+    </div>
+    <?php if(isset($data['brokerage']) && $data['brokerage'] > 0){?>
+        <button class="recharge" onclick=window.location.href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'rechargeWallet','type' => 1))?>">充值当学费</button>
+    <?php } else {?>
+        <button class="recharge" onclick=window.location.href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'ishare'))?>">马上去赚钱</button>
+    <?php }?>
+    <br><br>
+    <button class="withdraw" onclick=window.location.href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'rechargeWallet','type' => 2))?>">佣金提现</button>
+    <div class="recharge-to" onclick=window.location.href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'rechargeWallet','type' => 1))?>">充值当学费</a></div>
+    <div class="account_explain">
+      <p class="title">佣金说明</p>
+      <p style="text-align: justify"><?php echo $data['explain'];?></p>
+    </div>
+  </div>
+  <a href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'brokerageFinance'))?>" class="bill">佣金明细</a>
+</body>   
+</html>

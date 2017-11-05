@@ -1,0 +1,48 @@
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+             <legend class="lg_title">
+                <span>用户寄语：</span>
+            </legend>
+            <form id="send_word_form" onsubmit="return false;" class="form-horizontal" method="post" action="#">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">用户寄语：</label>
+                    <div class="col-md-8">
+                       <div><textarea name="content" id="status" style="resize:none;width:80%;height:55px;"onkeydown='countChar("status","counter");' 
+                    onkeyup='countChar("status","counter");'maxlength="20"><?php echo isset($list) && $list ? $list->content : '';?></textarea>
+                    <span class="wordwrap tr" style="width: 40px;"><i id="counter">0</i>/20</span></div>
+                    </div>
+                    <br>
+                    <span style="margin-left:130px;">请设置对用户的寄语，寄语将显示在公众号个人中心中。建议20个字内</span>
+                </div>
+                <div class="control-group">
+    				<label class="col-md-2 control-label"></label>
+    				<div class="col-md-8">
+    				    <input name="text_id" id="text_id" type="hidden" value="<?php echo isset($list) && $list ? $list->id : 0;?>"/>
+<!--     				    submit -->
+    					<input class="btn btn-large btn-primary tijiao" type="button" id="submit-button1" value="保存" />
+    				</div>
+    			</div>
+            </form>
+        </div>
+</div>
+<!-- 限定输入框的字数=提示 -->
+<script language="javascript">
+<?php if(isset($list) && $list ){?>
+countChar("status","counter");
+<?php }?>
+    function countChar(textareaName,spanName)
+    {
+        document.getElementById(spanName).innerHTML = document.getElementById(textareaName).value.length;
+    }
+</script>
+<script type="text/javascript">
+    $(".tijiao").click(function(){
+    	var id = $('#text_id').val();
+    	var content = $('#status').val();
+        var url = '<?php echo $this->url('admin',array('controller'=>'System','action'=>'sendWord'));?>';
+  		$.post(url,{id:id,content:content},function(data){
+  			alert(data.message);
+  		},'json');
+    });
+</script>

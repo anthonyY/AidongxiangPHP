@@ -1,0 +1,105 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/play-num-deal.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>赠送详情</title>
+<style>
+    body{
+        padding-bottom: 90px;
+        background-color: #f0f0f5; 
+    }
+
+</style>
+
+<html>
+<body>
+    <div class="bgb" style="display:none"></div>
+    <div id="details_banner">
+        <div class="bd sl">
+            <div class="tempWrap" style="overflow:hidden; position:relative;"><ul style=" position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translate(0px, 0px) translateZ(0px);">
+                 <li style="display: table-cell; vertical-align: top; "><a href="<?php echo $url;?>"><img src="<?php echo ROOT_PATH.UPLOAD_PATH.$image;?>" alt=""></a></li>
+            </ul></div>
+        </div>
+        <div class="hd">
+            <ul style="margin-left: 154.5px;"><li class="on">1</li></ul>
+        </div> 
+    </div>
+    <div class="present_course_title bg_white">
+        课程礼包
+    </div>
+            <div class="voice_curriculums_list bg_white" id="video_curriculums_list">
+                <ul>
+                    <li>
+                         <a href="#">
+                            <div class="cover">
+                                <img class="video_image" src="<?php echo ROOT_PATH.UPLOAD_PATH;?>201704/08/151854_2900.jpg" alt="">
+                                <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                            </div>
+                            <div class="content">
+                                <div>邓紫棋MV-泡沫</div>
+                                <div class="information2">
+                                    <div class="sum font_color_055773 course_price">￥223.98</div>
+                                    <div><img src="<?php echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span>4分33秒</span></div>
+                                </div>
+                            </div>
+                            <div class="more">
+                                <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="present_quantity">共
+                <span class="font_color_055773">2</span>
+                份,已领取
+                <span class="font_color_055773">0</span>
+                份
+            </div>
+           
+            <footer class="audio_footer">
+                <ul>
+                    <li><a href="javascript:(0);" ><p>送给好友</p></a></li>
+                     <li><a href="javascript:(0);" id="getMyBag"><p>领取礼包</p></a></li>
+                </ul>
+            </footer>
+    <!-- 领取成功 -->
+    <div class="get_hint" id="div_sub_ok">
+        <div>
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/get_succeed_gray.png" alt="">
+            <div>领取成功，课程已放入您的个人中心，即刻开始学习之旅吧！</div>
+        </div>
+        <div class="affirm">
+            <a href="javascript:(0);" id="sub_ok" onclick="sub_ok()">确认</a>
+        </div>
+    </div>
+
+    <!-- 点击分享 -->
+    <div class="get_hint" id="send_sub_ok">
+        <div>
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/share_gray.png" alt="">
+            <div>点击屏幕右上角“...”选择分享给好友来领取。</div>
+        </div>
+        <div class="affirm">
+            <a href="javascript:(0);" onclick="send_sub_ok()">确认</a>
+        </div>
+    </div>
+</body>   
+</html>
+<script>
+//图片轮播
+adList();
+function adList(){
+   TouchSlide({slideCell:"#details_banner",
+               titCell:".hd ul",
+               mainCell:'.bd ul',
+               effect:'left',
+               autoPlay:true,
+               autoPage:true
+        });           
+   $('.hd ul').css('margin-left',($('.hd').width()-$('.hd ul').width())/2+'px');
+}
+
+</script>

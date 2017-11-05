@@ -1,0 +1,96 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>我的推荐</title>
+<style>
+    body{
+        padding-bottom: 90px;
+        background-color: #f0f0f5;
+        position: relative;
+    }
+
+</style>
+<html>
+<body class="recommend">
+    <div class="recommend__top">
+        <span class="text">我的推荐:</span><span class="red"><?php echo $user['num'];?></span>
+        <span class="text" style="padding-left: 1.6rem">获得佣金数:</span><span class="red">￥<?php echo $user['price'];?></span>
+    </div>
+<ul class="transaction" id="transaction">
+</ul>
+</body>
+</html>
+<script>
+    var finished = false;
+    var page = 1;
+    getFinanceList();
+    function getFinanceList(type){
+        if (finished && type == 2) {
+            return false;
+        }
+        $('.londing_gif').show();
+        if(type == 1){
+            page = 1;
+        }
+        finished = true;
+        var url = "<?php echo $this->url('web-common', array('controller' => 'user', 'action' => 'ajaxGetRecommend'))?>";
+        $.post(url,
+            {page:page},
+            function(result){
+                $('.londing_gif').hide();
+                if(result.code == 200){
+                    var list = result.data;
+                    var li = '';
+                    if (list.length > 0) {
+                        $.each(list,function(i,v){
+                            li += '<li>';
+                            li +='<div><img src="'+v.image_path+'" alt="" /></div>'
+                            li += '<div>';
+                            li += '<div class="type">'+ v.name;
+                            if(v.is_vip == 1){
+                                li += '<span class="crown">会员</span>'
+                            }
+                            li += '</div>'
+                            li += '<div>';
+                            li += '<span>'+v.timestamp+'</span></div></div>';
+                            li += '<div>￥'+ v.price +'</div>';
+                            li += '</li>';
+                        });
+                        if(type == 1){
+                            $('#transaction li').remove();
+                        }
+                        $("#transaction").append(li);
+                        finished = false;
+                        page ++;
+                    }else{
+                        if(type == 1){
+                            $('#transaction li').remove();
+                        }
+                    }
+                }
+                else {
+                    if(type == 1){
+                        $('#transaction li').remove();
+                    }
+                }
+            },'json');
+    }
+
+    function loadmore(obj){
+        var scrollTop = $(obj).scrollTop();
+        var scrollHeight = $(document).height();
+        var windowHeight = window.innerHeight;
+        if (scrollHeight - scrollTop - windowHeight<=50 ) {
+            getFinanceList(2);
+        }
+    };
+    $(window).scroll(function (){
+        if (loadmore) {
+            loadmore($(this));
+        }
+    });
+
+</script>

@@ -1,0 +1,37 @@
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+             <legend class="lg_title">
+                <span>搜索词配置：</span>
+            </legend>
+            <form id="send_word_form" class="form-horizontal" method="post" action="">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">搜索词推荐：</label>
+                    <div class="col-md-8">
+                        <div>
+                            <input type="text" name="search_word" value="<?php echo isset($list['search_word']) ? $list['search_word'] : ""?>"/>
+                        </div>
+                    </div>
+                    <br>
+                    <span style="margin-left:130px;">用于管理公众号搜索栏的默认搜索内容</span>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">大家都在搜关键词：</label>
+                    <div class="col-md-8">
+                       <div>
+                           <textarea name="content" id="status" style="resize:none;width:80%;height:55px;"><?php echo isset($list['content']) ? trim($list['content']) : ""?></textarea>
+                       </div>
+                    </div>
+                    <br>
+                    <span style="margin-left:130px;">用于管理公众号大家都在搜的搜索内容,请用 | 隔开</span>
+                </div>
+                <div class="control-group">
+    				<label class="col-md-2 control-label"></label>
+    				<div class="col-md-8">
+    					<input class="btn btn-large btn-primary tijiao" name="sub" type="submit" id="submit-button1" value="保存" />
+    				</div>
+    			</div>
+            </form>
+        </div>
+</div>
+

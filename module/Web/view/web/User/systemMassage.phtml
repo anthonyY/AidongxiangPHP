@@ -1,0 +1,96 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>系统通知</title>
+<style>
+    body{
+        padding-bottom: 90px;
+        background-color: #f0f0f5; 
+    }
+
+</style>
+<html>
+<body>
+    <div class="system_massage" id="system_massage">
+        <ul>
+        
+        </ul>
+    </div>
+        <div class="unrecorded">
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/no_systemMassage.png" alt="">
+            <div>还没有系统通知</div>
+        </div>
+</body>   
+</html>
+<script>
+var finished = false;
+var page = 1;
+getSystemMessageList();
+function getSystemMessageList(type = 1){
+	 if (finished && type == 2) {
+         return false;
+     }
+     if(type == 1){
+    	 page = 1;
+     }
+     finished = true;
+     var url = "<?php echo $this->url('web-common', array('controller' => 'user', 'action' => 'ajaxSystemMassage'))?>";
+     $.post(url,
+    	 {page:page},
+    	 function(data){
+  	    	 if(data.code == 200){
+  	  	    	  var list = data.data;
+  	    		  var dom = $("#system_massage ul");
+	              var li = '';            
+	                  if (list.length > 0) {
+	                      $.each(list,function(i,v){
+		                      console.log(v.image);
+	                         li += '<li>';
+	                         li += '<a href="'+v.link+'">';
+	                         li += '<div class="massage_title">'+v.title+'</div>';
+	                         li += '<div class="massage_time mt10">'+v.timestamp+'</div>';
+	                         if(v.image){
+	                        	 li += '<img class="mt10" src="'+v.image+'" alt="">';
+		                     }
+	                         li += '<div class="mt10">'+v.outline+'</div>';
+	                         li += '</a></li>';
+	                      });
+	                      if(type == 1){
+	                     	 $('#system_massage ul li').remove();
+	                      }  
+	                      $("#system_massage ul").append(li);
+	                      finished = false;
+	                      page ++;
+	                  }else{
+	                	  if(type == 1){
+    	                 	 $('#system_massage ul li').remove();
+     	                 	$('.unrecorded').show();
+    	                  }
+    	              }
+	              }
+	              else {
+	                  if(type == 1){
+	                 	 $('#system_massage ul li').remove();
+	                  }
+	              }
+     },'json');
+}
+
+function loadmore(obj){
+    var scrollTop = $(obj).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = window.innerHeight;
+    if (scrollHeight - scrollTop - windowHeight<=50 ) {
+    	getSystemMessageList(2);
+    }
+};
+$(window).scroll(function (){
+    if (loadmore) {
+        loadmore($(this));
+    }
+});
+
+</script>

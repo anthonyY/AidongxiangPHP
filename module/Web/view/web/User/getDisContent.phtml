@@ -1,0 +1,93 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>一起聚餐</title>
+<style>
+  .return_home {
+    display: none;
+  }
+</style>
+<html>
+<body>
+  <div class="dinner">
+    <div class="dinner__content">
+      <p><?php echo $data['content'];?></p>
+    </div>
+    <div class="dinner__footer">
+      <div class="comment">
+        <img src="<?php echo ROOT_PATH;?>webStyle/images/comment.png" alt="">
+        <span>咨询</span>
+      </div>
+      <div class="join" onclick='recharge("<?php echo $data['price'];?>")'>
+        成为会员
+      </div>
+    </div>
+  </div>
+  <!-- 弹窗 -->
+  <div class="pop">
+    <div class="pop__code">
+      <div class="code__title">
+        联系我们
+        <span class="close"></span>
+      </div>
+      <div class="code__content">
+        <div class="code__image">
+          <img src="<?php echo ROOT_PATH;?>webStyle/images/qrCode.png" alt="">
+        </div>
+        <div class="code__text">
+          <p class="intro">长按二维码,联系客服</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 支付成功 -->
+  <div class="one_pay_success" id="one_pay_success" >
+    <img src="<?php echo ROOT_PATH;?>webStyle/images/get_succeed_gray.png" alt="">
+    <div>支付成功</div>
+  </div>
+</body>   
+</html>
+<script>
+  //点击弹出二维码窗口
+$('.comment').on('click', function() {
+  $('.pop').show()
+  $('.pop__code').show("fast")
+});
+
+$('.pop .close').on('click', function() {
+  $('.pop__code').hide("fast")
+  $('.pop').hide()
+});
+
+function recharge(price){
+    if(price == 0){
+      return false;
+    }
+    var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxRecharge'));?>";
+    $.post(url,{price:price},function(result){
+      if(result.code == 200){
+        if(result.is_debug == 1){
+          $("#one_pay_success").show();
+          setTimeout("text()",2000);
+        }else{
+          WeixinJSBridge.invoke('getBrandWCPayRequest',result,function(res){
+                WeixinJSBridge.log(res.err_msg);
+                if (res.err_msg.indexOf("ok") != -1) {
+                  $("#one_pay_success").show();
+                  setTimeout("text()",2000);
+                }
+              }
+          );
+          return false;
+        }
+      }else{
+        return false;
+      }
+  },'json');
+}
+function text(){
+  $('#one_pay_success').hide();
+//  location.reload();
+  window.location.href = "<?php echo $this->url('web-common',array('controller' => 'user','action' => 'index'))?>";
+}
+</script>

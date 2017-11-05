@@ -1,0 +1,62 @@
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>分销奖励等级设置：</span>
+            </legend>
+            <form id="submitForm" class="form-horizontal" method="post" action="">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">人数下限：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="start" id="start" value="" />&nbsp;&nbsp;<span>人</span></div>
+                    </div>
+
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">人数上限：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="end" id="end" value="" />&nbsp;&nbsp;<span>人</span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">一级分销佣金：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="stair_brokerage" id="stair_brokerage" value="" />&nbsp;&nbsp;<span>元</span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">二级分销佣金：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="second_brokerage" id="second_brokerage" value="" />&nbsp;&nbsp;<span>元</span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="hidden" value="03" name="ajax"/>
+                        <input type="button" class="btn btn-large btn-primary" id="ap" value="保存" onclick="save()"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    function save(){
+        if(!$('#start').val()){
+            alert('请填写人数下限');
+            return false;
+        }
+        if(!parseInt($('#stair_brokerage').val())){
+            alert('请填写一级分销佣金');
+            return false;
+        }
+        if(!parseInt($('#second_brokerage').val())){
+            alert('请填写二级分销佣金');
+            return false;
+        }
+        $("form").submit();
+        return false;
+    }
+</script>

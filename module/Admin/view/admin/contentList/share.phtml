@@ -1,0 +1,97 @@
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+</style>
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>分享图片：</span>
+            </legend>
+            <form id="submitForm" class="form-horizontal" method="post" action="<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'share'));?>">
+            	<div>
+				    <label class="control-label">分享图片：</label>
+					<div class="controls portraits">
+						<div style="border: 2px solid #ccc; width: 200px">
+							<img id="show_image_1" width="250" height="402" border="1" src="<?php echo isset($info['img_path']) ? $this->basePath().'/'.UPLOAD_PATH.$info['img_path'] : $this->basePath().'/adminStyle/img/index.png';?>" alt="">
+							<!-- 图片路径是否正确? -->
+						</div>
+						<span>用于管理公众号会员个人中心的分享页面内容(注：像素750*1206或宽高比与此相同)</span>
+						<div style="display: none;">
+							<input type="hidden" id="img_id_1" name="img_id" value="<?php echo $info ? $info['img_id']:'';?>" />
+							<input id="imgPath" type="hidden" name="image" value="<?php echo $info ? $info['img_path']:'';?>"/>
+							<input type="file" accept="" id="uploadImage"
+								capture="camera" onchange="selectFileImage(this);" hidden />
+						</div>
+					</div>
+			     </div>
+                
+              
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="hidden" value="<?php echo $info ? $info['id'] : 0;?>" name="id" />
+                          <input type="hidden" value="03" name="ajax" />
+                        <input type="button" class="btn btn-large btn-primary" id="ap" value="保存" onclick="save()"/>
+                        <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<script>
+function save(){
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+}
+
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'sharePreview'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+$('.iphone-iframe').css({
+    'width':$(window).width()+'px',
+    'height':$(window).height()+'px'
+});
+$('.iphone-bg').css({
+    'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+    'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+});
+$('#ap1').click(function(){
+    $('.iphone-iframe').toggle();
+});
+$('.iphone-btn').click(function() {
+    $('.iphone-iframe').toggle();
+});
+</script>
+<script>
+//上传封面
+var upload_url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+$("#show_image_1").click(function(){
+  $("#uploadImage").click();
+});
+</script>

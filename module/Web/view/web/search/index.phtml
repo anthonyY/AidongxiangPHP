@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/home.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<title>搜索</title>
+<style>
+
+</style>
+<html>
+<body>
+    <div class="global_search">
+    <form method="get" action="<?php echo $this->url('web-common', array('controller' => 'Search', 'action' => 'searchResult'));?>">
+        <input class="search_box" type="text" name="sk" value="<?php echo isset($data['word']) ? $data['word'] : "" ?>">
+        <input id="search_enter" class="search_enter" type="submit" name="sub" value="搜索"/>
+    </form>
+
+    </div>
+    <?php if($my_search){?>
+        <div class="once_search">
+            <div>你搜过</div>
+            <a href="javascript:void(0);" class="empty" onclick="empty()">清空</a>
+            <ul>
+                <?php foreach($my_search as $v){?>
+                    <li><a href="<?php echo $this->url('web-common', array('controller' => 'Search', 'action' => 'searchResult'));?>?sk=<?php echo $v;?>"><?php echo  $v ?></a></li>
+                <?php }?>
+            </ul>
+        </div>
+    <?php }?>
+    <?php if(isset($data['content']) && $data['content']){?>
+        <div class="hot_search">
+            <div>大家都在搜</div>
+            <ul>
+                <?php foreach($data['content'] as $v){?>
+                    <li><a href="<?php echo $this->url('web-common', array('controller' => 'Search', 'action' => 'searchResult'));?>?sk=<?php echo $v;?>"><?php echo  $v ?></a></li>
+                <?php }?>
+            </ul>
+        </div>
+    <?php }?>
+
+</body>   
+</html>
+<script>
+    function empty(){
+        if(confirm('确定清空搜索记录吗？')){
+            var url = "<?php echo $this->url('web-common', array('controller' => 'search', 'action' => 'ajaxDeleteSearch'))?>";
+            $.post(url, function(data){
+                alert('清空成功！');
+                window.location.reload();
+            },'json');
+        }
+    }
+//    wx.ready(function(){
+//         shareData = {title: '一起聚餐 | 中国5000万餐饮人的学习平台',desc: '学习改变命运 | 让餐饮赞美生命',imgUrl: '<?php //echo 'http://'.$_SERVER['HTTP_HOST'].ROOT_PATH?>//webStyle/images/nightbird_log.png'};
+//         share(shareData);
+//    });
+
+</script>

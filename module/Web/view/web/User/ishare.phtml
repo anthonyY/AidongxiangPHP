@@ -1,0 +1,167 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>推广赚奖学金</title>
+<style>
+  html,body {
+    width: 100%;
+    height: 100%;
+  }
+
+	body{
+		margin: 0;
+	}
+</style>
+<html>
+<body>
+  <div class="bgb" ></div>
+  <div class="ishare">
+    <!-- 预览图区域 -->
+    <div class="ishare__preview">
+      <div class="preview__show">
+        <img class="show__img" src="<?php echo ROOT_PATH;?>webStyle/images/ishare_bg1.png" alt="">
+        <div class="show__tips">
+          <span class="tips__arrow"></span>长按上图保存图片，或发送给朋友
+        </div>
+      </div>
+    </div>
+
+    <!-- 选择背景图样式 -->
+    <div class="ishare__style">
+        <?php if(isset($data['small_img_paths'])){?>
+              <?php foreach($data['small_img_paths'] as $k => $v){?>
+                <div data-type="<?php echo $k?>" class="style">
+                    <img name="123" value="<?php echo $v['id']?>" src="<?php echo $v['val']?>" alt="">
+                </div>
+              <?php }?>
+        <?php }?>
+    </div>
+
+    <!-- 右上角分享样式 -->    
+    <div class="ishare__link">
+      <span class="money"></span>
+      <span class="text"><?php echo isset($data['button_name']) ? $data['button_name'] : ""?></span>
+    </div>
+
+    <!-- 二维码 -->    
+    <div class="ishare__code"></div>
+  </div>
+
+  <!-- 弹窗 -->
+  <div class="pop">
+    <div class="pop__code">
+      <div class="code__title">
+        长按二维码保存
+        <span class="close"></span>
+      </div>
+      <div class="code__content">
+        <div class="code__image">
+          <img src="<?php echo isset($data['path']) ? $data['path'] : ""?>" alt="">
+        </div>
+        <div class="code__text">
+          <p class="intro">适用于各渠道进行推广</p>
+         <!-- <p class="validity">二维码有效期至：<?php /*echo isset($data['time']) ? $data['time'] : ""*/?>（30天）</p>-->
+        </div>
+      </div>
+    </div>
+    <div class="pop__share">
+      <div class="share__title">
+        活动规则
+      </div>
+      <div class="share__content">
+        <p><?php echo isset($data['rule']) ? $data['rule'] : ""?></p>
+      </div>
+      <div class="share__btn">确定</div>
+    </div>
+  </div>
+  <div class="verification_wrong" >
+    <div id="contente">图片生成失败！</div>
+    <div>
+      <ul>
+        <li>
+          <a href="javascript:(0);"  class="font_color_055773 verification_wrong_close">
+            <p>确认</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+
+<script type="text/javascript">
+  var d = true;
+  setImg(0,"<?php echo $data['small_img_paths'][0]['val']?>");
+  //点击切换预览图样式
+  $('.ishare__style').on('click', '.style', function() {
+    var type = $(this).data('type');
+    var img_id =  $($(this).children("img")[0]).attr('value');
+    if(!type && !img_id){
+      $('.bgb').show();
+      $('.verification_wrong').show();
+       return false;
+    }
+    setImg(type,img_id);
+  })
+
+  function setImg(type,img_id){
+    if(!d){
+      return false;
+    }
+    d = false;
+    $('.londing_gif').show();
+    var url = "<?php echo $this->url('web-common', array('controller' => 'User', 'action' => 'getPhotofunia'))?>";
+    $.post(url,{type:type,img_id:img_id},function(data) {
+      $('.londing_gif').hide();
+      d = true;
+      if(data.code == 200){
+        $('.show__img').attr('src',data.img);
+      }else{
+        $('.bgb').show();
+        $('.verification_wrong').show();
+        return false;
+      }
+
+    },'json');
+  }
+
+  //点击弹出二维码窗口
+  $('.ishare__code').on('click', function() {
+    $('.pop').show()
+    $('.pop__code').show("fast")
+  })
+
+  $('.pop .close').on('click', function() {
+    $('.pop__code').hide("fast")
+    $('.pop').hide()
+  })
+
+  //点击弹出分享详情窗口
+  $('.ishare__link').on('click', function() {
+    $('.pop').show()
+    $('.pop__share').show("fast")
+  })
+
+  $('.pop .share__btn').on('click', function() {
+    $('.pop__share').hide("fast")
+    $('.pop').hide()
+  })
+
+  $('.verification_wrong_close').on('click',function(){
+      $('.bgb').hide();
+      $('.verification_wrong').hide();
+      return false;
+  });
+  //数据分享
+  <?php
+    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') && in_array(WX_IOSENV, array(1,2))) {
+  ?>
+    wx.ready(function(){
+         link = "<?php echo DIS_QRCODE_URL.$_SESSION['user_id'];?>";
+         shareData = {title: '<?php echo isset($data['heading']) ? $data['heading'] : ""?>', link:link ,desc: '<?php echo isset($data['subheading']) ? $data['subheading'] : ""?>',imgUrl: '<?php echo isset($data['img_path']) ? 'https://' . $_SERVER['HTTP_HOST'] .'/'.$data['img_path'] : ""?>'};
+         share(shareData);
+    });
+  <?php }?>
+
+</script>

@@ -1,0 +1,291 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>赠送记录</title>
+<style>
+    body{
+        padding-bottom: 80px;
+        background-color: #f0f0f5; 
+    }
+.voice_details .select_top a, .video_details .select_top a, .record .select_top a {
+
+    width: 33%;
+}
+.voice_curriculums_list div.content .information2 div:nth-child(2) {
+    text-align: right;
+}
+.voice_curriculums_list div.content {
+
+    padding: 8px 0 8px 5%;
+
+}
+
+
+</style>
+<html>
+<body>
+<div class="bgb"></div>
+    <div class="record">
+        <?php if($type && $type == "member"){?>
+            <div class="select_top  bg_white">
+                <a href="javascript:(0);" onclick="getFavorite(1,1)">音频</a>
+                <a href="javascript:(0);" onclick="getFavorite(2,1)">视频</a>
+                <a href="javascript:(0);" class="select_on" onclick="getFavorite(5,1)">会员</a>
+            </div>
+        <?php }else if($type && $type == "video"){?>
+           <div class="select_top  bg_white">
+                <a href="javascript:(0);" onclick="getFavorite(1,1)">音频</a>
+                <a href="javascript:(0);" class="select_on" onclick="getFavorite(2,1)">视频</a>
+                <a href="javascript:(0);" onclick="getFavorite(5,1)">会员</a>
+            </div>
+        <?php }else{?>
+            <div class="select_top  bg_white">
+                <a href="javascript:(0);" class="select_on" onclick="getFavorite(1,1)">音频</a>
+                <a href="javascript:(0);" onclick="getFavorite(2,1)">视频</a>
+                <a href="javascript:(0);" onclick="getFavorite(5,1)">会员</a>
+            </div>
+        <?php }?>
+        
+        <section>
+            <!-- 音频 -->
+            <div class="voice_curriculums_list" id="audio_curriculums_list">
+                <ul class=" bg_white">
+                    
+                </ul>
+        		<div class="unrecorded">
+        			<img src="<?php echo ROOT_PATH;?>webStyle/images/no_presentRecord.png" alt="">
+            		<div>还没有赠送记录</div>
+        		</div> 
+            </div>            
+            <!-- 视频 -->
+            <div class="voice_curriculums_list" id="video_curriculums_list" style="display:none">
+                <ul class=" bg_white">            
+                </ul>
+        		<div class="unrecorded">
+        			<img src="<?php echo ROOT_PATH;?>webStyle/images/no_presentRecord.png" alt="">
+            		<div>还没有赠送记录</div>
+        		</div> 
+            </div>  
+             <!-- 会员 -->
+            <div class="voice_curriculums_list" id="member_curriculums_list" style="display:none">
+                <ul class=" bg_white">            
+                </ul>
+        		<div class="unrecorded">
+        			<img src="<?php echo ROOT_PATH;?>webStyle/images/no_presentRecord.png" alt="">
+            		<div>还没有赠送记录</div>
+        		</div> 
+            </div>       
+        </section>
+    </div>
+</body>   
+</html>
+<script>
+var t=1;
+$(".record .select_top a").click(function(){
+        $(this).addClass('select_on').siblings().removeClass('select_on');
+        $('section>div').hide();
+        $('section>div').eq($(this).index()).show()
+})
+
+
+var finished = false;
+var page = 1;
+var member_type = "<?php echo $type?>";
+if(member_type){
+	if(member_type == "member"){
+		getFavorite(5,1);
+		$("#member_curriculums_list").show();
+	}else if(member_type == "video"){
+		getFavorite(2,1);
+		$("#video_curriculums_list").show();
+	}
+}else{
+	getFavorite(1,1);
+}
+function getFavorite(num,type){
+	 if (finished && type == 2) {
+         return false;
+     }
+	 $('.londing_gif').show();
+     if(type == 1){
+    	 page = 1;
+     }
+     finished = true;
+	$.post("<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxPresentRecordList'));?>",{num:num,page:page},function(result){
+		$('.londing_gif').hide();
+		if(result.length > 0){
+			var li = '';
+			var video_dom = $("#video_curriculums_list ul");
+			var audio_dom = $("#audio_curriculums_list ul");
+			var member_dom = $("#member_curriculums_list ul");
+			var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'presentRecordDetail'));?>";
+			$.each(result,function(i,v){
+				if(num == 1 || num == 2){
+					if(v.type == 3 || v.type == 4){
+						li += '<li>';
+						li += '<div class="delete_blue"><img src="<?php echo ROOT_PATH;?>webStyle/images/delete_blue.png" alt=""></div>';
+						li += '<a href="'+url+'?id='+v.id+'">';
+						li += '<div class="cover">';
+						if(num == 1){
+							li += '<img src="'+v.img+'" alt="">';
+						}else{
+							li += ' <img class="video_image" src="'+v.img+'" alt="">';
+						}
+						li += '<img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">';
+						li += '</div><div class="content"><div>'+v.audio_name+'</div>';
+						li += '<div class="information"> ';//<div class="sum">总共'+v.audio_num+'个音频</div><div class="counting"><span class="font_color_055773">'+v.study_num+'</span>人在学</div>';
+						if(num == 2){
+							li += '<div>数量：'+v.remain_num+'/'+v.num+'</div>';
+							if(v.num - v.remain_num != 0){
+								li += '<div class="counting"><span class="unclaimed">未领完</span></div>';
+							}else{
+								li += '<div class="counting"><span class="get_over">已领完</span></div>';
+							}
+						}else{
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/video_view.png" alt=""><span>'+v.study_num+'</span></div>';*/
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span>'+v.audio_length+'</span></div>';*/
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/date.png" alt=""><span>'+v.timestamp+'</span></div>';*/
+							li += '<div>数量：'+v.remain_num+'/'+v.num+'</div>';
+							if(v.num - v.remain_num != 0){
+								li += '<div class="counting"><span class="unclaimed rl5">未领完</span></div>';
+							}else{
+								li += '<div class="counting"><span class="get_over rl5">已领完</span></div>';
+							}
+						}
+						li += '<div class="ultimately_delete" id='+v.id+' onclick=ajaxDelete('+v.id+')>删除</div></li>';
+					}else if(v.type == 1 || v.type == 2){                     
+						li += '<li>';
+						li += '<div class="delete_blue"><img src="<?php echo ROOT_PATH;?>webStyle/images/delete_blue.png" alt=""></div>';
+						li += '<a href="'+url+'?id='+v.id+'">';
+						li += '<div  class="cover">';
+						if(num == 1){
+							li += '<img src="'+v.img+'" alt="">';
+						}else{
+							li += '<img class="video_image" src="'+v.img+'" alt="">';
+						}
+						li += '<img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">';
+						li += '</div>';
+						li += '<div class="content">';
+						li += '<div>'+v.audio_name+'</div>';
+						li += '<div class="teacher_name">'+v.teacher_name+'</div>';
+						li += '<div class="information2">';
+						if(num == 2){
+							li += '<div>数量：'+v.remain_num+'/'+v.num+'</div>';
+							if(v.num - v.remain_num != 0){
+								li += '<div class="counting"><span class="unclaimed">未领完</span></div>';
+							}else{
+								li += '<div class="counting"><span class="get_over">已领完</span></div>';
+							}
+						}else{
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/video_view.png" alt=""><span>'+v.study_num+'</span></div>';*/
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span>'+v.audio_length+'</span></div>';*/
+							/*li += '<div><img src="<?php //echo ROOT_PATH;?>webStyle/images/date.png" alt=""><span>'+v.timestamp+'</span></div>';*/
+							li += '<div>数量：'+v.remain_num+'/'+v.num+'</div>';
+							if(v.num - v.remain_num != 0){
+								li += '<div class="counting"><span class="unclaimed rl5">未领完</span></div>';
+							}else{
+								li += '<div class="counting"><span class="get_over rl5">已领完</span></div>';
+							}
+						}
+						li += '</div></div>';
+						li += '<div  class="more"><img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt=""></div></a>';
+						li += '<div class="ultimately_delete" id='+v.id+' onclick=ajaxDelete('+v.id+')> 删除 </div></li>';
+					}
+				}
+				if(num == 5){
+					if(v.type == 5){
+						li += '<li>';
+						li += '<div class="delete_blue"><img src="<?php echo ROOT_PATH;?>webStyle/images/delete_blue.png" alt=""></div>';
+						li += '<a href='+url+'?id='+v.id+'&type=member>';
+						li += '<div  class="cover">';
+						li += '<img src="<?php echo ROOT_PATH;?>webStyle/images/nightbird_log.png" alt="">';
+						li += '</div>';
+						li += '<div class="content">';
+						li += '<div>一起聚餐会员卡</div>';
+						li += '<div class="information2">';
+						li += '<div>数量：'+v.remain_num+'/'+v.num+'</div>';
+						if(v.num - v.remain_num != 0){
+							li += '<div class="counting"><span class="unclaimed rl5">未领完</span></div>';
+						}else{
+							li += '<div class="counting"><span class="get_over rl5">已领完</span></div>';
+						}
+						li += '</div></div>';
+						li += '<div  class="more"><img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt=""></div></a>';
+						li += '<div class="ultimately_delete" id='+v.id+' onclick=ajaxDelete('+v.id+')> 删除 </div></li>';
+					}	
+				}
+								
+			});	
+			if(type == 1){
+				$("#video_curriculums_list ul li").remove('li');
+				$("#audio_curriculums_list ul li").remove('li');
+				$("#member_curriculums_list ul li").remove('li');
+			}
+			if(num == 1){
+				audio_dom.append(li);
+			}else if(num == 2){
+				video_dom.append(li);
+			}else{
+				member_dom.append(li);
+			}
+// 			$(".user_footer").show()
+			finished = false;
+            page++;
+		}else{
+			if(num == 1){
+				if($("#audio_curriculums_list ul li").length <= 0){
+					$(".user_footer").hide();
+					$("#audio_curriculums_list .unrecorded").show();
+				}
+			}else if(num == 2){
+				if($("#video_curriculums_list ul li").length <= 0){
+					$(".user_footer").hide();
+					$("#video_curriculums_list .unrecorded").show();
+				}
+			}else{
+				if($("#member_curriculums_list ul li").length <= 0){
+					$(".user_footer").hide();
+					$("#member_curriculums_list .unrecorded").show();
+				}
+			}
+		}
+		var ua = navigator.userAgent.toLowerCase(); 
+    			if (/android/.test(ua)) {
+        			$(".rl5").css({"position":"relative ","left":"5px"})
+
+
+    			}
+	},'json');
+	
+}
+
+
+	
+function loadmore(obj){    
+	if($('.select_on').html() == '视频课程'){
+		var num = 2;
+	}else if($('.select_on').html() == '音频课程'){
+		var num = 1;
+	}else{
+		var num = 5;
+	}
+    var scrollTop = $(obj).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = window.innerHeight;
+    if (scrollHeight - scrollTop - windowHeight<=50 ) {
+    	getFavorite(num,2);
+    }
+};
+$(window).scroll(function (){
+    if (loadmore) {
+        loadmore($(this));
+    }
+});
+
+
+
+
+</script>
+

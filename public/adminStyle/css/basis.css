@@ -1,0 +1,52 @@
+	.manage-box h1 {
+		border-bottom: 1px solid #ccc;
+		line-height: 50px;
+	}
+	li {
+		list-style-type:none;
+		float: left;
+	}
+	.manage-box header ul li {
+		/*width: 11.11%;*/
+		width: 6.09%;
+		text-align: center;
+		line-height: 40px;
+	}
+	.manage-box header ul li a {
+		line-height: 40px;
+		font-size: 16px;
+		display: block;
+	}
+	.manage-box header ul li .on {
+		color: #fff;
+		background: #317eac;
+	} 
+	.manage-box header ul {
+		overflow: hidden;
+		line-height: 40px;
+		height: 40px;
+		margin: 0;
+		border: 1px solid #ccc;
+		border-top: none;
+	}
+	.manage-box .content {
+		margin-top: 20px;
+	}
+	.form-horizontal .control-label {
+		text-align: left;
+	}
+	.manage-box .content .box .box-content tbody input {
+		border: none;
+		display: inline-block;
+		height: 26px;
+		padding: 0;
+		margin-bottom: 0;
+		font-size: 14px;
+		width: 100%;
+		text-align: center;
+	}
+	.content h6 {
+		overflow: hidden;
+		height: 45px;
+		line-height: 45px;
+	}

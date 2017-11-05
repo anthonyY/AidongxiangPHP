@@ -1,0 +1,70 @@
+/*
+<span class="divider">/</span>
+  style="position: relative"
+ <i class="iconfont" style="position: absolute; top: 5px; left: 5px;">&#xe604;</i>
+ * */
+.pull-right .input-small,.pull-right .input-big{
+	width: 118px;
+    padding-left: 25px
+}
+.pull-right #inpstart,.pull-right #inpend{
+	width: 115px;
+}
+#select {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	width: 100px;
+}
+
+/*信誉度样式*/
+/*心*/
+.b_1{
+width: 16px;
+height: 16px;
+display: inline-block;
+background: url('../../images/b_1.gif') no-repeat;
+-webkit-background-size: contain;
+}
+/*钻*/
+.b_2{
+width: 16px;
+height: 16px;
+display: inline-block;
+background: url('../../images/b_2.gif') no-repeat;
+-webkit-background-size: contain;
+}
+/*皇冠*/
+.b_3{
+width: 16px;
+height: 16px;
+display: inline-block;
+background: url('../../images/b_3.gif') no-repeat;
+-webkit-background-size: contain;
+}
+/*黄冠*/
+.b_4{
+width: 16px;
+height: 16px;
+display: inline-block;
+background: url('../../images/b_4.gif') no-repeat;
+-webkit-background-size: contain;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* project id："144617" */
+  src: url('//at.alicdn.com/t/font_1474862685_457878.eot');
+  src: url('//at.alicdn.com/t/font_1474862685_457878.eot') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1474862685_457878.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1474862685_457878.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1474862685_457878.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont";
+    font-size:16px;
+    font-style:normal;
+}
+
+
+
+
+

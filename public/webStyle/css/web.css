@@ -1,0 +1,779 @@
+/*资讯详情*/
+/*.information {
+	padding: 15px 15px 20px 15px;
+	background-color: #f2f2f2;
+}*/
+.information .information-header p {
+	font-size: 17px;
+	color: #333;
+	text-align: center;
+}
+.information .information-header div {
+	margin-top: 20px;
+}
+.information .information-header div span {
+	font-size: 12px;
+	color: #999;
+}
+.information .information-header div .information-header-date {
+	margin-right: 30px;
+}
+.information .information-body {
+	margin-top: 10px;
+	padding-top: 19px;
+	border-top: 1px solid #d9d9d9;
+}
+.information .information-body p {
+	margin-bottom: 1px;
+	font-size: 15px;
+	color: #333;
+}
+
+.information .information-button p {
+	margin: 25px auto;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+}
+.information .information-button p span {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: none;
+	background-color: #f6c700;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 60px;
+	text-align: center;
+	color: #fff;
+}
+.information .information-footer {
+	background-color: #fff;
+	width: 100%;
+	border-radius: 10px;
+}
+.information .information-footer .information-footer-header {
+	padding-left: 15px;
+	height: 35px;
+	line-height: 35px;
+	font-size: 15px;
+	color: #f7820f;
+}
+.information .information-footer .information-footer-box {
+	border-top: 1px solid #d9d9d9;
+	overflow: hidden;
+}
+.information .information-footer .information-footer-box .footer-box-left {
+	padding: 10px;
+}
+.information .information-footer .information-footer-box .footer-box-left img {
+	/*width: 120px;
+	height: 90px;*/
+	width: 80px;
+	height: 60px;
+	border-radius: 5px;
+}
+.information .information-footer .information-footer-box .footer-box-right {
+	position: relative;
+	height: 80px;
+	margin-left: 5px;
+}
+.information .information-footer .information-footer-box .footer-box-right p {
+	position: absolute;
+	top: 10px;
+	left: 0;
+	font-size: 15px;
+	color: #333;
+	table-layout:fixed;
+	word-break: break-all;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.information .information-footer .information-footer-box .footer-box-right span {
+	position: absolute;
+	left: 0;
+	bottom: 10px;
+	font-size: 12px;
+	color: #999;
+}
+/*广告详情*/
+.advert {
+	padding: 15px 15px 20px 15px;
+	background-color: #f2f2f2;
+}
+.advert .advert-header p {
+	font-size: 17px;
+	color: #1a1a1a;
+	text-align: center;
+}
+.advert .advert-header div {
+	margin-top: 21px;
+}
+.advert .advert-header div span {
+	font-size: 14px;
+	color: #999;
+}
+.advert .advert-header div .advert-header-date {
+	margin-right: 20px;
+}
+.advert .advert-body {
+	margin-top: 10px;
+	padding-top: 19px;
+	border-top: 1px solid #d9d9d9;
+}
+.advert .advert-body p {
+	margin-bottom: 16px;
+	font-size: 15px;
+	color: #333;
+}
+.advert .advert-body img {
+	margin-bottom: 16px;
+	width: 100%;
+}
+/*回答详情*/
+.answer {
+	background-color: #fff;
+}
+.answer .answer-header {
+	position: relative;
+	padding: 15px 15px 0 15px;
+	overflow: hidden;
+}
+.answer .answer-header .header-name {
+	font-size: 18px;
+	color: #333;
+}
+.answer .answer-header .header-grade {
+	/*position: absolute;*/
+	padding-left: 10px;
+	font-size: 13px;
+	color: #999;
+}
+.answer .answer-header .header-call {
+	/*position: absolute;*/
+	padding-left: 10px;
+	font-size: 13px;
+	color: #1b83ed;
+}
+.answer .answer-header .header-money {
+	position: absolute;
+	right: 15px;
+	bottom: 0;
+	font-size: 18px;
+	color: #f24a3e;
+}
+.answer .answer-title {
+	padding: 0 15px;
+	margin-top: 14px;
+	font-size: 18px;
+	color: #333;
+}
+.answer .answer-content {
+	padding: 0 15px;
+	overflow: hidden;
+	margin-top: 20px;
+}
+.answer .answer-content .answer-content-img img {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: none;
+}
+.answer .answer-content .answer-content-audio {
+	margin-left: 12px;
+}
+.answer .answer-content .answer-content-audio p {
+	position: relative;
+}
+.answer .answer-content .answer-content-audio .audio-name {
+	font-size: 14px;
+	color: #999;
+}
+.answer .answer-content .answer-content-audio .audio-grade {
+	position: absolute;
+	left: 52px;
+	bottom: 0;
+	font-size: 12px;
+	color: #999;
+}
+.answer .answer-content .answer-content-audio .audio-call {
+	position: absolute;
+	left: 80px;
+	bottom: 0;
+	font-size: 12px;
+	color: #1b83ed;
+}
+.answer .answer-content .answer-content-audio .content-audio-img{
+	position: relative;
+	margin-top: 10px;
+	width: 80%;
+	height: 40px;
+}
+.answer .answer-content .answer-content-audio .content-audio-img>img {
+	width: 100%;
+	height: 40px;
+}
+.answer .answer-content .answer-content-audio .content-audio-img>p {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	padding-left: 20px;
+	height: 40px;
+	line-height: 40px;
+	z-index: 999;
+}
+.answer .answer-content .answer-content-audio .content-audio-img .audio-img-p .audio-img-p-animation {
+	display: inline-block;
+	margin-top: 5px;
+	width: 30px;
+	height: 30px;
+	background: url(../images/common_ic_04voice@2x.png) no-repeat 0 49%;
+	background-size: 30px 30px;
+}
+@keyframes myfirst {
+	0%   {background: url(../images/common_ic_01voice@2x.png) no-repeat -200% 49%;background-size: 30px 30px;}
+	30%  {background: url(../images/common_ic_02voice@2x.png) no-repeat 100% 49%;background-size: 30px 30px;}
+	60%	 {background: url(../images/common_ic_03voice@2x.png) no-repeat 100% 49%;background-size: 30px 30px;}
+	90%  {background: url(../images/common_ic_04voice@2x.png) no-repeat 0 49%;background-size: 30px 30px;}
+	100% {background: url(../images/common_ic_04voice@2x.png) no-repeat -200% 49%;background-size: 30px 30px;}
+}
+.answer .answer-content .answer-content-audio .content-audio-img .audio-img-p .audio-img-p-date {
+	position: relative;
+	top: -18px;
+	font-size: 14px;
+	color: #fff;
+}
+.answer .answer-content .answer-content-audio .content-audio-img .audio-img-p .audio-img-p-text {
+	padding-left: 15px;
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	vertical-align: top;
+	font-size: 16px;
+	color: #fff;
+}
+.answer .answer-content .answer-content-bottom {
+	position: relative;
+	clear: left;
+	padding-top: 23px;
+}
+.answer .answer-content .answer-content-bottom .content-bottom-date {
+	font-size: 12px;
+	color: #999;
+}
+.answer .answer-content .answer-content-bottom .content-bottom-number {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	font-size: 12px;
+	color: #666;
+	background: url(../images/common_btn_like_nor@3x.png) no-repeat 0 49%;
+	background-size: 18px 18px;
+	padding-left: 20px;
+}
+.answer .answer-footer {
+	padding: 0 15px 15px 15px;
+	margin-top: 18px;
+	border-top: 1px solid #d9d9d9;
+}
+.answer .answer-footer>p {
+	margin-top: 9px;
+	font-size: 14px;
+	color: #333;
+}
+.answer .answer-footer .answer-footer-img {
+	margin-top: 10px;
+	padding-left: 20px;
+	overflow: hidden;
+}
+.answer .answer-footer .answer-footer-img img {
+	padding-left: 4px;
+	margin-right: 0;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: none;
+	float: right;
+}
+/*关于我们*/
+.aboutmy .aboutmy-img {
+	padding-top: 59px;
+	text-align: center;
+}
+.aboutmy .aboutmy-img>img {
+	width: 120px;
+	height: 120px;
+	border-radius: 15px;
+}
+.aboutmy .aboutmy-img>p {
+	margin-top: 13px;
+	font-size: 18px;
+	color: #333;
+}
+.aboutmy .aboutmy-text {
+	padding: 23px 15px 0 15px;
+}
+.aboutmy .aboutmy-text>p {
+	font-size: 15px;
+	color: #666;
+	line-height: 22px;
+}
+/*注册协议*/
+.register {
+	padding: 13px 15px;
+	font-size: 15px;
+	color: #333;
+}
+.register span {
+	display: block;
+	font-size: 15px;
+	font-weight: bold;
+	color: #333;
+	margin: 10px 0;
+}
+/*视屏详情*/
+.screen .screen-video {
+	width: 100%;
+	height: 225px;
+	background-color: #000;
+}
+.screen .screen-video #media {
+	width: 100%;
+	height: 225px;
+	background-color: #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+}
+.screen .screen-top {
+	padding: 15px 15px 18px 15px;
+	background-color: #fff;
+}
+.screen .screen-top p {
+	font-size: 15px;
+	color: #333;
+}
+.screen .screen-top .screen-top-top {
+	position: relative;
+	margin-top: 20px;
+}
+.screen .screen-top .screen-top-top span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: inline-block;
+	background: url(../images/common_ic_promulgator@3x.png) no-repeat 0 49%;
+	background-size: 20px 20px;
+	padding-left: 25px;
+	font-size: 13px;
+	color: #666;
+}
+.screen .screen-top .screen-top-top img {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
+}
+.screen .screen-top .screen-top-click {
+	text-align: center;
+	margin-top: 54px;
+}
+.screen .screen-top .screen-top-click span {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: none;
+	background-color: #f6c700;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 60px;
+	color: #fff;
+}
+.screen .screen-center {
+	margin-top: 12px;
+	background-color: #fff;
+}
+.screen .screen-center .screen-center-title {
+	padding: 16px 0 16px 15px;
+	font-size: 16px;
+	color: #f7820f;
+}
+.screen .screen-center .screen-center-input {
+	position: relative;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #d9d9d9;
+	height: 30px;
+}
+.screen .screen-center .screen-center-input img {
+	position: absolute;
+	top: 0;
+	left: 22px;
+	width: 30px;
+	height: 30px;
+}
+.screen .screen-center .screen-center-input input {
+	position: absolute;
+	top: 0;
+	left: 69px;
+	width: 70%;
+	height: 28px;
+	border-radius: 4px;
+	border: 1px solid #d9d9d9;
+	padding-left: 10px;
+	font-size: 15px;
+}
+.screen .screen-box {
+	background-color: #fff;
+	padding: 0 15px;
+}
+.screen .screen-box .screen-evaluate {
+	position: relative;
+	height: auto;
+	border-bottom: 1px solid #d9d9d9;
+	padding-bottom: 15px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-img {
+	margin-top: 13px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-img img {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	border: none;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center {
+	margin-top: 15px;
+	margin-left: 13px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-name {
+	font-size: 15px;
+	color: #333;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-name span {
+	padding-left: 13px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-title {
+	margin-top: 12px;
+	font-size: 15px;
+	color: #666;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-footer {
+	margin-top: 16px;
+	position: relative;
+	font-size: 12px;
+	color: #999;
+	height: 15px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-footer .center-footer-date {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-footer .center-footer-img {
+	position: absolute;
+	top: -2px;
+	right: 0;
+	color: #666;
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-footer .center-footer-img img {
+	width: 20px;
+	height: 20px;
+}
+.screen .screen-box .screen-evaluate .screen-evaluate-center .evaluate-center-footer .center-footer-img span {
+	vertical-align: super;
+}
+.screen .screen-btn {
+	width: 100%;
+	height: 45px;
+	text-align: center;
+	line-height: 45px;
+	font-size: 16px;
+	color: #1b83ed;
+	background-color: #fff;
+}
+/*直播分享*/
+.radio .radio-header {
+	position: fixed;
+	top: 8px;
+	left: 10px;
+	font-size: 14px;
+	color: #fff;
+	z-index: 9999999;
+	background-color: #000;
+	opacity: 0.4;
+	border-radius: 17px;
+	height: 35px;
+}
+.radio .radio-header .radio-header-own {
+	position: relative;
+	left: 0.5px;
+	top: 0.5px;
+	width: 125px;
+	height: 34px;
+}
+.radio .radio-header .radio-header-own>img {
+	width: 32px;
+	height: 32px;
+	border: 1px solid #fff;
+	border-radius: 50%;
+}
+.radio .radio-header .radio-header-own>div {
+	position: absolute;
+	top: 0;
+	left: 47px;
+}
+.radio .radio-header .radio-header-own>div>p {
+
+}
+.radio .radio-header .radio-header-own>div>span {
+	font-size: 12px;
+	position: relative;
+	top: -4px;
+}
+.radio .radio-footer {
+	position: fixed;
+	left: 0;
+	z-index: 999;
+	bottom: 18px;
+	width: 100%;
+}
+.radio .radio-footer img {
+	width: 34px;
+	height: 34px;
+}
+.radio .radio-footer .radio-footer-text {
+	margin-left: 15px;
+}
+.radio .radio-footer .radio-footer-off {
+	margin-right: 15px;
+}
+.radio .radio-footer .radio-footer-share {
+	margin-right: 36px;
+}
+.radio .radio-footer .radio-footer-money {
+	margin-right: 18px;
+}
+/*下载app*/
+.download {
+	position: relative;
+	width: 100%;
+}
+.download .slideBox {
+	position:relative;
+	overflow:hidden;
+	margin: 0 auto;
+	width: 100%;
+	height: 140px;
+}
+.download .slideBox .hd {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 1;
+	width: 100%;
+	text-align: center;
+	height: 28px;
+	line-height: 28px;
+}
+.download .slideBox .hd li {
+	display: inline-block;
+	margin: 0 6px;
+	width: 6px;
+	height: 6px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	border: 1px solid #fff;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+.download .slideBox .hd li.on {
+	margin: -1px 6px;
+	width: 8px;
+	height: 8px;
+	background: #fff;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+}
+.download .slideBox .bd {
+	position: relative;
+	z-index: 0;
+}
+.download .slideBox .bd li {
+	position: relative;
+	text-align: center;
+}
+.download .slideBox .bd li img {
+	background:url(images/loading.gif) center center no-repeat;
+	vertical-align: top;
+	width:100%;/* 图片宽度100%，达到自适应效果 */
+}
+.download .slideBox .bd li a {
+	-webkit-tap-highlight-color:rgba(0,0,0,0); /* 去掉链接触摸高亮 */
+}
+.download .download-center {
+	padding: 0 15px;
+	position: absolute;
+	left: 0;
+	bottom: 20px;
+}
+.download .download-center>p>i {
+	font-style: normal;
+}
+.download .download-center .download-iphone {
+	width: 100%;
+	height: 45px;
+	line-height: 45px;
+	font-size: 14px;
+	background-color: #fff;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom: 1px solid #ccc;
+}
+.download .download-center .download-iphone span {
+	display: inline-block;
+	width: 75px;
+	text-align: center;
+}
+.download .download-center .download-iphone input {
+	padding-left: 8px;
+	height: 45px;
+}
+.download .download-center .download-sms {
+	position: relative;
+	width: 100%;
+	height: 45px;
+	line-height: 45px;
+	font-size: 14px;
+	background-color: #fff;
+}
+.download .download-center .download-sms-yzm {
+	border-bottom: 1px solid #ccc;
+}
+.download .download-center .download-sms-bottom {
+	margin-bottom: 20px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.download .download-center .download-sms .download-sms-text {
+	display: inline-block;
+	width: 75px;
+	text-align: center;
+}
+.download .download-center .download-sms input {
+	padding-left: 8px;
+	height: 45px;
+}
+.download .download-center .download-sms .download-sms-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: inline-block;
+	width: 90px;
+	height: 45px;
+	line-height: 45px;
+	text-align: center;
+	color: #fff;
+	background-color: #f8992a;
+}
+.download .download-center .download-sms-bottom .download-sms-btn {
+	border-bottom-right-radius: 5px;
+}
+.download .download-center .download-btn {
+	margin-top: 10px;
+	width: 100%;
+	height: 44px;
+	font-size: 17px;
+	color: #fff;
+	background-color: #07bb31;
+	border-radius: 5px;
+	-webkit-tap-highlight-color:transparent;
+}
+/*零钱规则*/
+.looseChange {
+	padding: 27px 15px;
+	font-size: 15px;
+	color: #333;
+}
+/*直播协议*/
+.radioAgreement {
+	padding: 15px 15px 55px 15px;
+	font-size: 15px;
+	color: #333;
+}
+.radioAgreement-btn input {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 99;
+	width: 100%;
+	height: 49px;
+	font-size: 17px;
+	color: #fff;
+	background-color: #07bb31;
+	border-radius: 0;
+}
+/*二维码分享*/
+.code{
+	padding: 0 15px;
+	background: url(../images/bg.png) no-repeat 100% 100%;
+	background-size: 100% 100%;
+}
+.code .code-header {
+	padding-top: 48px;
+	font-size: 16px;
+	color: #fff;
+}
+.code .code-header>p span {
+	margin-left: 11px;
+}
+.code .code-header .code-header-text {
+	margin-top: 24px;
+}
+.code .code-header .code-header-text p {
+	/*margin-bottom: 6px;*/
+	line-height: 24px;
+}
+.code .main {
+	position: relative;
+	margin: 0 auto;
+	margin-top: 76px;
+	text-align: center;
+}
+.code .main #message {
+	position: absolute;
+	top: 60px;
+}
+.code .main #message img {
+	margin: 0 auto;
+	width: 60px;
+	height: 60px;
+}
+.code .main .main-text {
+	margin-top: 15px;
+	font-size: 14px;
+	color: #fff;
+}
+.code .code-btn {
+	margin-top: 81px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+.code .code-btn input {
+	width: 160px;
+	height: 44px;
+	background-color: #07bb31;
+	border-radius: 5px;
+	font-size: 16px;
+	color: #fff;
+}

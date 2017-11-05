@@ -1,0 +1,249 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/play-num-deal.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>赠送详情</title>
+<style>
+    body{
+        padding-bottom: 90px;
+        background-color: #f0f0f5; 
+    }
+
+</style>
+
+<html>
+<body>
+    <div class="bgb" style="display:none"></div>
+    <div id="details_banner">
+        <div class="bd sl">
+            <div class="tempWrap" style="overflow:hidden; position:relative;"><ul style="width: 1500px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translate(0px, 0px) translateZ(0px);">
+            <?php if($ads){?>
+            <?php foreach ($ads as $v){?>
+                <li style="display: table-cell; vertical-align: top; width: 375px;"><a href="<?php echo $v['link']?>"><img src="<?php echo ROOT_PATH.UPLOAD_PATH.$v['image'];?>" alt=""></a></li>
+            <?php }?>
+            <?php }?>
+            </ul></div>
+        </div>
+        <div class="hd">
+            <ul style="margin-left: 154.5px;"><li class="on">1</li><li class="">2</li><li class="">3</li><li class="">4</li></ul>
+        </div> 
+    </div>
+
+    <?php if(!isset($data['qrcode'])){?>
+    <div class="present_course_title bg_white">
+        课程礼包
+    </div>
+            <div class="voice_curriculums_list bg_white" id="video_curriculums_list">
+                <ul>
+                    <li>
+                    <?php if($data['audio']['type'] == 1 || $data['audio']['type'] == 2){?>
+                    <?php if($data['audio']['type'] == 2){?>
+                        <a href="<?php echo $this->url('web-common',array('controller' => 'video','action' => 'details'));?>?id=<?php echo $data['audio']['id']?>,1&type=1">
+                    <?php }else{?>
+                        <a href="<?php echo $this->url('web-common',array('controller' => 'audio','action' => 'details'));?>?id=<?php echo $data['audio']['id']?>,1&type=1">
+                    <?php }?>
+                            <div  class="cover">
+                                <img class="video_image" src="<?php echo $data['audio']['img']?>" alt="">
+                                <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                            </div>
+                            <div class="content">
+                                <div><?php echo $data['audio']['title']?></div>
+<!--                                 <div class="teacher_name">张老师</div> -->
+                                <div class="information2">
+                                    <div class="sum font_color_055773 course_price">￥<?php echo $data['price']?></div>
+<!--                                     <div class="counting">总共8个音频</div> -->
+                                    <div><img src="<?php echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span><?php echo $data['audio']['audio_length']?></span></div>
+                                </div>
+                            </div>
+                            <div  class="more">
+                                <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                            </div>
+                        </a>
+                    <?php }else{?>                                             
+                        <?php if($data['audio']['type'] == 3){?>
+                             <a href="<?php echo $this->url('web-common',array('controller' => 'audio','action' => 'details'));?>?id=<?php echo $data['audio']['id']?>,2&type=2">
+                        <?php }else{?>
+                            <a href="<?php echo $this->url('web-common',array('controller' => 'video','action' => 'details'));?>?id=<?php echo $data['audio']['id']?>,2&type=2">
+                        <?php }?>
+                            <div  class="cover">
+                                <img class="video_image" src="<?php echo $data['audio']['img']?>" alt="">
+                                <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                            </div>
+                            <div class="content">
+                                <div><?php echo $data['audio']['title']?></div>
+                                <div class="information">
+                                    <div class="sum font_color_055773 course_price">￥<?php echo $data['price']?></div>
+                                    <div class="counting">总共<?php echo $data['audio']['audios_num']?>个音频</div>
+                                </div>
+                            </div>
+                            <div  class="more">
+                                <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                            </div>
+                        </a>
+                    <?php }?>
+                    </li>
+
+                </ul>
+            </div>
+            
+            <div class="present_quantity">共
+                <span class="font_color_055773"><?php echo $data['num']?></span>
+                份,已领取
+                <span class="font_color_055773"><?php echo $data['remain_num']?></span>
+                份
+            </div>
+           <?php if(isset($data['courses_list']) && $data['courses_list']){?>     
+                <div class="thank_list bg_white">
+                    <ul>
+                       <?php foreach ($data['courses_list'] as $v){?>
+                            <li>
+                                <a>
+                                    <div class="cover">
+                                        <img src="<?php echo $v['user_img_head_icon'];?>" alt="">
+                                    </div>
+                                    <div class="content">
+                                            <div class="mb10"><?php echo $v['user_name'];?></div>
+                                            <div class="font_color_gray">谢谢老板么么哒</div>
+        
+                                    </div>
+                                    <div class="thank_time">
+                                        <span class="mr10"><?php echo date('Y-m-d',strtotime($v['timestamp']));?></span>
+                                        <span class="mr10"><?php echo date('H:i',strtotime($v['timestamp']));?></span>
+                                    </div>
+                                </a>
+                            </li>
+                        <?php }?>
+                    </ul>
+                </div>
+             <?php }?>
+            <footer class="audio_footer">
+                <ul>
+                    <?php if($data['user_id'] == $_SESSION['user_id']){?>
+                        <?php if($data['num']-$data['remain_num'] > 0 && in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                            <li><a href="javascript:(0);" onclick="sendFriend()"><p><span>送给好友</span></p></a></li>
+                            <li><a href="javascript:(0);" class="received"><p><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><span>已领取</span></p></a></li>
+                        <?php }else if($data['num']-$data['remain_num'] == 0 && in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                            <li><a href="javascript:(0);" class="received"><p><span>送给好友</span></p></a></li>
+                            <li><a href="javascript:(0);" class="received"><p><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><span>已领取</span></p></a></li>
+                        <?php }else if($data['num']-$data['remain_num'] > 0 && !in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                             <li><a href="javascript:(0);" onclick="sendFriend()"><p><span>送给好友</span></p></a></li>
+                             <li><a href="javascript:(0);" id="getMyBag"><p><span>领取礼包</span></p></a></li>
+                        <?php }else{?>
+                             <li><a href="javascript:(0);" class="received"><p><span>送给好友</span></p></a></li>
+                             <li><a href="javascript:(0);" class="received"><p><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><span>礼包已领完</span></p></a></li>
+                        <?php }?>
+                    <?php }else{?>
+                        <?php if($data['num']-$data['remain_num'] > 0 && in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                            <li><a href="javascript:(0);" class="received"><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><p><span>已领取</span></p></a></li>
+                        <?php }else if($data['num']-$data['remain_num'] == 0 && in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                            <li><a href="javascript:(0);" class="received"><p><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><span>已领取</span></p></a></li>
+                        <?php }else if($data['num']-$data['remain_num'] > 0 && !in_array($_SESSION['user_id'],$data['user_ids'])){?>
+                             <li><a href="javascript:(0);" id="getOrderBag"><p><span>领取礼包</span></p></a></li>
+                        <?php }else{?>
+                             <li><a href="javascript:(0);" class="received"><p><img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt=""><span>礼包已领完</span></p></a></li>
+                        <?php }?>
+                    <?php }?>
+                </ul>
+            </footer>
+    <?php }?>
+    <!-- 领取成功 -->
+    <div class="get_hint" id="div_sub_ok">
+        <div>
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/get_succeed_gray.png" alt="">
+            <div>领取成功，课程已放入您的个人中心，即刻开始学习之旅吧！</div>
+        </div>
+        <div class="affirm">
+            <a href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'buyRecord'));?>" id="sub_ok" onclick="sub_ok()">确认</a>
+        </div>
+    </div>
+
+    <!-- 点击分享 -->
+    <div class="get_hint" id="send_sub_ok">
+        <div>
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/share_gray.png" alt="">
+            <div>点击屏幕右上角“...”选择分享给好友来领取。</div>
+        </div>
+        <div class="affirm">
+            <a href="javascript:(0);" onclick="send_sub_ok()">确认</a>
+        </div>
+    </div>
+</body>   
+</html>
+<script>
+//图片轮播
+adList();
+function adList(){
+   TouchSlide({slideCell:"#details_banner",
+               titCell:".hd ul",
+               mainCell:'.bd ul',
+               effect:'left',
+               autoPlay:true,
+               autoPage:true
+        });           
+   $('.hd ul').css('margin-left',($('.hd').width()-$('.hd ul').width())/2+'px');
+}
+
+$("#getMyBag").click(function(){
+	var user_id = "<?php echo $_SESSION['user_id']?>"; //当前用户
+	var audio_id = "<?php echo isset($data['audio']['id']) ? $data['audio']['id'] : 0?>"; //课程ID -> 修改get_course
+	var get_id = "<?php echo isset($data['id']) ? $data['id'] : 0?>"; //当前记录id->修改get_course
+    var type = "<?php echo isset($data['audio']['type']) ? $data['audio']['type'] : 0?>";
+	var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxGetCourse'));?>";
+	$.post(url,{type:type,get_id:get_id,audio_id:audio_id,user_id:user_id},function(result){
+		if(result.code != 200){
+			alert(result.message);
+			return false;
+		}else{
+			$("#getMyBag").addClass('received');
+			$("#getMyBag>p>span").html('已领取');
+             $("#getMyBag>p>span").before('<img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt="">');
+			$('#div_sub_ok').show();
+			$('.bgb').show();
+		}
+	},'json');
+	
+});
+$("#getOrderBag").click(function(){
+	var user_id = "<?php echo $_SESSION['user_id']?>"; //当前用户
+	var audio_id = "<?php echo isset($data['audio']['id']) ? $data['audio']['id']:0?>"; //课程ID -> 修改get_course
+	var get_id = "<?php echo isset($data['id']) ? $data['id']:0?>"; //当前记录id->修改get_course
+    var type = "<?php echo isset($data['audio']['type']) ? $data['audio']['type']:0?>";
+	var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxGetCourse'));?>";
+	$.post(url,{type:type,get_id:get_id,audio_id:audio_id,user_id:user_id},function(result){
+		if(result.code != 200){
+			alert(result.message);
+			return false;
+		}else{
+			$("#getOrderBag").addClass('received');
+			$("#getOrderBag>p>span").html('已领取');
+            $("#getOrderBag>p>span").before('<img class="already_by" src="<?php echo ROOT_PATH;?>webStyle/images/ed.png" alt="">');
+			$('#div_sub_ok').show();
+			$('.bgb').show();
+		}
+	},'json');
+	
+});
+function sub_ok(){
+	$('#div_sub_ok').hide();
+	$('.bgb').hide();
+	location.reload();
+	
+}
+
+function send_sub_ok(){
+	$('#send_sub_ok').hide();
+}
+
+function sendFriend(){
+	$('#send_sub_ok').show();
+}
+//分享设置 
+wx.ready(function(){
+     var img = "<?php echo isset($data['audio']['img']) ? 'http://' . $_SERVER['HTTP_HOST'] . $data['audio']['img'] : ""?>";
+	 shareData = {title: '<?php echo isset($data['audio']['title']) ?  $data['audio']['title'] : ""?>',desc: '好友<?php echo isset($data['share_user_name']) ? $data['share_user_name'] : "";?>给您赠送了一个精彩课程，快点击领取！',imgUrl: img};
+	 share(shareData);
+});
+</script>

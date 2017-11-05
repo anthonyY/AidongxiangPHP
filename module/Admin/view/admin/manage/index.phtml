@@ -1,0 +1,71 @@
+<link href="<?php echo $this->basePath() . '/adminStyle/css/basis.css'?>" rel="stylesheet" type="text/css">
+<style type="text/css">
+	.tab_menu li.on {
+		background-color: #0099CC;
+		border-color: #0099CC;
+	}
+	.tab_menu li.on a{
+	   color: #fff;
+	}
+    #box{
+    	border:0px;
+    	width:100%;
+    	height:900px;
+    }
+</style>
+<body>
+    <article class="manage-box">
+    	<h1>系统设置</h1>
+    	<header class="tab_menu">
+    		<ul>
+    		<?php $role = $_SESSION['role_nb_admin_manage']; if($role == 'all' || count(array_diff(array('System-userHelp',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'userHelp'));?>" target="box"><li class="on">用户帮助</a></li>
+			<?php } if($role == 'all' || count(array_diff(array('System-userJob',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'userJob'));?>" target="box">用户职位</a></li>    
+    		<?php } if($role == 'all' || count(array_diff(array('System-system',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'system'));?>" target="box">系统消息</a></li>
+			<?php } if($role == 'all' || count(array_diff(array('System-marketing',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'marketing'));?>" target="box">营销工具</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-distribution',), $role)) < 1){?>
+				<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'distribution'));?>" target="box">分销设置</a></li>
+			<?php } if($role == 'all' || count(array_diff(array('System-userHelp2',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'userHelp2'));?>" target="box">功能介绍</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-category',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'category'));?>" target="box">板块管理</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-setMember',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'setMember'));?>" target="box">会员管理</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-index',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'index'));?>" target="box">首页管理</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-setTopUp',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'setTopUp'));?>" target="box">充值管理</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-protocol',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'protocol'));?>" target="box">注册协议</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-role',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'role'));?>" target="box">职务管理</a></li>
+    		<?php } if($role == 'all' || count(array_diff(array('System-roleList',), $role)) < 1){?>
+    			<li><a href="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'roleList'));?>" target="box">管理员</a></li>
+    		<?php }?>
+    		</ul>
+    	</header>
+    </article>
+    <div class="tab_box">
+    	  <iframe src="<?php echo $this->url('admin', array('controller'=> 'System', 'action' => 'userHelp'));?>" name="box" id="box">
+    	  </iframe>
+    </div>
+</body>
+
+<script type="text/javascript">
+    var tourl = $.cookie("tourl");
+    $.cookie('tourl', 'aqymarks' , { path: '/', expires: -1 }); 
+    if(tourl=="aqymarks"){
+		$(".tab_menu ul li:eq(1)").addClass("on").siblings().removeClass("on");  
+		$(".tab_box > section").eq(1).show().siblings().hide();	
+    }
+	$(function(){
+		$(".tab_menu ul li").click(function(){
+			$(this).addClass("on").siblings().removeClass("on");  
+			$(".tab_box > section").eq($(this).index()).show().siblings().hide(); 
+		});
+	});
+
+</script>

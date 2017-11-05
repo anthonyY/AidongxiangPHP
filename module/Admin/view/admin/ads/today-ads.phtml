@@ -1,0 +1,173 @@
+<br/>
+<style>
+	.preview_code{
+		border: 1px solid #cbcbcb;
+		border-radius: 5px;
+		width: 240px;
+		height: 240px;
+		background-color: #fff;
+		position: absolute;
+		left: 80px;
+		top: 50px;
+		display:none;
+	}
+	
+    .preview_code2{
+		border: 1px solid #cbcbcb;
+		border-radius: 5px;
+		width: 240px;
+		height: 240px;
+		background-color: #fff;
+		position: absolute;
+		left: 80px;
+		top: 50px;
+		display:none;
+	}
+	
+	.preview_code img{
+		display:block;
+		width: 200px;
+		height: 200px;
+		margin: 20px auto;
+	}
+    .preview_code2 img{
+		display:block;
+		width: 200px;
+		height: 200px;
+		margin: 20px auto;
+	}
+</style>
+<div class="pannel-body">
+    <div class="pannel">
+        <form method="get" action="">
+            <div class="pull-left ml8">
+                     <!--  target="_blank" 新窗口打开 -->
+    			<a class="btn btn-primary" href="<?php echo $this->url('admin', array('controller' => 'ads', 'action' => 'relationDetails','cid'=>3));?>" >+新增广告</a>
+    			<a class="btn btn-primary show_preview">预览</a>
+    			<div class="preview_code">
+					<img id="code_img" src="" alt="">
+				</div>
+				
+				<div class="preview_code2">
+					<img id="code_img2" src="" alt="">
+				</div>
+    		</div>
+    		<div class="pull-right">
+        		<div class="pull-left">
+        			<label>
+        				<select name="status" class="input-medium select select-radius" style="border-radius: 4px;">
+        				<option value="0">全部广告状态</option>
+        				<option value="1" <?php echo (1 == $condition['where']['status']) ? ' selected="selected"' : '';?>>正常</option>
+        				<option value="2" <?php echo (2 == $condition['where']['status']) ? ' selected="selected"' : '';?>>已下架</option>
+        				</select>
+        			</label>
+        		</div>
+        		<div class="pull-left" style="margin-left: 8px;">
+        			<button type="submit" class="btn btn-primary submit">查询</button>
+        		</div>
+			</div>
+		</form>
+		<div class="clearfix"></div>
+	</div>
+	<div class="row-fluid">
+		<div class="box span12">
+			<div class="box-content">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+						    <th>排序序号</th>
+						    <th>图片</th>
+						    <th>广告板块</th>
+							<th>跳转类型</th>
+							<th>生效时间</th>
+							<th>下架时间</th>
+							<th>广告状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+                <?php foreach($list as $k=>$v){?>
+                        <tr id="item<?php echo $v['id']?>">
+							<td><?php echo $v['sort'];?></td>
+							<td><img src="<?php echo $this->basepath() . '/'  . UPLOAD_PATH . 'thumb/0X100X4/' . $v['image'];?>" height="100" /></td>
+							<td>今日推荐</td>
+							<td><?php echo $jump[$v['type']];?></td>
+							<td><?php echo $v['start_time'];?></td>
+							<td><?php echo $v['end_time'];?></td>
+							<td id="statusDesc<?php echo $v['id'];?>"><?php echo $v['status']==1? '正常' :'已下架';?></td>
+						
+							<td>
+							    <input type="button" id="statusSwitch<?php echo $v['id']?>" onclick="statusSwitch('<?php echo $v['id']?>')"  class="btn <?php echo $v['status'] == 1 ? 'btn-warning' : 'btn-success';?>" value="<?php echo $v['status'] == 1 ? '下架' : '上架';?>" status="<?php echo $v['status'];?>" />
+							    <a href="<?php echo $this->url('admin', array('controller' => 'ads', 'action' => 'relationDetails', 'id' => $v['id'],'cid'=>3));?>"
+							    class="btn btn-primary" >查看</a>
+							    <input class="btn btn-danger" type="button" onclick="deleteModal('<?php echo $v['id'];?>')" value="删除" />
+				           </td>
+						</tr>
+                <?php }?>
+                    </tbody>
+				</table>
+			</div>
+		</div>
+		<div class="page-control">
+        <?php echo $this->paginationControl($paginator, 'Sliding', 'page',array('route' =>'admin','condition'=>$condition));?>
+        </div>
+	</div>
+	<div class="modal hide" id="myModal" style="width: 300px">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3 id="titles" style="text-align: center">确定删除广告</h3>
+		</div>
+		<div class="modal-footer">
+			<input type="hidden" name="id" value="" id="social_id">
+			<a href="#" class="btn" data-dismiss="modal">取消</a>
+			<input type="button" name="s" class="btn btn-primary"
+			onclick="submitDelete()" value="确定">
+		</div>
+	</div>
+<script>
+function deleteModal(id){
+	$('#social_id').val(id);
+	$('#myModal').modal('show');
+}
+function submitDelete() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'ads', 'action' => 'deleteRelationAjax'))?>';
+	var id = $('#social_id').val();
+	$.post(url, {id: id}, function (data) {
+		$('#item' + id).remove();
+		$('#myModal').modal('hide');
+	}, 'json');
+}
+</script>
+<script src="<?php echo $this->basepath()?>/adminStyle/js/custom_common2.js"></script>
+<script type="text/javascript">
+var statusSwitchUrl = '<?php echo $this->url('admin', array('controller' => 'ads', 'action' => 'updateRelationAjax'));?>';
+
+
+
+$('.show_preview').hover(function(){
+    var url = '<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'ajaxRealPreview'));?>';
+	$.post(url,{type:3},function(result) {
+	   if(result){
+		   $('.preview_code').show();
+		   $("#code_img").attr('src',result);		   
+	   }
+    },"json")
+    
+},function(){
+    $('.preview_code').hide();
+});
+
+$('.show_preview2').hover(function(){
+    var url = '<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'ajaxRealPreview'));?>';
+	$.post(url,{type:4},function(result) {
+	   if(result){
+		   $('.preview_code2').show();
+		   $("#code_img2").attr('src',result);		   
+	   }
+    },"json")
+    
+},function(){
+    $('.preview_code2').hide();
+});
+</script>
+</div>

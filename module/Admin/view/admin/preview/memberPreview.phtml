@@ -1,0 +1,136 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>成为觉鸟会员</title>
+<style>
+    body{
+        /*padding-bottom: 90px;*/
+        background-color: #f0f0f5; 
+    }
+
+</style>
+<html>
+<body>
+        <div class="bgb"></div>
+                <img style="height:100%" src="<?php echo  isset($data['img_path']) ? $this->basePath().'/'.UPLOAD_PATH.$data['img_path'] : '';?>" alt="">
+        <footer class="audio_footer">
+            <ul>
+                <li><a href="javascript:(0);" onclick="present_window()"><p>送给好友</p></a></li>
+                <li><a href="javascript:(0);" onclick = "member(1)"><p>成为会员</p></a></li>
+            </ul>
+        </footer>
+        
+         <div class="present_window" style="display:none"> 
+            <div class="title">
+                赠送会员
+                <img class="close" src="<?php echo ROOT_PATH;?>webStyle/images/close_black.png" alt="">
+            </div>
+            <ul class="present_detail">
+                <li>
+                    <div>赠送人数</div>
+                    <div class="quantity">
+                        <span class="minus">-</span><span><input type="text" id="edit_num" value="1"></span><span class="add">+</span>
+                    </div>
+                </li>
+                <li>
+                    <div>会员单价</div>
+                    <div id="price">￥<span><?php echo $data['price']?></span></div>
+                </li>
+                <li>
+                    <div>订单总价</div>
+                    <div class="font_color_055773">￥<span></span></div>
+                </li>
+            </ul>
+            <div>
+            <ul class="operation">
+                <li><a href="javascript:(0);" class="cancel"><p>取消</p></a></li>
+                <li><a href="javascript:(0);" class="affirm" onclick = "member(2)"><p>支付订单</p></a></li>
+            </ul>
+        </div>
+        </div>
+         <div class="pay_success" >
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/get_succeed_gray.png" alt="">
+            <div>支付成功</div>
+            <a href="">分享赠送链接</a>
+        </div>
+</body>   
+</html>
+<script>
+
+function member(type){
+	var price = $('.on>a>span').html();
+	var url = "<?php echo $this->url('web-common',array('controller' => 'User','action' => 'ajaxMember'));?>";
+	var data = {};
+	data['price'] = $("#price>span").html();
+	data['type'] = type;
+	if(type == 2){
+		data['num'] = $("#edit_num").val();
+	}
+	$.post(url,{data:data},function(result){
+		if(result.code == 200){
+			WeixinJSBridge.invoke(
+					'getBrandWCPayRequest',
+					result,
+					function(res){
+						WeixinJSBridge.log(res.err_msg);
+						// alert(res.err_code+res.err_desc+res.err_msg);
+						if (res.err_msg.indexOf("ok") != -1) {
+							if (page_id) {
+								// 跳已完成页面
+								window.location.href = "";
+							}
+							else {
+								// 跳填写名片页面
+								window.location.href = "";
+							}
+						}
+					}
+				);	
+			return false;
+		}else{
+			alert(result.message);
+			return false;
+		}
+	},'json');
+	
+}
+
+present_window = function(){
+    $(".present_window").show();
+    $(".bgb").show();
+}
+
+$(".present_window .title .close").on("click",function(){
+    $(".present_window").hide();
+    $(".bgb").hide();
+})
+$(".present_window .operation .cancel").on("click",function(){
+    $(".present_window").hide();
+    $(".bgb").hide();
+})
+
+// 购买数量加减
+$(".present_detail .quantity .add").on("click",function(){
+    $(".present_detail .quantity input").val(parseInt($(".present_detail .quantity input").val()) + 1);
+    $(".font_color_055773>span").html($("#price>span").html()*$(".present_detail .quantity input").val());
+})
+$(".present_detail .quantity .minus").on("click",function(){
+    if($(".present_detail .quantity input").val()>=2){
+        $(".present_detail .quantity input").val(parseInt($(".present_detail .quantity input").val()) - 1);
+        $(".font_color_055773>span").html($("#price>span").html()*$(".present_detail .quantity input").val());
+    }
+    
+})
+$("#edit_num").keyup(function(){
+	if($("#edit_num").val() > 0){
+		$(".font_color_055773>span").html($("#price>span").html()*$("#edit_num").val());
+	}	
+});
+
+$(".font_color_055773>span").html($("#price>span").html()*$("#edit_num").val());
+
+
+</script>

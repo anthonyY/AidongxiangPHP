@@ -1,0 +1,140 @@
+<?php  $arr = $condition['where'];?>
+<style>
+.select {
+    border:1px solid #ccc;
+    border-radius: 3px;
+    width:115px;
+}
+</style>
+<ul class="breadcrumb">
+    <li><a href="<?php echo $this->url('admin', array('controller' =>'GroupMember', 'action' => 'index'));?>"><span>集团会员</span></a><span class="divider">/</span></li>
+    <li> <a href="#">导入历史</a></li>
+</ul>
+<div class="pannel-body">
+<div class="pannel">
+    <div class="row">
+        
+        <form class="form-horizontal" method="post" action="<?php echo $this->url('admin', array('controller' =>'GroupMember', 'action' => 'index2'));?>">
+         <div class="pull-left ml8" style="margin-left:30px;">
+               <span class="l_f">
+                 <a href="<?php echo $this->url('admin',array('controller' => 'GroupMember', 'action'=>'getExcel3')).'?'.http_build_query($arr);?>"  class="btn btn-purple btn-primary btn-sm">导出excel</a>
+               </span>
+          </div>
+           <div class="pull-left ml8">
+				<span style="margin-left:20px;">导入日期：</span>
+				<input type="text" id="inpstart" class="input-medium" name="start" value="<?php echo $arr['start'] ? $arr['start'] : '';?>">&nbsp;至&nbsp;
+				<input type="text" id="inpend" class="input-medium" name="end" value="<?php echo $arr['end'] ? $arr['end'] : '';?>">
+			</div>
+            <div class="pull-right">
+         
+               <div class="pull-left ml8" style="position: relative">
+            <input  style="width:160px;padding-left: 25px" name="keyword" type="text" class="input-small" placeholder="请输入用户名、手机号" value="<?php echo $arr['keyword']?>">
+            <i class="iconfont" style="position: absolute;top: 5px;left: 5px;">&#xe604;</i>
+            </div>
+          
+           <div class="pull-left ml8" >
+                <div class="btn-group marginTB-xs" style="display:inline-block;margin:0 15px;">
+                  <select name="status" size="1" class="select">
+                    <option value="0" >全部状态</option>
+                    <option value="1" <?php echo $arr['status']==1?'selected="selected"':''?>>已生效</option>
+                    <option value="2" <?php echo $arr['status']==2?'selected="selected"':''?>>未生效</option>
+                  </select>
+            </div>
+        </div>
+        <div class="pull-left ml8" >
+            <button type="submit" class="btn btn-info submit">搜索</button>
+        </div>
+        </div>
+        </form>
+    </div>
+</div>
+    <div class="row-fluid sortable">
+        <div class="box span12">
+            <div class="box-content">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>头像</th>
+                <th>用户名</th>
+                <th>手机号码</th>
+                <th>导入时间</th>
+                <th>会员到期时间</th>
+                <th>充值金额(元)</th>
+                <th>生效状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+         <tbody>
+            <?php foreach($list as $k=>$v){?>
+            <tr>
+                <th>
+                    <img src="<?php echo $v['user_img_id'] ? ($this->basepath().'/'.UPLOAD_PATH.$v['user_img_path']) : ($v['user_head_icon'] ? $v['user_head_icon'] : $this->basepath().'/'."adminStyle/images/logo.png")?>" width="100" height="100">
+                </th>
+                <th><?php echo $v['user_name'] ? $v['user_name'] : '--';?></th>
+                <td><?php echo $v['mobile'];?></td>
+                <td><?php echo $v['excel_time'];?></td>
+                <td><?php echo $v['member_time'];?></td>
+                <td><?php echo $v['price'];?></td>
+                <td><?php echo $v['group_status'] == 1?'生效':'未生效';?></td>
+                <td>
+                  <?php if($v['group_status'] == 1){?>
+                     <a href="<?php echo $this->url('admin', array('controller' => 'GroupMember', 'action' => 'details', 'id' => $v['id']));?>" class="btn btn-info">查看</a>
+                     <?php }?>
+                </td>
+            </tr>
+            <?php }?>
+            </tbody>
+        </table>
+        <div class="page-control">
+        <?php  echo $this->paginationControl($paginator, 'Sliding', 'page',array('route' =>'admin','condition'=>$condition));?>
+       </div>
+    </div>
+      <!--/span-->
+</div>
+</div>
+</div>
+<div class="modal hide" id="myModal"  style="width:300px">
+	<form action="<?php echo $this->url('admin', array('controller' => 'Social', 'action' => 'delete'));?>" method="post" id="abolish-family">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3 id="titles" style="text-align: center">您确认要删除吗？</h3>
+		</div>
+		<div class="modal-footer">
+			<input type="hidden" name="id" value="" id ="social_id">
+			<input type="hidden" name="remark" id ="remark2">
+			<a href="#" class="btn" data-dismiss="modal">取消</a>
+			<input type="button" name="s" class="btn btn-primary"  onclick="submitDelete()" value="确定">
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function ajaxDelete(id,type){
+	var url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'ajaxDelete'));?>';
+	$.post(url,{id:id,type:type},function(data){
+	    if(data.code==200){
+		    if(type ==1){//启用
+		    	$('#id-'+id).html('禁用');
+		    	$('#id-'+id).attr('onclick','ajaxDelete('+id+',2)');
+		    	$('#id-'+id).attr('class','btn btn-warning');
+		    }else{
+		    	$('#id-'+id).html('启用');
+		    	$('#id-'+id).attr('onclick','ajaxDelete('+id+',1)');
+		    	$('#id-'+id).attr('class','btn btn-success');
+		    }
+		    return;
+	    }
+	    alert(data.message);return;
+	},'json');
+}
+function deleteSocial(id){
+	 $('#social_id').val(id);
+// 	$('#remark3').val(remark);
+	$('#myModal').modal('show');
+}
+function submitDelete(){
+// 	$('#myModal').modal('hide');
+    $('#abolish-family').submit();
+	$('#myModal').modal('toggle');
+}
+</script>

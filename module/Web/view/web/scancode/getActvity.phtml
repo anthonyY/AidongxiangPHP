@@ -1,0 +1,216 @@
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/scancode.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/api-request.js"></script>
+<style>
+	
+</style>
+<html>
+<body>
+	<div class="banner">
+		<div>
+			<span class="give_members">
+				<span><?php echo $data['day']?></span>
+			</span>
+			<span class="give_fund">
+				<span><?php echo $data['price']?></span>
+			</span>
+		</div>
+		<div class="welfare">
+			<div>内部福利</div>
+			<img src="<?php echo ROOT_PATH;?>webStyle/images/arrows.png" alt="">
+		</div>
+	</div>
+	<div class="scancode_content">
+		<div class="import_phone">
+			<span>手机号码：</span>
+			<input type="text" id="mobile" placeholder="请输入领取号码" maxlength="11" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+		</div>
+		<div class="import_code">
+			<span>短信验证：</span>
+			<input type="text" placeholder="请输入验证码" id="captcha" maxlength="6">
+			<a href="javascript:(0);" class="get_code">获取验证码</a>
+		</div>
+		<div class="gray_line"></div>
+		<button id="get_welfare">立即领取</button>
+		<div class="gray_line">
+			<p class="rules_title">
+				<span>活动规则</span>
+			</p>
+			<ul>
+				<li>
+					1. 企业内部福利，每张卡仅可扫码领取1
+					次
+				</li>
+				<li>
+					2. 领取即为会员，可免费学习365个餐饮课程
+				</li>
+				<li>
+					3. 请在<?php echo $data['m']?>月<?php echo $data['d']?>日前扫码领取，过期就失效了哦
+				</li>
+				<li>
+					4. 有任何疑问可请联系电话：18928924234  或微信：jnxt002
+				</li>
+			</ul>
+		</div>
+		
+
+	</div>	
+	<div class="received">
+        <div class="title">你已领过啦</div>
+        <p>亲，每个人只能领1次哦</p>
+        <div>
+            <a href="<?php echo $this->url('web-common',array('controller' => 'index','action' => 'index'));?>" class="font_color_055773 "><p>现在去学习</p></a>
+        </div>
+    </div>
+	<div class="bgb"></div>
+</body>
+</html>
+<script>
+	var is_get = "<?php echo $data['is_get']?>";
+	//发送短信地址
+	var API_URL = '<?php echo API_URL?>';
+	var flat = true;
+	$(".get_code").on("click",function(){
+		//判断是否领取
+		if(is_get == 1){
+			$('.bgb').show();
+			$('.received').show();
+			return false;
+		}
+		var status = check_mobile();
+		if(flat && status){
+			flat = false;
+			sendCaptcha();
+		}
+	});
+
+
+	if(is_get == 1){
+		$('.bgb').show();
+		$('.received').show();
+	}
+
+	$('.received a').on('click',function(){
+		$('.bgb').hide();
+		$('.received').hide();
+	});
+
+	//修改提示内容
+	function update_content(one_msg){
+		$('.received > .title').html('提示');
+		$('.received > p').html(one_msg);
+		$('.received > div > a > p').html('确定');
+		$('.received > div > a').attr('href','javascript:;');
+		$('.bgb').show();
+		$('.received').show();
+	}
+
+	//验证手机
+	function check_mobile(){
+		//验证手机号是否为空；
+		if(!$('#mobile').val()){
+			update_content('请输入手机号！');
+			return false;
+		}
+		//验证手机号码格式
+		if(!isMobile($('#mobile').val()))
+		{
+			update_content('请输入正确的手机号码！');
+			return false;
+		}
+		return true;
+	}
+
+	//提交数据
+	$("#get_welfare").on("click",function(){
+		//判断是否领取
+		if(is_get == 1){
+			$('.bgb').show();
+			$('.received').show();
+			return false;
+		}
+		var status = check_mobile();
+		if(status){
+			checkCaptcha();
+		}
+	});
+
+	//发送验证码
+	function sendCaptcha()
+	{
+		var json = GetJson('SMSCode');
+		json.q.a = 1;
+		json.q.type = 4;
+		json.q.userId = '<?php echo $_SESSION['user_id']?>';
+		json.q.mobile = $('#mobile').val();
+		json.json = JSON.stringify(json);
+		$.post(API_URL,json,function(data)
+		{
+			console.log(data);
+			if(data.q.s == 0)
+			{
+				var setTime;
+				var time=60;
+				$(".get_code").text('60s');
+				$(".get_code").css("background-color","#cccccc");
+				setTime=setInterval(function(){
+					if(time<=0){
+						flat = true;
+						clearInterval(setTime);
+						$(".get_code").text("获取验证码");
+						$(".get_code").css("background-color","#d7000f");
+						return false;
+					}
+					time--;
+					$(".get_code").text(time+'s');
+					//             $(".gain_verification").css("background-color","#cccccc");
+				},1000);
+				return true;
+			}
+			else
+			{
+				flat = true;
+				update_content(data.q.d);
+				return false;
+			}
+		},"json");
+	}
+
+	//验证验证码
+	function checkCaptcha(){
+		var code = $('#captcha').val();
+		if(!code){
+			update_content('请输入验证码！');
+			return false;
+		}
+		var json = GetJson('SMSCode');
+		json.q.a = 2;
+		json.q.type = 4;
+		json.q.userId = '<?php echo $_SESSION['user_id']?>';
+		json.q.mobile = $('#mobile').val();
+		json.q.w = new Object();
+		json.q.w.code = code;
+		json.json = JSON.stringify(json);
+		$.post(API_URL,json,function(data)
+		{
+			if(data.q.s == 0)
+			{
+				var mobile = $('#mobile').val();
+				var id = "<?php echo $id;?>";
+				$.post("<?php echo $this->url('web-common',array('controller' => 'ScanCode','action' => 'updateCodeStatus'));?>",{mobile:mobile,id:id},function(result){
+					if(result.status){
+						var url= "<?php echo $this->url('web-common',array('controller' => 'ScanCode','action' => 'getActvity'));?>";
+						window.location.href = url+"?type=4,"+id;
+					}else{
+						update_content(result.msg);
+					}
+				},'json');
+			}else{
+				update_content(data.q.d);
+				return false;
+			}
+		},"json");
+	}
+</script>

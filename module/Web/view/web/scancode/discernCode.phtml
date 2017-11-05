@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/scancode.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<style>
+	*{
+		text-align: center;
+	}
+</style>
+<html>
+<body>
+	<?php if($type == 2){?>
+		<div class="code_title1">亲，活动已经结束啦^_^</div>
+		<div class="code_title2">去看看还有哪些优质课程吧</div>
+	<?php }else if($type == 3){?>
+		<div class="code_title1">亲，这个礼包被拆过啦^_^</div>
+		<div class="code_title2">去看看还有哪些优质课程吧</div>
+	<?php }else if($type == 4){?>
+		<div class="code_title1">领取成功</div>
+		<div class="code_title2"><?php echo $data['price']?>元学习基金，<?php echo $data['day']?>天VIP会员均已到账</div>
+	<?php }?>
+	<div class="code_title3">长按下方二维码前往查看</div>
+	<img class="code_img" src="<?php echo $ticket?>" alt="">
+	<div class="code_bottom">
+		<div>一起聚餐</div>
+		<div>凝聚餐饮品牌智慧</div>
+	</div>
+</body>
+</html>

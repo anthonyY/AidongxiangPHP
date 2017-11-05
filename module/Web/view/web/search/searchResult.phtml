@@ -1,0 +1,193 @@
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/home.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<title>搜索</title>
+<style>
+    body{
+        background-color: #efeff4;
+    }
+</style>
+<html>
+<body>
+    <div class="global_search bg_white">
+    <form method="get" action="#">
+        <input class="search_box" type="text" name="sk" value="<?php echo isset($sk) ? $sk : "" ?>">
+        <input id="search_enter" class="search_enter" type="submit" name="sub" value="搜索"/>
+    </form>
+    </div>
+
+    <!-- 音频列表，最多显示三个，没有时不显示 -->
+    <?php if($data['audio_list']){?>
+        <div class="mt10 bg_white search_list">
+            <a href="<?php echo $this->url('web-common', array('controller' => 'search', 'action' => 'getAduioList'));?>?sk=<?php echo $sk;?>">
+                <div class="curriculums_table">
+                    <span>音频</span>
+                    <div class="more">
+                        <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                    </div>
+
+                </div>
+            </a>
+            <div class="voice_curriculums_list" id="audio_curriculums_list">
+                <ul>
+                    <?php foreach($data['audio_list'] as $v){?>
+                        <li>
+                           <?php if($v['type'] == 1){?>
+                                <a href="<?php echo $this->url('web-common', array('controller' => 'audio', 'action' => 'details'));?>?id=<?php echo $v['id'];?>,1&type=1">
+                           <?php }else{?>
+                                <a href="<?php echo $this->url('web-common', array('controller' => 'audio', 'action' => 'details'));?>?id=<?php echo $v['id'];?>,2&type=2">
+                           <?php }?>
+                                <div class="cover">
+                                    <img src="<?php echo ROOT_PATH.UPLOAD_PATH. $v['image_path'];?>" alt="">
+                                    <img audio_id="" class="player" onclick="" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                                </div>
+                                <div class="content">
+                                    <div><?php echo $v['title'];?></div>
+                                    <div class="teacher_name">
+                                        <?php echo $v['teacher_name']?>
+                                        <?php if($v['count'] != '0%' && $v['count']){?>
+                                            <?php if($v['count'] != '100%'){?>
+                                                <span class="ml40"><span>已播</span>
+                                            <span class=" font_color_055773"><?php echo $v['count'] ?></span></span>
+                                            <?php }else{?>
+                                                <span class="ml40 ">已学完</span>
+                                            <?php }?>
+                                        <?php }?>
+                                    </div>
+                                    <div class="information2">
+                                        <div>
+                                            <?php if($v['sell_type'] == 2){?>
+                                                <span class="font_color_055773">仅限会员</span>
+                                            <?php }else{?>
+                                                <span>非会员:</span><span><?php echo $v['price'] > 0 ? $v['price'] : "免费"?></span>
+                                            <?php }?>
+                                        </div>
+                                        <div class="counting">
+                                            <span>会员:</span>
+                                            <span class="font_color_055773"><?php echo $v['original_price'] > 0 ? $v['original_price'] : '免费'?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="more">
+                                    <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                    <?php }?>
+                </ul>
+            </div>
+        </div>
+    <?php }?>
+
+
+    <!-- 视频列表，最多显示三个，没有时不显示-->
+    <?php if($data['video_list']){?>
+        <div class="mt10 bg_white search_list">
+            <a href="<?php echo $this->url('web-common', array('controller' => 'search', 'action' => 'getvideoList'));?>?sk=<?php echo $sk;?>">
+                <div class="curriculums_table television">
+
+                    <span>视频</span>
+                    <div class="more">
+                        <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                    </div>
+
+                </div>
+            </a>
+            <div class="voice_curriculums_list" id="video_curriculums_list">
+                <ul>
+                    <?php foreach($data['video_list'] as $v){?>
+                        <li>
+                            <?php if($v['type'] == 1){?>
+                                <a href="<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details'));?>?id=<?php echo $v['id'];?>,1&type=1">
+                            <?php }else{?>
+                                <a href="<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details'));?>?id=<?php echo $v['id'];?>,2&type=2">
+                            <?php }?>
+
+                                <div class="cover">
+                                    <img class="video_image" src="<?php echo ROOT_PATH.UPLOAD_PATH. $v['image_path'];?>" alt="">
+                                    <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                                </div>
+                                <div class="content">
+                                    <div><?php echo $v['title'];?></div>
+                                    <div class="teacher_name">
+                                        <?php if($v['count'] != '0%' && $v['count']){?>
+                                            <?php if($v['count'] != '100%'){?>
+                                                <span class="ml40"><span>已播</span>
+                                                <span class=" font_color_055773"><?php echo $v['count'] ?></span></span>
+                                            <?php }else{?>
+                                                <span class="ml40 ">已学完</span>
+                                            <?php }?>
+                                        <?php }?>
+                                    </div>
+                                    <div class="information2">
+                                        <div>
+                                            <?php if($v['sell_type'] == 2){?>
+                                                <span class="font_color_055773">仅限会员</span>
+                                            <?php }else{?>
+                                                <span>非会员:</span><span><?php echo $v['price'] > 0 ? $v['price'] : "免费"?></span>
+                                            <?php }?>
+                                        </div>
+                                        <div class="counting">
+                                            <span>会员:</span>
+                                            <span class="font_color_055773"><?php echo $v['original_price'] > 0 ? $v['original_price'] : '免费'?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="more">
+                                    <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                    <?php }?>
+                </ul>
+            </div>
+        </div>
+    <?php }?>
+
+    <!-- 导师列表，最多显示三个，没有时不显示 -->
+    <?php if($data['teacher']){?>
+        <div class="mt10 bg_white search_list">
+            <a href="<?php echo $this->url('web-common', array('controller' => 'search', 'action' => 'getTeacherList'));?>?sk=<?php echo $sk;?>">
+                <div class="curriculums_table tutor">
+                    <span>导师</span>
+                    <div class="more">
+                        <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                    </div>
+                </div>
+            </a>
+            <div class="tutor_list">
+                <ul>
+                    <?php foreach($data['teacher'] as $v){?>
+                        <li>
+                            <a href="<?php echo $this->url('web-common', array('controller' => 'Tutor', 'action' => 'details','id' =>$v['id']));?>">
+                                <img src="<?php echo ROOT_PATH.UPLOAD_PATH. $v['img_path'].$v['img_filename'];?>" alt="">
+                                <div><?php echo $v['name'] .":". $v['signature']  ;?></div>
+                            </a>
+                        </li>
+                    <?php }?>
+                </ul>
+            </div>
+        </div>
+    <?php }?>
+
+
+    <!-- 没有任何搜索结果时，则显示 -->
+    <?php if(!$data['teacher'] && !$data['audio_list'] && !$data['video_list']){?>
+        <div class="unrecorded" style="display: block;">
+            <img src="<?php echo ROOT_PATH;?>webStyle/images/no_search_result.png" alt="">
+            <div>搜索结果为空</div>
+        </div>
+    <?php }?>
+</body>   
+</html>
+<script>
+
+//wx.ready(function(){
+//     shareData = {title: '一起聚餐 | 中国5000万餐饮人的学习平台',desc: '学习改变命运 | 让餐饮赞美生命',imgUrl: '<?php //echo 'http://'.$_SERVER['HTTP_HOST'].ROOT_PATH?>//webStyle/images/nightbird_log.png'};
+//     share(shareData);
+//});
+
+
+
+</script>

@@ -1,0 +1,815 @@
+<?php  //var_dump($list['audio_length']);exit;?>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.config.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.all.min.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/cos-js/dist/cos-js-sdk-v4.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/cos-js/sample/demo/crypto.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath();?>/adminStyle/template/js/thescript.js"></script>
+<script src="<?php echo $this->basePath();?>/adminStyle/template/upload/ajaxfileupload.js"></script>
+<script src="<?php echo ROOT_PATH;?>webStyle/js/zepto.min.js"></script>
+<script src="<?php echo ROOT_PATH;?>webStyle/js/jweixin-1.2.0.js"></script>
+<script src="<?php echo ROOT_PATH;?>webStyle/js/weui.min.js"></script>
+<script src="<?php echo ROOT_PATH;?>webStyle/js/example.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/webStyle/css/weui.css">
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/webStyle/css/example.css">
+<script type="text/javascript">
+    var uploader = '<?php echo $this->url('admin',array('controller' => 'common', 'action'=>'uploadImage'));?>';//图片上传地址
+</script>
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+    #uniform-js-file{
+    	display:none;
+	}
+    .weui-progress{
+        width:600px;
+    	margin-top:20px;	
+    }
+    	
+</style>
+<div id="content" class="span10">
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-content">
+				<form action="" method="post" class="form-horizontal" id="submitForm">
+					<fieldset>
+						<legend class="lg_title">
+    						<?php if($id){?>
+    						  <span>内容列表-<?php echo $type==1?'音频':'视频'?>课程详情：</span>
+    						<?php }else{?>
+    						  <span>内容列表-新增<?php echo $type==1?'音频':'视频'?>课程：</span>
+    						<?php }?>
+						</legend>
+						<h3><span>课程信息</span></h3>
+					    <br>
+						<section style="overflow: hidden;">
+						<input type="hidden" name="id" value="<?php echo $list ? $list['id'] : 0 ?>"/>
+						 <input type="hidden" name="type" value="<?php echo $type ? $type : 0 ?>"/>
+						 <input type="hidden" name="add" value="<?php echo $add ? $add : 0 ?>"/>
+							<div style="float: left;">
+								<div class="control-group">
+									<label class="control-label">课程名称：</label>
+									<div class="controls">
+										<input name="name" id="name" required="required"class="input-xlarge" type="text" value="<?php echo $list ? $list['title'] : ""?>"
+											placeholder="请输入课程名称"><br><span>请设置课程名称,建议20个字内</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">上架时间：</label>
+									<div class="controls">										
+                					    <input type="text" id="putaway" class="input-medium" name="putaway" value="<?php echo $list ? $list['putaway'] : ""?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">排序序号：</label>
+									<div class="controls">
+										<input type="number" value="<?php echo $list ? $list['sort'] : '1';?>" min="1" name="sort" required="required" id="sort" placeholder="请输入排序序号" />
+									</div>
+								</div>
+								<?php if(isset($list['id']) && $list['id']){?>
+								    <div class="control-group">
+    									<label class="control-label">课程地址：</label>
+    									<div class="controls">
+    										<input name="link" readonly="true" id="link" style="width:500px" class="input-xlarge" type="text" value="<?php echo $list ? $list['link'] : ""?>"
+    											placeholder="">
+    									</div>
+    								</div>
+								<?php }?>
+								<div class="control-group">
+    								<label class="control-label">课程分类：</label>
+    								<div class="controls">
+    								    <select name="one_type" id="one_type">
+                                            <option value="0" id="select-type">请选择分类</option> 
+                                         </select>
+                                         <select name="two_type" id="two_type">
+                                            <option value="0" id="select-type">请选择分类</option> 
+                                         </select>
+                                         <br><span>请选择课程分类,一级分类必选</span>
+                                    </div>
+    							</div>
+    							<div class="control-group">
+    								<label class="control-label">课程老师：</label>
+    								<div class="controls">
+    								    <select name="teacher" id="teacher">
+                                            <option value="0" id="select-type">请选择老师</option> 
+                                            <?php foreach ($teacher as $v){?>
+                                                <option value="<?php echo $v['id']?>" <?php if($list && $list['teacher_id'] == $v['id']){?> selected="true" <?php }?>><?php echo $v['name']?></option>
+                                            <?php }?>                                                                                     
+                                         </select>
+                                         <br><span>请选择课程老师</span>
+                                    </div>
+    							</div>
+    							<div class="control-group">
+        							<label class="control-label">付费类型：</label>
+    								<div class="controls">
+        								<div class="control-group">
+            								<input class="re-redio" name="recommend" type="radio" id="course_pack" <?php if($list && ($list['pay_type']==1 || $list['pay_type']==4)){?> checked="checked" <?php }else{?> checked="checked"<?php }?> value="1"/> 课程包
+        									<input class="re-redio" name="recommend" type="radio" id="single_sell" <?php if($list && $list['pay_type']==2){?> checked="checked" <?php }?> value="2"/> 单卖   
+        									<input class="re-redio" name="recommend" type="radio" id="free" <?php if($list && $list['pay_type']==3){?> checked="checked" <?php }?> value="3"/> 免费 								
+        								</div>
+        							</div>
+    							
+								<label class="control-label big_sell_type">售卖类型：</label>
+								<div class="controls">
+    								<div class="control-group big_sell_type">
+        								  <input name="sell_type" type="radio" id="y_sell_type" <?php if($list && $list['sell_type']==1){?> checked="checked" <?php }?> checked="checked" value="1"/>  普通课程包
+        								  <input name="sell_type" type="radio" id="n_sell_type" <?php if($list && $list['sell_type']==2){?> checked="checked" <?php }?> value="2"/> 会员专享包
+    								</div>
+    								 <select name="courses" id="courses">
+                                        <?php foreach ($courses as $v){?>
+                                            <option value="<?php echo $v['id']?>" <?php if($list && $list['courses_id'] == $v['id']){?> selected="true" <?php }?>><?php echo $v['title']?></option>
+                                        <?php }?>                                                                                     
+                                     </select>
+                                     <div class="control-group" id="singles">
+        								  <input name="recommend_sing" type="checkbox" <?php if($list && $list['pay_type']==4){?> checked="checked" <?php }?> id="single" value="4"/>  课程包外单卖
+    								</div>
+								</div>		
+																			
+								<div class="control-group" id="one_price" style="display:none">
+									<label class="control-label">普通价：</label>
+									<div class="controls">
+										<input name="price" id="price"  type="text" value="<?php echo $list ? $list['price'] : ""?>"
+											placeholder="普通用户购买单价"> 元
+									</div>
+								</div>
+								
+								<div class="control-group" id="two_price" style="display:none">
+									<label class="control-label">会员价：</label>
+									<div class="controls">
+										<input name="original_price" id="original_price"  type="text" value="<?php echo $list ? $list['original_price'] : ""?>"
+											placeholder="会员用户购买单价"> 元
+									</div>
+								</div>
+								</div>
+								<div>
+    							    <label class="control-label">课程列表封面：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img class="show_img" id="img_0" width="400" height="150" border="1" src="<?php echo  $this->basePath().(isset($list['img']) && $list['img'] ? '/'.UPLOAD_PATH.$list['img'] :'/images/portrait.png');?>" alt="">
+    										<!-- 图片路径是否正确? -->
+    									</div>
+    									<br><span><?php echo $type == 1 ? '（注：像素120x120或者宽高比与此相同）' : '（注：像素280x200或者宽高比与此相同）';?></span>
+    									<div style="display: none;">
+    										<input type="hidden" id="img_id_0" name="img_id_0" value="<?php if(isset($list['image']) && $list['image']){echo $list['image'];} ?>" />
+    										<input id="img_path_0" type="hidden" name="img_path_0" value="<?php if(isset($list['img']) && $list['img']){echo $list['img'];} ?>"/>
+    										<!-- <input type="file" accept="" id="uploadImage"
+    											capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img0" name="Filedata[]" onchange="return ajaxFileUpload('0');"/>
+    									</div>
+    								</div>
+							     </div>
+							     <br>
+							     <div>
+    							    <label class="control-label">课程详情封面：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img class="show_img" id="img_1" width="400" height="150" border="1" src="<?php echo  $this->basePath().(isset($list['d_img']) && $list['d_img'] ? '/'.UPLOAD_PATH.$list['d_img'] :'/images/portrait.png');?>" alt="">
+    										<!-- 图片路径是否正确? -->
+    									</div>
+    									<br><span>（注：像素750x420或者宽高比与此相同）</span>
+    									<div style="display: none;">
+    										<input type="hidden" id="img_id_1" name="img_id_1" value="<?php if(isset($list['details_image']) && $list['details_image']){echo $list['details_image'];} ?>" />
+    										<input id="img_path_1" type="hidden" name="img_path_1" value="<?php if(isset($list['d_img']) && $list['d_img']){echo $list['d_img'];} ?>"/>
+    										<!-- <input type="file" accept="" id="uploadImage"
+    											capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img1" name="Filedata[]" onchange="return ajaxFileUpload('1');"/>
+    									</div>
+    								</div>
+							     </div>
+							      <br>
+                                 <input id="js-file" type="file" style="display:none;"/>
+							     <div class="control-group">
+									<label class="control-label">试听课程：</label>
+									<div class="controls">
+								        <a id="uploadFile" href="javascript:void(0);"class="btn btn-lg btn-outline">试听课程</a>
+								        &nbsp<span id="result1" style="color:red"></span>
+										<span>|--文件地址:</span><span id="result1-1">
+										  <?php if($list && $list['auditions_path']){?>
+										      <input type='text' style='width:40%' readonly='readonly'  name='auditions_path' id="auditions_path" value="<?php echo $list['auditions_path'];?>">
+										  <?php }?>
+										</span>
+										<span>|--<?php echo $type==1?'音频':'视频'?>长度:</span><span id="result1-1-1">
+										  <?php if($list && $list['auditions_path']){?>
+										      <input type='text' style='width:10%' readonly='readonly'  name='auditions_time' id="auditions_time" value="<?php echo $list['auditions_length'];?>">
+										  <?php }?>
+										</span>
+										<?php if(!$list){?>
+    								        <div class="weui-progress" id="one_weui-progress" style="display:none">
+    								            <span>0%</span>&nbsp&nbsp
+                                                    <div class="weui-progress__bar">
+                                                        <div class="weui-progress__inner-bar js_progress" id="audition_js_progress" style="width: 0%;"></div>
+                                                    </div>&nbsp&nbsp
+                                                <span id="one_num">0%</span>
+                                            </div>
+                                        <?php }?>
+									</div>
+								 </div>
+								 <br>
+								 <div class="control-group">
+									<label class="control-label">完整课程：</label>
+									<div class="controls">
+									   <a id="sliceUploadFile" href="javascript:void(0);" class="btn btn-lg btn-outline">完整课程</a>
+										&nbsp<span id="result2" style="color:red"></span>
+										<span>|--文件地址:</span><span id="result">
+										   <?php if($list && $list['full_path']){?>
+										      <input type='text' style='width:40%' readonly='readonly'  name='full_path'  id="full_path" value="<?php echo $list['full_path'];?>">
+										   <?php }?>
+										</span>
+										<span>|--<?php echo $type==1?'音频':'视频'?>长度:</span><span id="result2-2">
+										  <?php if($list && $list['audio_length']){?>
+										      <input type='text' style='width:10%' readonly='readonly'  name='full_time'  id="full_time" value="<?php echo isset($list['audio_length'])? $list['audio_length'] :($list['audio_length']);?>">
+										  <?php }?>
+										</span>
+								        <div class="weui-progress" id="two_weui-progress" style="display:none">
+								            <span>0%</span>&nbsp&nbsp
+                                                <div class="weui-progress__bar">
+                                                    <div class="weui-progress__inner-bar js_progress" id="full_js_progress" style="width: 0%;"></div>
+                                                </div>&nbsp&nbsp
+                                            <span id="two_num">0%</span>
+                                        </div>
+									</div>
+								 </div>
+								  
+								 <object id="qs" width="0" height="0" type="application/x-shockwave-flash" data="<?php echo $this->basePath()?>/js/sdk/Somethingtest.swf" style="visibility: visible;"></object>
+							     <br>
+							     <div class="control-group">
+						            <label class="control-label">课程介绍：</label>
+    								<div class="controls portraits">
+    								    <div><textarea id="cc1" name="synopsis" rows="20" style="width: 95%;" placeholder="请输入课程介绍"><?php echo $list ? $list['audio_synopsis'] : ""?></textarea></div>
+    								</div>
+							     </div>
+						         <div class="control-group">
+    					            <label class="control-label">课程概要：</label>
+    								<div class="controls portraits">
+    								    <div><textarea id="cc2" name="outline" rows="20" style="width: 95%;" placeholder="请输入课程概要"><?php echo $list ? $list['outline'] : ""?></textarea></div>
+    								</div>
+							     </div>
+							     
+							     <div id="div_code_img" style="display: none">
+    							    <label class="control-label">预览二维码：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img id="code_img" width="400" height="150" border="1" src="" alt="">
+    									</div>
+    									<br><span>请使用微信客户端扫描！</span>
+    								</div>
+								 </div>
+						</section>
+						<div class="control-group">
+							<label class="control-label" for="focusedInput"></label>
+							<div class="controls" style="margin-top: 10px;">
+								<div class="controls" style="margin-top: 10px;">
+									<input name="sb" class="btn btn-large btn-primary" type="button" id="submit-button"  value="保存" />
+									<?php if(!$list){?>
+								        <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+								    <?php }else{?>
+								        <button type="button" class="btn btn-large btn-primary" id="ap2" onclick="realPreview()">预览</button>
+								    <?php }?>
+									<input class="btn btn-large btn-primary resetHref" type="reset" value="取消" />
+									
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<script>
+$(window).bind('beforeunload',function(){
+	var num2 = $("#result2").html();
+	var num1 = $("#result1").html();
+	if(num2 == '正在上传' || num1 == '正在上传'){
+		return false;
+	}
+});
+
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'detailsPreview'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+
+function realPreview(){
+	var id = "<?php echo $list ? $list['id'] : 0 ?>";
+	if(!id){
+		alert("预览失败！");
+		return false;
+	}
+	var url = '<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'ajaxRealPreview'));?>';
+	$.post(url,{id:id},function(result) {
+	   if(result){
+		   $("#div_code_img").show();
+		   $("#code_img").attr('src',result);		   
+	   }
+    },"json")
+
+}
+
+
+$('.iphone-iframe').css({
+    'width':$(window).width()+'px',
+    'height':$(window).height()+'px'
+});
+$('.iphone-bg').css({
+    'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+    'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+});
+$('#ap1').click(function(){
+    $('.iphone-iframe').toggle();
+});
+$('.iphone-btn').click(function() {
+    $('.iphone-iframe').toggle();
+});
+</script>
+<script type="text/javascript">
+    var ue1 = UE.getEditor('cc1', {
+    	"initialFrameWidth" : "100%",
+    	"initialFrameHeight" : 400,
+    	"maximumWords" : 8000,
+    });
+    
+    var ue2 = UE.getEditor('cc2', {
+    	"initialFrameWidth" : "100%",
+    	"initialFrameHeight" : 400,
+    	"maximumWords" : 8000,
+    });
+</script>
+<script type="text/javascript">
+//取消按钮
+$(".resetHref").click(function(){
+    location.href = '<?php echo $this->url('admin',array('controller'=>'ContentList','action'=>'videoList'));?>';
+});
+
+
+//课程包外单卖
+$("#single").click(function(){
+	if($(this)[0].checked){
+		sell_type = $("input[name='sell_type']:checked").val();
+		 if(sell_type == 1){
+	    	$("#one_price").show();
+	    	$("#two_price").show();
+		}else{
+			$("#two_price").show();
+		}
+	}else{
+		$("#one_price").hide();
+		$("#two_price").hide();
+	}
+	
+});
+
+//单卖
+$("#single_sell").click(function(){
+	$("#courses").hide();
+	$("#singles").hide();
+	sell_type = $("input[name='sell_type']:checked").val();
+    if(sell_type == 1){
+    	$("#one_price").show();
+    	$("#two_price").show();
+	}else{
+		$("#two_price").show();
+	}
+	$(".big_sell_type").show();
+	
+	
+	
+});
+
+//课程包
+$("#course_pack").click(function(){
+	if($("#single")[0].checked){
+		sell_type = $("input[name='sell_type']:checked").val();
+		 if(sell_type == 1){
+	    	$("#one_price").show();
+	    	$("#two_price").show();
+		}else{
+			$("#two_price").show();
+		}
+	}else{
+		$("#one_price").hide();
+		$("#two_price").hide();
+	}
+	$(".big_sell_type").show();
+	$("#courses").show();
+	$("#singles").show();
+});
+
+var pay_type = "<?php echo $list ? $list['pay_type'] : 0?>";
+if(pay_type == 2){
+	$("#courses").hide();
+	$("#singles").hide();
+	sell_type = $("input[name='sell_type']:checked").val();
+	 if(sell_type == 1){
+	$("#one_price").show();
+	$("#two_price").show();
+	}else{
+		$("#two_price").show();
+	}
+}
+if(pay_type == 4){
+	sell_type = $("input[name='sell_type']:checked").val();
+	 if(sell_type == 1){
+  	$("#one_price").show();
+  	$("#two_price").show();
+	}else{
+		$("#two_price").show();
+	}
+}
+if(pay_type == 3){
+	$("#courses").hide();
+	$("#singles").hide();
+	$("#one_price").hide();
+	$("#two_price").hide();
+	$(".big_sell_type").hide();
+}
+//免费
+$("#free").click(function(){
+	$("#courses").hide();
+	$("#singles").hide();
+// 	$("#singles")[0].checked = false;
+	$("#one_price").hide();
+	$("#two_price").hide();
+	$(".big_sell_type").hide();
+});
+
+//售卖类型
+$("#y_sell_type").click(function(){
+	if($("#single")[0].checked || $("input[name='recommend']:checked").val()==2){
+		 $("#one_price").show();
+		 $("#two_price").show();
+	}
+});
+$("#n_sell_type").click(function(){
+	 $("#one_price").hide();
+});
+
+//提交表单
+$("#submit-button").click(function(){
+    var name = $("#name").val();
+    var putaway = $("#putaway").val();
+    var type = $("#type").val();
+    var one_type = $("#one_type").val();
+    var teacher = $("#teacher").val();
+    var result = $("#result").html();
+    var synopsis = UE.getEditor('cc1').hasContents();
+    var outline = UE.getEditor('cc2').hasContents();
+    var str2 = $("#result2").html();
+    var str1 = $("#result1").html();
+    var path = $('#full_path').val();
+	var time = $('#full_time').val();
+// 	var re_redio = $('.re-redio').val();
+	var re_redio = $("input[name='recommend']:checked").val();
+	var result2 = $("#result1-1").html();
+    var path2 = $('#auditions_path').val();
+	var time2 = $('#auditions_time').val();
+	var img1 = $('#img_path_0').val();
+	var img2 = $('#img_path_1').val();
+// 	console.log(re_redio,result2);return;
+    if(!name){
+    	alert('课程名称不能为空！');
+    	return false;
+    }else if(!putaway){
+    	alert('上架时间不能为空！');
+    	return false;
+    }else if(one_type == 0){
+    	alert('请选择课程包分类！');
+    	return false;
+    }else if(teacher == 0){
+    	alert('请选择课程老师！');
+    	return false;
+    }else if(re_redio!=3){
+    	if(!result2){
+        	alert('请上传试听课程！');
+        	return false;
+        }
+   	    if(!path2 && !time2){
+	    	alert('请上传试听课程！');
+	    	return false;
+	    }
+    }else if(!result){
+    	alert('请上传完整课程！');
+    	return false;
+    }else if(!path && !time){
+    	alert('请上传完整课程！');
+    	return false;
+    }else if(!synopsis){
+    	alert('课程介绍不能为空！');
+    	return false;
+    }else if(!outline){
+       alert('课程概述不能为空！');
+ 	   return false;
+    }else if(str1 == '正在上传'){
+       alert('试听课程正在上传！');
+   	   return false;
+    }else if(str2 == '正在上传'){
+       alert('完整课程正在上传！');
+   	   return false;
+    }else if(!img1){
+        alert('课程列表封面不能为空！');
+ 	   return false;
+  	}else if(!img2){
+        alert('课程详情封面不能为空！');
+ 	   return false;
+  	}
+    
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+//     $('#submitForm').from();
+ });
+//上传封面
+//var upload_url = '<?php //echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+// $("#show_image_1").click(function(){
+//   $("#img0").click();
+// });
+$(".show_img").click(function () {
+	$(this).parent().parent().find(".img").click();
+})
+
+
+//获取课程包类型和子类型
+var type_data = "<?php echo isset($type) && $type ? $type : 1;?>";
+
+type = type_data;
+masetr(type,1); 
+masetr(type,2,0);
+$("#department").bind("change", function(){
+	type = 1;
+	masetr(type,1);    
+})
+function masetr(type,genre,par_id=0){
+// 	console.log(type);
+	var one_type = "<?php echo $list ? $list['audio_one_type'] : 0?>";
+	var two_type = "<?php echo $list ? $list['audio_two_type'] : 0?>";
+	$.post("<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'getcategory'));?>",{type:type,genre:genre,par_id:par_id},function(result) {
+	    if(result.num == 1){
+		    if(genre == 1){
+		    	$("#one_type").html("");
+		    	$("#one_type").append("<option value='0'>请选择分类</option>");
+		    }else{
+		    	$("#two_type").html("");
+		    	$("#two_type").append("<option value='0'>请选择分类</option>");
+		    }	
+	    }else if(result.num == 2){
+		    if(genre == 1){
+		    	$("#one_type").html("");
+			    $("#one_type").append("<option value='0'>请选择分类</option>");
+		    	$.each(result.data, function(i,val){
+			    	if(one_type == val.id){
+			    		$("#one_type").append("<option selected='true' value='"+val.id+"'>"+val.name+"</option>");
+			    	}else{
+			    		$("#one_type").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			    	} 		
+	    		});  
+		    	var id = "<?php echo $list ? $list['id'] : 0 ?>";
+		    	if(id){	
+		    		type = 1;
+		    		par_id = $("#one_type").val();
+		    		masetr(type,2,par_id);
+		    	}
+		    }else{
+		    	$("#two_type").html("");
+		    	$.each(result.data, function(i,val){
+		    		if(two_type == val.id){
+			    		$("#two_type").append("<option selected='true' value='"+val.id+"'>"+val.name+"</option>");
+			    	}else{
+			    		$("#two_type").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			    	} 
+	    		});  
+		    }
+	    }
+    },"json")
+	
+}
+$("#one_type").bind("change", function(){
+	par_id = $("#one_type").val();
+	type = 1;
+	masetr(type,2,par_id);
+}) 
+</script>
+
+<script type="text/javascript">
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var year = d.getFullYear();
+    var day = (d.getDate()<10 ? '0' : '') + d.getDate();
+    var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month;
+	$(function(){
+		var url = "<?php echo ROOT_PATH."Sign.php"?>"; 
+        var bucket = 'yiqijucan';
+        var region = 'gz';
+        var appid = '1252925600';
+        var cos = new CosCloud({
+        	appid:appid,
+            bucket: bucket,//bucketName 必填参数
+            region: region,//地域信息 必填参数 华南地区填gz 华东填sh 华北填tj
+            getAppSign: function (callback) {//获取签名 必填参数  
+         	      var now = parseInt(new Date().getTime() / 1000);
+                  var e = now + 600;    
+                  $.get(url,{bucketName:bucket,expired:e},function(data){
+                	  var sig = data.data.sign;
+                      callback(encodeURIComponent(sig));
+                  },'json'); 
+            },
+        });
+
+		var data = "";
+		var successCallBack = function(result){
+			data = result.data ?  result.data.access_url : "";
+			// data = result.data ?  result.data.source_url : "";
+			if(data){
+				$("#result2").html("上传完成");
+			}
+			$("#result").html("<input type='text' style='width:40%' readonly='readonly'  name='full_path' value="+ data + "><audio id='audio2' src="+data+">");
+			$("#result2-2").html("<input type='text' style='width:5%;text-align:center;' readonly='readonly'  name='full_time' id='full_time' value=''>");
+			getTime(2);
+		};
+
+		var errorCallBack = function(result){
+			console.log(result);
+			return false;
+		}
+		
+	    var sliProgressCallBack = function(curr) {
+        	$("#two_weui-progress").show()
+        	$("#full_js_progress").attr('style','width:'+curr*100+'%');
+        	$("#two_num").html((curr*100).toFixed(2)+'%');
+            console.log('uploading... curr progress is ' + curr)
+            $("#result").val('uploading... curr progress is ' + curr);
+        };
+
+		var uploadFileSuccessCallBack = function(result){ 
+			data = result.data ?  result.data.access_url : "";
+			// data = result.data ?  result.data.source_url : "";
+			if(data){
+				$("#result1").html("上传完成");
+			}
+			$("#result1-1").html("<input type='text' style='width:40%' readonly='readonly'  name='auditions_path' value="+ data + "><audio id='audio1' src="+data+"></audio>");
+			$("#result1-1-1").html("<input type='text' style='width:5%;text-align:center;' readonly='readonly'  name='auditions_time' id='auditions_time' value=''>");
+			getTime(1);
+	    };
+
+		var uploadFileErrorCallBack = function(result){
+			console.log(result);
+			return false;
+		}
+
+	   var uploadProgressCallBack = function (curr) {
+        	$("#one_weui-progress").show()
+        	$("#audition_js_progress").attr('style','width:'+curr*100+'%');
+        	$("#one_num").html((curr*100).toFixed(2)+'%');
+            console.log('uploading... curr progress is ' + curr)
+            $("#result").val('uploading... curr progress is ' + curr);
+        };
+
+		//获取音频的总时间
+	    function getTime(id) {
+            setTimeout(function () {
+                if(id == 1){
+                	var duration = $("#audio1")[0].duration;
+                }else{
+                	var duration = $("#audio2")[0].duration;
+                }
+                if(isNaN(duration)){
+                    getTime(id);
+                }
+                else{
+                    if(id == 1){
+                 	    var time = formatSeconds($("#audio1")[0].duration);
+                    	$("#auditions_time").val(time);
+                    }else{
+                    	var time = formatSeconds($("#audio2")[0].duration);
+                    	$("#full_time").val(time);
+                    }
+                }
+            }, 10);
+        }
+	   //获取时间转换为时分秒
+	    function formatSeconds(value) {
+	        var theTime = parseInt(value);// 秒
+	        var theTime1 = 0;// 分
+	        var theTime2 = 0;// 小时
+	        if(theTime > 60) {
+	            theTime1 = parseInt(theTime/60);
+	            theTime = parseInt(theTime%60);
+	                if(theTime1 > 60) {
+	                theTime2 = parseInt(theTime1/60);
+	                theTime1 = parseInt(theTime1%60);
+	                }
+	        }
+	            var result = ""+parseInt(theTime)+"秒";
+	            
+	            if(theTime1 > 0) {
+            	//result = ""+parseInt(theTime)
+	             result = ""+parseInt(theTime1)+"分"+result;
+	            }
+	            if(theTime2 > 0) {
+	             result = ""+parseInt(theTime2)+"时"+result;
+	            }
+	        return result;
+	    }
+
+	    $('#uploadFile').on('click', function () {
+            $('#js-file').off('change').on('change', function (e) {
+                var files = e.target.files[0];
+                if(type_data == 1){
+					 if(files.type != "audio/mp3"){
+						 alert("请上传MP3文件!");
+						 return false;
+					 } 
+				 }else{
+					 if(files.type != "video/mp4"){
+						 alert("请上传MP4文件!");
+						 return false;
+					 } 
+				 }
+                if(files && files.size > 0){
+    			 	if(!$('#qs').length){				 		
+    			 		$('body').append('<object id="qs" width="0" height="0" type="application/x-shockwave-flash" data="sdk/Somethingtest.swf" style="visibility: visible;"></object>');
+    			 	}
+    			 	$("#result1").html("正在上传");
+    				if(type_data == 1){
+    					cos.sliceUploadFile(uploadFileSuccessCallBack, uploadFileErrorCallBack,uploadProgressCallBack, bucket, "/audio/audition/" + output +"/"+ day +"/"+ 'audition_' + files.name, files,0);
+    			 	}else{
+    			 		cos.sliceUploadFile(uploadFileSuccessCallBack, uploadFileErrorCallBack,uploadProgressCallBack,bucket, "/video/audition/" + output +"/"+ day +"/"+ 'audition_' + files.name, files,0);
+    			 	}
+    			 	
+    			 }
+    			 else{
+    			 	alert("请选择一个文件");
+    			 }
+                return false;
+            });
+
+            setTimeout(function () {
+                $('#js-file').click();
+            }, 0);
+
+            return false;
+        });
+
+		  //分片上传文件,当选择大于20M大小的文件的时候用分片上传
+        $('#sliceUploadFile').on('click', function () {
+            $('#js-file').off('change').on('change', function (e) {
+            	var files = e.target.files[0];
+                if(type_data == 1){
+					 if(files.type != "audio/mp3"){
+						 alert("请上传MP3文件!");
+						 return false;
+					 } 
+				}else{
+					 if(files.type != "video/mp4"){
+						 alert("请上传MP4文件!");
+						 return false;
+					} 
+				}
+				
+                if(files && files.size > 0){
+    			 	if(!$('#qs').length){				 		
+    			 		$('body').append('<object id="qs" width="0" height="0" type="application/x-shockwave-flash" data="sdk/Somethingtest.swf" style="visibility: visible;"></object>');
+    			 	}
+    			 	$("#result2").html("正在上传");
+    			 	if(type_data == 1){
+    			 		cos.sliceUploadFile(successCallBack, errorCallBack,sliProgressCallBack, bucket, "/audio/full/" + output +"/"+ day +"/"+ 'full_' + files.name, files,0);
+    			 	}else{
+    			 		cos.sliceUploadFile(successCallBack, errorCallBack,sliProgressCallBack, bucket, "/video/full/" + output +"/"+ day +"/"+ 'full_' + files.name, files,0);
+    			 	}
+    			 	
+    			 }
+    			 else{
+    			 	alert("请选择一个文件");
+    			 } 
+                return false;
+            });
+
+            setTimeout(function () {
+                $('#js-file').click();
+            }, 0);
+
+            return false;
+        });
+});
+</script>

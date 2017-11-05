@@ -1,0 +1,357 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/play-num-deal.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>观看记录</title>
+<style>
+    body{
+        padding-bottom: 80px;
+        background-color: #f0f0f5; 
+    }
+
+</style>
+<html>
+<body>
+<div class="bgb"></div>
+    <div class="record">
+        <div class="select_top  bg_white">
+            <a href="javascript:(0);" class="select_on" id = "1" onclick="getWatchRecordAudioList(1)">音频课程</a>
+            <a href="javascript:(0);" id = "2" onclick="getWatchRecordAudioList(2)">视频课程</a>
+        </div>
+        <section>
+            <!-- 音频 -->
+            <div class="voice_curriculums_list" id="audio_curriculums_list">
+                <ul class=" bg_white">
+                
+                </ul>
+        <div class="unrecorded">
+        <img src="<?php echo ROOT_PATH;?>webStyle/images/no_watchRecord.png" alt="">
+            <div>还没有观看记录</div>
+        </div> 
+            </div>            
+            <!-- 视频 -->
+            <div class="voice_curriculums_list" id="video_curriculums_list" style="display:none">
+                <ul class=" bg_white">
+            
+                </ul>
+        <div class="unrecorded">
+        <img src="<?php echo ROOT_PATH;?>webStyle/images/no_watchRecord.png" alt="">
+            <div>还没有观看记录</div>
+        </div> 
+            </div>
+                   
+        </section>
+    </div>
+ 
+    <input type="hidden" class="play" id="contrllor">
+    <audio id="audio" -webkit-playsinline webkit-playsinline>
+            <source src="" />
+    </audio>
+    <div class="affirm_delete">
+        <div>是否要清空所有记录？</div>
+        <div>
+            <ul>
+                <li><a href="javascript:(0);" class="cancel"><p>取消</p></a></li>
+                <li><a href="javascript:(0);" class="affirm" id="affirm"><p>确认</p></a></li>
+            </ul>
+        </div>
+    </div>
+    <footer class="user_footer" style="display:none">
+        <ul>
+            <li><a href="javascript:(0);" class="delete"><p>删除</p></a></li>
+            <li><a href="javascript:(0);" class="empty"><p>一键清空</p></a></li>
+        </ul>
+    </footer>
+</body>   
+</html>
+<script>
+var pause_img = "<?php echo ROOT_PATH;?>"+'webStyle/images/audio_pause_white.png';
+var play_img = "<?php echo ROOT_PATH;?>"+'webStyle/images/player.png';
+var delete_img = "<?php echo ROOT_PATH;?>webStyle/images/delete_blue.png";
+var clock_img = "<?php echo ROOT_PATH;?>webStyle/images/clock.png";
+var details_img = "<?php echo ROOT_PATH;?>webStyle/images/gray_more.png";
+var study_num_url = "<?php echo $this->url('web-common', array('controller' => 'Audio', 'action' => 'ajaxAddStudyNum'));?>";
+var finished = false;
+var page = 1;
+var audio_type = $(".select_on").attr('id');
+var current_audio_id = 0;
+getWatchRecordAudioList(1);
+function getWatchRecordAudioList(audio_type,load_more){
+     if(!load_more){
+        load_more = 1;
+     }
+	 if (finished && load_more == 2) {
+         return false;
+     }
+	 $('.londing_gif').show();
+     if(load_more == 1){
+    	 page = 1;
+     }
+     finished = true;
+     audio_type = audio_type;
+     var url = "<?php echo $this->url('web-common', array('controller' => 'user', 'action' => 'ajaxWatchRecord'))?>";
+     $.post(url,{audio_type:audio_type,page:page},
+    	 function(data){
+    	 $('.londing_gif').hide();
+  	    	 if(data.code == 200){
+  	  	    	  var list = data.data;
+	              var li = '';            
+	                  if (list.length > 0) {
+		                  $('.user_footer').show();
+	                	  if(audio_type == 1){
+	                		  url = '<?php echo $this->url('web-common', array('controller' => 'audio', 'action' => 'details'));?>';
+// 	                		  audio_alias = "音频";
+		                  }else{
+		                	  url = '<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details'));?>';
+// 		                	  audio_alias = "视频";
+			              }
+	                      var detail_img = "<?php echo ROOT_PATH;?>webStyle/images/gray_more.png";
+	                      $.each(list,function(i,v){
+	                    	  var ids = [v.id,1];
+	                         li += '<li>';
+	                         li += '<div class="delete_blue"><img src="'+delete_img+'" alt=""></div>';
+	                         if(audio_type == 1){
+	                        	 li += '<div  class="cover">';
+	                        	 li += '<img src="'+v.image+'" alt="">';
+	                        	 li += '<img audio_id='+v.id+' class="player" onclick="play_audio(\''+v.full_path+'\',this)" src="'+play_img+'" alt=""></div>';
+	                        	 li += '<a href="'+url+'?id='+ids+'&type=1">';
+		                     }else{
+		                    	 li += '<a href="'+url+'?id='+ids+'&type=1">';
+		                         li += '<div  class="cover">';
+		                    	 li += '<img class="video_image" src="'+v.image+'" alt="">';
+		                    	 li += '<img class="player" src="'+play_img+'" alt=""></div>';
+			                 }
+	                         li += '<div class="content">';
+	                         li += '<div>'+v.title+'</div>';
+	                         li += '<div class="teacher_name">'+v.teacher_name+'</div><div class="information2">';
+	                         li += '<div><img src="'+clock_img+'" alt=""><span>上次播放至：'+formatSeconds(v.time)+'</span></div>';
+	                         li += '</div></div><div  class="more">';
+	                         li += '<img src="'+details_img+'" alt="">';
+	                         li += '</div></a><div class="ultimately_delete" record_id="'+v.record_id+'" onclick="deleteRecord(this)">删除</div></li>';
+	                      });
+	                      if(load_more == 1){
+		                      if(audio_type == 1){
+		                    	  $('#audio_curriculums_list ul li').remove();
+				              }else{
+				            	  $('#video_curriculums_list ul li').remove();
+					          }
+	                      }
+	                      if(audio_type == 1){
+	                    	  $("#audio_curriculums_list ul").append(li);
+			              }else{
+			            	  $("#video_curriculums_list ul").append(li);
+				          }  
+	                      finished = false;
+	                      page ++;
+	                  }else{
+	                	  if($("#audio_curriculums_list>.bg_white > li").length > 0 && audio_type == 1){
+	                		  $('.user_footer').show();
+	                	  }else if($("#video_curriculums_list>.bg_white > li").length > 0 && audio_type == 2){
+	                		  $('.user_footer').show();
+	                	  }else{
+	                		  $('.user_footer').hide();
+	                	  }
+	                	  if(load_more == 1){
+	                		  if(audio_type == 1){
+		                    	  $('#audio_curriculums_list ul li').remove();
+		                    	  $('#audio_curriculums_list .unrecorded').show();
+				              }else{
+				            	  $('#video_curriculums_list ul li').remove();
+				            	  $('#video_curriculums_list .unrecorded').show();
+					          }
+    	                  }
+    	              }
+	              } 
+	              else {
+	                  if(load_more == 1){
+	                	  if(audio_type == 1){
+	                    	  $('#audio_curriculums_list ul li').remove();
+			              }else{
+			            	  $('#video_curriculums_list ul li').remove();
+				          }
+	                  }
+	              }
+     },'json');
+}
+
+function play_audio(src,obj){
+	var new_audio_id = $(obj).attr('audio_id');
+	$('.player').attr('src',play_img);
+    if(src){
+    	var audio = document.getElementById("audio");
+    	if(new_audio_id != current_audio_id){
+    		audio.src = src;
+    		current_audio_id = new_audio_id;
+    		$("#contrllor").addClass("play")
+        }
+    	audio.loop = false; //歌曲循环
+    	if ($("#contrllor").hasClass("play")) {
+    		$("#contrllor").addClass("pause").removeClass("play");
+    		audio.play();//开始播放
+    		$(obj).attr('src',pause_img);
+        }
+    	else
+    	{
+    		$("#contrllor").addClass("play").removeClass("pause");
+    	    audio.pause();
+    	    $(obj).attr('src',play_img);
+        }
+
+    	play_num_deal(current_audio_id);//播放量处理
+    }
+}
+
+function deleteRecord(obj){
+	var record_id = $(obj).attr('record_id');
+	var url = "<?php echo $this->url('web-common', array('controller' => 'user', 'action' => 'deleteRecord'))?>";
+	$.post(url,{id:record_id},function(result) {
+        if(result.code == 200){
+        	$(obj).parent().remove();
+        }else{
+            alert(result.message);
+        }
+   },'json');
+}
+
+$("#affirm").click(function(){
+	var type = $(".select_on").attr('id');
+	$.post("<?php echo $this->url('web-common',array('controller' => 'user','action' => 'deleteAllRecord'));?>",{type:type},function(result){
+		if(result.code == 200){
+			if(type == 1){
+				audio_dom = $("#audio_curriculums_list ul").remove();
+				$('#audio_curriculums_list .unrecorded').show();
+			}else{
+				video_dom = $("#video_curriculums_list ul").remove();
+				$('#video_curriculums_list .unrecorded').show(); 
+			}
+		    $(".bgb").hide();
+			$(".affirm_delete").hide();
+			$('.user_footer').hide();
+		}
+	},'json');
+});
+
+//获取时间转换为时分秒
+function formatSeconds(value) {
+	if(value == 'nan'){
+		return "00:00";
+	}
+    var theTime = parseInt(value);// 秒
+    var theTime1 = 0;// 分
+    var theTime2 = 0;// 小时
+    if(theTime > 60) {
+        theTime1 = parseInt(theTime/60);
+        theTime = parseInt(theTime%60);
+            if(theTime1 > 60) {
+            theTime2 = parseInt(theTime1/60);
+            theTime1 = parseInt(theTime1%60);
+            }
+    }
+        if(theTime >= 10 && theTime != 0){
+        	var result = ""+parseInt(theTime);
+        }else{
+            
+        	var result = "0"+parseInt(theTime);
+        }
+       
+//         console.log(theTime1);
+//         console.log(theTime2);
+        if(theTime1>= 10 && theTime1 != 0) {
+    	//result = ""+parseInt(theTime)       	 
+     	   result = ""+parseInt(theTime1)+":"+result;
+        }else{
+           	 if(theTime1 != 0){
+        		result = "0"+parseInt(theTime1)+":"+result;
+              }else{
+            	  result = "0"+parseInt(theTime1)+":"+result;
+              }
+        }
+        
+        if(theTime2 >= 10 && theTime2 != 0) {
+     	   result = ""+parseInt(theTime2)+":"+result;
+        }else{
+            if(theTime2 != 0){
+            	result = "0"+parseInt(theTime2)+":"+result;
+            }
+        	
+        }
+    return result;
+}
+
+$(".attention_volume").click(function(){
+	var attention_url = "<?php echo $this->url('web-common', array('controller' => 'tutor', 'action' => 'ajaxAttention'))?>";
+    $.post(attention_url,{teacher_id:teacher_id,user_id:user_id},function(result) {
+        if(result.code == 200 && result.num == 1){
+            //添加
+//         	$(".attention_volume").attr('class','collect');
+        	$(".attention_volume").html('已关注('+result.subscription_num+')');
+        }else{
+            //取消
+//         	$(".attention_volume").attr('class','collected');
+        	$(".attention_volume").html('关注('+result.subscription_num+')');
+        }
+   },'json');
+});
+
+function loadmore(obj){
+    var scrollTop = $(obj).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = window.innerHeight;
+    if (scrollHeight - scrollTop - windowHeight<=50 ) {
+    	getWatchRecordAudioList($(".select_on").attr('id'),2);
+    }
+};
+$(window).scroll(function (){
+    if (loadmore) {
+        loadmore($(this));
+    }
+});
+
+var t=1;
+$(".record .select_top a").click(function(){
+        $(this).addClass('select_on').siblings().removeClass('select_on');
+        $('section>div').hide();
+        $('section>div').eq($(this).index()).show();
+        $(".delete_blue").hide();
+        $(".delete").html("删除");
+        t=1;
+    })
+$(".delete").on('click',function(){
+    if(t==1){
+        $(".voice_curriculums_list li a").addClass('left50');
+        $("#audio_curriculums_list li .cover").addClass('left50');
+        $(".delete_blue").show();
+        $(".delete").html("完成");
+        t=2;
+        $(".delete_blue").on('click',function(){
+            $(this).parent().children("a").addClass('left-60');
+            $(this).parent().children(".cover").addClass('left-60');
+            $(this).hide();
+            $(this).parent().children(".ultimately_delete").show();
+
+        })
+    }else{
+    	$("#audio_curriculums_list li .cover").removeClass('left50');
+        $(".voice_curriculums_list li a").removeClass('left50');
+        $(".delete_blue").hide();
+        $(".delete").html("删除");
+        $(".voice_curriculums_list li a").removeClass('left-60');
+        $(".voice_curriculums_list li .cover").removeClass('left-60');
+        $(".ultimately_delete").hide();
+        t=1
+    
+    }
+}) 
+
+$(".empty").on('click',function(){
+    $(".bgb").show();
+    $(".affirm_delete").show();
+})
+$(".affirm_delete .cancel").on('click',function(){
+    $(".bgb").hide();
+    $(".affirm_delete").hide();
+})
+
+</script>

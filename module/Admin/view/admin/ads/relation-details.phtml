@@ -1,0 +1,404 @@
+<script src="<?php echo $this->basePath() ?>/js/thescript.js"></script>
+<script src="<?php echo $this->basePath() ?>/js/ajaxfileupload.js"></script>
+<script src="<?php echo $this->basePath() ?>/js/date/jedate.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.config.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.all.min.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/lang/zh-cn/zh-cn.js"></script>
+<link href="<?php echo $this->basePath() . '/js/date/skin/jedate.css'?>" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+</style>
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span><?php echo $info?'编辑':'新增';?>广告信息：</span>
+            </legend>
+            <form id="submitForm" class="form-horizontal" method="post" action="<?php echo $info ? $this->url('admin', array('controller' => 'ads', 'action' => 'saveRelation')) : '';?>">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">广告板块：</label>
+                    <div class="col-md-8">
+                        <div>
+                        	 <select name="plate" id="plate" onchange="changeSizeWarning()">
+                                <?php if($cid == 3){?>
+                                    <option value="3" <?php echo $info && ($info['plate']==3) ? 'selected="selected"':'';?> >今日推荐</option>
+                                <?php }else{?>
+                                    <option value="1" <?php echo $info && ($info['plate']==1) ? 'selected="selected"':'';?>>首页</option>
+                                    <option value="2" <?php echo $info && ($info['plate']==2) ? 'selected="selected"':'';?> >赠送页面</option>
+                                <?php }?>
+                            </select>
+                      </div>
+                    </div>
+                </div>
+				<div class="control-group">
+                    <label class="col-md-2 control-label">排序：</label>
+                    <div class="col-md-8">
+					    <div><input type="text" name="sort" id="sort" value="<?php echo $info?$info['sort']:''?>" /></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">开始时间：</label>
+                    <div class="col-md-8">
+                        <div><input required="required" type="text" name="start_time" id="start_time" value="<?php echo $info ? $info['start_time'] : date('Y-m-d H:i');?>" /></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">结束时间：</label>
+                    <div class="col-md-8">
+                        <div><input required="required" type="text" name="end_time" id="end_time" value="<?php echo $info ? $info['end_time'] : date('Y-m-d H:i', strtotime('+1 days'));?>" /></div>
+                    </div>
+                </div>
+            	<div>
+				    <label class="control-label">广告图片：</label>
+					<div class="controls portraits">
+						<div style="border: 2px solid #ccc; width: 200px">
+							<img id="show_image_1" width="250" height="125 border="1" src="<?php echo isset($info['image']) ? $this->basePath().'/'.UPLOAD_PATH.$info['image'] : $this->basePath().'/adminStyle/img/home-made.png';?>" alt="">
+							<!-- 图片路径是否正确? -->
+						</div>
+						<br><span>(注：像素<em class="size">750*375</em>或宽高比与此相同)</span>
+						<div style="display: none;">
+							<input type="hidden" id="img_id_1" name="img_id" value="" />
+							<input id="imgPath" type="hidden" name="image" value=""/>
+							<input type="file" accept="" id="uploadImage"
+								capture="camera" onchange="selectFileImage(this);" hidden />
+						</div>
+					</div>
+			     </div>
+                
+                <div class="control-group">
+                    <label class="col-md-2 control-label">跳转类型：</label>
+                    <div class="col-md-8">
+                        <div>
+                        	<select name="type" onchange="showMaterialBox(this,0,0)" id="ads_type">
+                        	<?php foreach ($jump as $k=>$v){?>
+            				   <option value="<?php echo $k;?>" <?php echo $info['type'] == $k?'selected="selected"':''?>><?php echo $v;?></option>
+            				  <?php }?>
+            				</select>
+                      </div>
+                    </div>
+                </div>
+            
+<!--                 <div class="control-group"> -->
+<!--                     <label class="col-md-2 control-label">管理物料：</label> -->
+<!--                     <div class="col-md-8" id="selectButton">
+                        <div><input type="button" id="bind" class="btn" value="关联物料" onclick="showMaterialBox('bind')">
+                        <input type="button" id="add" class="btn" value="上传新物料" onclick="showMaterialBox('add')"></div>
+<!--                     </div> -->
+<!--                 </div> -->
+             <div id="Material_1" class="classMaterial hide">
+                <div class="control-group">
+		            <label class="control-label">广告标题：</label>
+					<div class=" portraits" style="margin-left:140px">
+					    <div><input type="text" name="title" id="title" value="<?php echo $info?$info['title']:''?>" /></div>
+					</div>
+			     </div>
+               <div class="control-group">
+		            <label class="control-label">广告详情：</label>
+					<div class=" portraits" style="margin-left:140px">
+					    <div><textarea id="cc1" name="content" rows="20" style="width: 90%;" placeholder=""><?php echo $info ? $info['content'] : "";?></textarea></div>
+					</div>
+		     </div>
+            </div>
+            
+            <div id="Material_2" class="classMaterial hide">
+                <div class="control-group">
+                    <label class="col-md-2 control-label titles">选择物料：</label>
+                    <div class="col-md-8">
+<!--                     onchange="showMaterial(this.value)" -->
+                        <div><select required="required" name="audio_id" id="audio_id" class="contents"><option value="0"></option>
+                        </select></div>
+                    </div>
+                </div>
+            </div>
+
+               <div id="Material_6" class="control-group classMaterial hide">
+                <div class="control-group ">
+                    <label class="control-label col-md-2">链接地址：</label>
+                    <div class="controls col-md-8">
+					    <div><input type="text" name="link" id="link" value="<?php echo $info?$info['link']:''?>" /></div>
+                        <span>请输入带有https或者http的外部链接地址</span>
+                    </div>
+                </div>
+            </div>
+         
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="hidden" value="<?php echo $info ? $info['id'] : 0;?>" name="id" />
+                        <input type="hidden" name="add" value="<?php echo $add ? $add : 0 ?>"/>
+                          <input type="hidden" value="2017" name="ajax" />
+<!--                           onclick="save()" -->
+                        <input type="button" class="btn btn-large btn-primary" id="submit-button" value="保存" />
+				       <?php if(!$info){?>
+					    <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+					    <?php }?>
+                        <input class="btn btn-large btn-primary resetHref" id="resetHref" type="reset" value="取消"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+
+<script>
+function changeSizeWarning(){
+	var plate = $('#plate').val();
+	if(plate == 3){
+	    $('.size').html('210*210');
+	}else{
+		$('.size').html('750*375');
+	}
+	return;
+}
+
+$('#resetHref').click(function(){
+	history.go(-1); 
+});
+
+
+function preview() {
+	//var url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'presentRecordDetail'));?>';
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'indexPreview2'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+    $('.iphone-iframe').css({
+        'width':$(window).width()+'px',
+        'height':$(window).height()+'px'
+    });
+    $('.iphone-bg').css({
+        'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+        'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+    });
+    $('#ap1').click(function(){
+        $('.iphone-iframe').toggle();
+    });
+    $('.iphone-btn').click(function() {
+        $('.iphone-iframe').toggle();
+    });
+</script>
+
+<script>
+//上传封面
+var upload_url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+$("#show_image_1").click(function(){
+  $("#uploadImage").click();
+});
+//编辑框
+    var ue1 = UE.getEditor('cc1', {
+    	"initialFrameWidth" : "100%",
+    	"initialFrameHeight" : 200,
+    	"maximumWords" : 8000,
+    });
+<?php if ($info) {?>
+showMaterialBox(null,<?php echo ($info['type']?$info['type']:1).','.($info['audio_id']?$info['audio_id']:0);?>);
+<?php }else{?>
+showMaterialBox(null,1,0);
+<?php }?>
+function showMaterialBox(btn,type,id){
+	if(!type){
+      type = $(btn).val();
+	}
+      if(type>=2 && type<=5){
+          var url = '<?php echo $this->url('admin',array('controller'=>'Ads','action'=>'ajaxFindList'));?>';
+          $('.contents').html('');
+           $.post(url,{type:type,ajax:27,id:id},function(data){
+        	    if(data.status != 0){
+                     alert(data.msg);return;
+        	    }else{
+//         	        console.log(data.content);
+        	    	 $('.contents').append(data.content);
+        	    }
+        	  },'json');
+          if(type == 2){
+              $('.titles').text('选择音频：');
+//               $('.contents').append('选择音频：');
+          }else if(type == 3){
+        	  $('.titles').text('选择视频：');
+          }else if(type == 4){
+        	  $('.titles').text('选择音频包：');
+          }else if(type == 5){
+        	  $('.titles').text('选择视频包：');
+          }
+          type = 2;
+      }
+// 	}
+      $(".classMaterial").hide();
+ 	 $("#Material_"+ type ).show();
+}
+
+//提交表单
+$("#submit-button").click(function(){
+    var plate = $("#plate").val();
+    var start_time = $("#start_time").val();
+    var end_time = $("#end_time").val();
+    var img_id_1 = $("#img_id_1").val();
+    var ads_type = $("#ads_type").val();
+    var title = $('#title').val();
+	var cc1 =  UE.getEditor('cc1').hasContents();
+// 	console.log(cc1);return;
+	var audio_id = $('#audio_id').val();
+	var link = $('#link').val();
+	var sort = $('#sort').val();
+	
+    if(!plate){
+    	alert('广告板块不能为空！');
+    	return false;
+    }else if(!start_time){
+    	alert('开始时间不能为空！');
+    	return false;
+    }else if(isNaN(sort)){
+    	alert('序号应该为数字！');
+    	return false;
+    }else if(!end_time){
+    	alert('结束时间不能为空！');
+    	return false;
+    }else if(!img_id_1){
+	<?php if (!$info) {?>
+    	alert('广告图片不能为空！');
+    	return false;
+    	<?php }?>
+    }else if(ads_type ==1){
+    	if(!title){
+        	alert('广告标题不能为空！');
+        	return false;
+        }
+   	    if(!cc1){
+	    	alert('广告详情不能为空！');
+	    	return false;
+	    }
+    }else if(ads_type ==2){
+    	if(!audio_id){
+        	alert('选择音频不能为空！');
+        	return false;
+        }
+    }else if(ads_type ==3){
+    	if(!audio_id){
+        	alert('选择视频不能为空！');
+        	return false;
+        }
+    }else if(ads_type ==4){
+    	if(!audio_id){
+        	alert('选择音频包不能为空！');
+        	return false;
+        }
+    }else if(ads_type ==5){
+    	if(!audio_id){
+        	alert('选择视频包不能为空！');
+        	return false;
+        }
+    }else if(ads_type ==6){
+    	if(!link){
+        	alert('链接地址不能为空！');
+        	return false;
+        }
+    }
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+//     $('#submitForm').from();
+ });
+// function showMaterialBox(type) {
+	
+// 	 $(".classMaterial").hide();
+// 	 $("#" + type + "Material").show();
+
+// 	 $("#selectButton input").removeClass("btn-primary");
+// 	 $("#" + type).addClass("btn-primary");
+
+// 	 $("#hiddenMode").val(type);
+// }
+
+</script>
+<script>
+// function validate() {
+// 	var form = $("#myForm");
+// 	var mode = $("#hiddenMode").val();
+// 	var check = true;
+
+// 	$(".validate_msg").remove();
+// 	$("#myForm > .control-group input").each(function() {
+// 		if ($(this).attr("required") && $(this).val() == '') {
+// 			check = false;
+// 			$(this).after('<span id="'+$(this).attr('id')+'_msg" class="validate_msg" style="color: red;"> 必填 </span>');
+// 		}
+// 	});
+	
+// 	if (mode == 'bind') {
+// 		$("#bindMaterial > .control-group select").each(function() {
+// 			if ($(this).attr("required") && $(this).val() == '0') {
+// 				check = false;
+// 				$(this).after('<span id="'+$(this).attr('id')+'_msg" class="validate_msg" style="color: red;"> 必选 </span>');
+// 			}
+// 		});
+// 	}
+// 	else if (mode == 'add') {
+// 		$("#addMaterial > .control-group input").each(function() {
+// 			if ($(this).attr("required") && $(this).val() == '') {
+// 				check = false;
+// 				$(this).after('<span id="'+$(this).attr('id')+'_msg" class="validate_msg" style="color: red;"> 必填 </span>');
+// 			}
+// 		});
+// 	}
+
+// 	if (check) {
+// 		$("#myForm").submit();
+// 	}
+// }
+</script>
+
+<script>
+//var loading_img = '<?php echo $this->basepath() . '/adminStyle/img/loading.gif'?>';
+// $("#forUpload").click(function(){
+//     $(".file").click();
+// });
+</script>
+<script>
+     var start = {
+        dateCell: '#start_time',
+        format:"YYYY-MM-DD hh:mm",
+        minDate: '2013-01-01 00:00:00',
+        festival:true,
+        //maxDate: jeDate.now(0),
+        isTime: true,
+        choosefun: function(datas){
+            end.minDate = datas;
+        }
+    };
+    var end = {
+        dateCell: '#end_time',
+        minDate: '2013-01-01 00:00:00',
+        festival:true,
+        format:"YYYY-MM-DD hh:mm",
+        isTime: true,
+        choosefun: function(datas){
+            start.maxDate = datas;
+        }
+    };
+    jeDate(start);
+    jeDate(end);
+
+    changeSizeWarning();
+</script>

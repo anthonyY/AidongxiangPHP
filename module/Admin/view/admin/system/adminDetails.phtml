@@ -1,0 +1,234 @@
+<style>
+.form-horizontal .controls {
+	margin-left: 140px;
+}
+.controls input {
+    padding: 8px;
+}
+
+	.form-horizontal .control-label {
+		text-align: left;
+	}
+	.select-top {
+ border:1px solid #ccc;
+ color:#969292;
+     border-radius: 3px;
+     width: 287px;
+     padding:  8.5px  8.5px 8.5px 3px;
+}
+	.control-group-border {
+		border-bottom: 1px solid #ccc;
+	}
+	.control-label>img {
+		margin: 0 10px;
+		width: 18px;
+		height: 18px;
+		border: none;
+		vertical-align: bottom;
+	}
+	.admin-role span{
+	 margin-right: 40px;
+	}
+</style>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<div id="content" class="">
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-content">
+				<form action="" method="post" class="form-horizontal" id="submitForm">
+					<fieldset>
+						<legend class="lg_title">
+							<span>管理员信息：</span>
+						</legend>
+						<section style="overflow: hidden;">
+							<div style="float: left;">
+								<div class="control-group">
+									<label class="control-label">姓名：</label>
+									<div class="controls">
+										<input name="name" id="name" required="required"class="input-xlarge" type="text" value="<?php echo $admin ? $admin['name'] : '';?>"
+											placeholder="请输入管理员姓名"><span style="color: red"> *</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">手机号码：</label>
+									<div class="controls">
+										<input name="mobile" id="mobile" required="required" maxlength="11"
+											class="input-xlarge" type="text" value="<?php echo $admin ? $admin['mobile'] : '';?>"
+											placeholder="请输入联系手机号码"><span style="color: red;"> *</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">登录账号：</label>
+									<div class="controls">
+										<input name="login_name" id="login_name" required="required"
+											class="input-xlarge" type="text" value="<?php echo $admin ? $admin['login_name'] : '';?>"
+											placeholder="请设置管理员登录账号"><span style="color: red;"> *</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">登录密码：</label>
+									<div class="controls">
+										<input name="password" id="password"  class="input-xlarge" type="password" value="" placeholder="<?php echo $admin ? '若不修改密码请留空' : '请设置管理员登录密码';?>"><span style="color: red"> </span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">选择职务：</label>
+									<div class="controls">
+<!-- 										
+										<input name="role" id="role" required="required" class="input-xlarge" type="text" value="" placeholder="请选择职务"><span style="color: red">*</span>
+ -->                                        
+                                          <select <?php if($admin && $admin['role_id'] == 1){echo "disabled='disabled'";}?> id="form-remind" class="select-top" name="role" size="1" id="select"  placeholder="请选择职务">
+                                            <option value="0" id="select-type">请选择职务</option> 
+                                          <?php foreach ($role_list as $v){ ?>
+                                            <option value="<?php echo  $v['id'];?>" <?php if($admin){echo $admin['role_id']==$v['id']?'selected="selected"':'';}?>><?php echo $v['name'];?></option>
+                                        <?php }?>
+                                         </select><span style="color: red;"> *</span>
+                                    </div>
+								</div>
+							</div>
+							<div style="float: right; margin-right: 75px;">
+								<div class="controls portraits">
+									<div style="border: 2px solid #ccc; width: 100px">
+										<img id="show_image_1" width="100" height="100" border="1" src="<?php echo  $this->basePath().(isset($admin['image']) && $admin['image'] ? '/'.UPLOAD_PATH.$admin['image'] :'/images/portrait.png');?>" alt="">
+										<!-- 图片路径是否正确? -->
+									</div>
+									<div style="display: none;">
+										<input type="hidden" id="img_id_1" name="img_id" value="" />
+										<input id="imgPath" type="hidden" name="img_path" value="<?php if(isset($admin['image']) && $admin['image']){echo $admin['image'];} ?>"/>
+										<input type="file" accept="" id="uploadImage"
+											capture="camera" onchange="selectFileImage(this);" hidden />
+									</div>
+								</div>
+							</div>
+						</section>
+						<div class="control-group">
+							<label class="control-label" style="font-weight:bold;font-size:16px;">权限信息：</label>
+						</div>
+						<div class="control-group">
+							<label >请先选择职务后查看职务的权限</label>
+						</div>
+						<div id="admin_list"></div>
+					
+						<div class="control-group">
+							<label class="control-label" for="focusedInput"></label>
+							<div class="controls" style="margin-top: 10px;">
+								<input name="id"  type="hidden" value="<?php echo $admin ? $admin['id'] : 0; ?>" />
+								<div class="controls" style="margin-top: 10px;">
+									<input name="sb" class="btn btn-large btn-primary" type="submit" id="submit-button"
+										value="保存" />
+									<input class="btn btn-large btn-primary resetHref" type="reset" value="取消" />
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(".resetHref").click(function(){
+    location.href = '<?php echo $this->url('admin',array('controller'=>'System','action'=>'roleList'));?>';
+});
+var url = '<?php echo $this->url('admin', array('controller' =>'System', 'action' => 'ajaxAdminRole'));?>';
+function getAdminList(id) {
+	  if (url) {
+	    $.post(url, {id:id},function (data) {
+	    	adminTemplate(data, 'admin_list');
+	    },"json");
+	  }
+	}
+
+// function adminTemplate(data,container) {
+// 	var content = '';
+// 	console.log(data);
+// 	  $.each(data, function(key,val){
+// 	    template = '<div class="control-group control-group-border">';
+// 	    template += '<span>'+key+'</span>';
+// 	    template += '</div>';
+// 	    content += template;
+// 	  });
+// 	  if (content) {
+// 	    $("#" + container).append(content);
+// 	  }
+// }
+function adminTemplate(data,container) {
+	var content = '';
+	  $.each(data, function(key,val){
+	    template = '<div class="control-group control-group-border"><label class="control-label">';
+	    template += '<i class="icon-home"></i> '+key+'：</label>';
+		  template += '<div class="controls admin-role">';
+		  $.each(val, function(k,v){
+			  template += '<span>'+k+'</span>';
+		  });
+		  template += '</div></div>';
+	    content += template;
+	  });
+	  if (content) {
+	    $("#" + container).append(content);
+	  }
+}
+</script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+// 		$("#select-type").attr("selected","selected");
+        var id_start = '<?php echo $admin ? $admin['role_id'] : 0;?>';
+        if(id_start>0){
+				$(".select-top").attr("style","color:#1B1919");
+				getAdminList(id_start);
+		}
+		$("#form-remind").change(function(){
+             var id = $('#form-remind option:selected') .val()
+             if(id>0){
+//  				$(".select-top").attr("style","color:#1B1919");
+ 				$("#admin_list").html('');
+ 				getAdminList(id);
+ 				return;
+ 			}
+			$(".select-top").attr("style","color:#969292");
+			$("#admin_list").html('');
+		});
+	});
+
+$("#submit-button").click(function(){
+    var path = $("#imgPath").val();
+    var mobile = $("#mobile").val();
+    var name = $("#name").val();
+    var login_name = $("#login_name").val();
+    if(!path){
+	    alert('管理员头像不能为空');
+	    return false;
+    }
+    if(!name){
+    	alert('姓名不能为空'); // message.js
+    	return false;
+    }
+    if(!login_name){
+    	alert('登录不能为空'); // message.js
+    	return false;
+    }
+    var t= "^[.\0-9]+$";
+    if(!mobile){
+    	alert('手机号码不能为空'); // message.js
+    	return false;
+    }
+    if(mobile.search(t)==-1){
+    	alert('手机号码请输入数字'); // message.js
+    	return false;
+    }
+	if(!(/^1\d{10}$/.test(mobile))){
+    	alert("请输入正确的手机号码!");
+    	return false;
+    }
+    $("#submitForm").submit();
+ });
+	
+//上传封面
+  var upload_url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+	$("#show_image_1").click(function(){
+		  $("#uploadImage").click();
+		});
+</script>

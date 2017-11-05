@@ -1,0 +1,429 @@
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.config.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.all.min.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/sdk/qcloud_sdk.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/sdk/swfobject.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath();?>/adminStyle/template/js/thescript.js"></script>
+<script src="<?php echo $this->basePath();?>/adminStyle/template/upload/ajaxfileupload.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<script type="text/javascript">
+    var uploader = '<?php echo $this->url('admin',array('controller' => 'common', 'action'=>'uploadImage'));?>';//图片上传地址
+</script>
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+
+    #uniform-file{
+    	display:none;
+    }
+</style>
+<div id="content" class="span10">
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-content">
+				<form action="" method="post" class="form-horizontal" id="submitForm">
+					<fieldset>
+						<legend class="lg_title">
+    						<?php if($id){?>
+    						  <span>内容列表-课程包详情：</span>
+    						<?php }else{?>
+    						  <span>内容列表-新增课程包：</span>
+    						<?php }?>
+						</legend>
+						<h3><span>课程包信息</span></h3>
+					    <br>
+						<section style="overflow: hidden;">
+						<input type="hidden" name="id" value="<?php echo $list ? $list['id'] : 0 ?>"/>
+						  <div class="control-group">
+								<label class="control-label">课程包类型：</label>
+								<div class="controls">
+								    <select name="type" id="department" <?php if($list['id']){?>disabled="disabled"<?php }?>>
+                                        <!-- <option value="0" id="select-type">请选择类型</option>  -->
+                                        <option value="3" <?php if($list && $list['type'] == 3){?> selected="true" <?php }?>>音频</option>
+                                        <option value="4" <?php if($list && $list['type'] == 4){?> selected="true" <?php }?>>视频</option>
+                                     </select>
+                                     <br><span>请设置课程包类型</span>
+                                </div>
+							</div>
+							<div style="float: left;width:100%;">
+								<div class="control-group">
+									<label class="control-label">课程包名称：</label>
+									<div class="controls">
+										<input name="name" id="name" required="required"class="input-xlarge" type="text" value="<?php echo $list ? $list['title'] : ""?>"
+											placeholder="请输入课程包名称"><br><span>请设置课程包名称,建议20个字内</span>
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label">课程包排序序号：</label>
+									<div class="controls">
+										<input type="number" value="<?php echo $list ? $list['cour_sort'] : '1';?>" min="1" name="cour_sort" required="required" id="sort" placeholder="请输入排序序号" />
+									</div>
+								</div>
+								<?php if(isset($list['id']) && $list['id']){?>
+								    <div class="control-group">
+    									<label class="control-label">课程包地址：</label>
+    									<div class="controls">
+    										<input name="link" readonly="true" id="link" style="width:500px" class="input-xlarge" type="text" value="<?php echo $list ? $list['link'] : ""?>"
+    											placeholder="">
+    									</div>
+    								</div>
+								<?php }?>
+								<div class="control-group">
+    								<label class="control-label">课程包分类：</label>
+    								<div class="controls">
+    								    <select name="one_type" id="one_type">
+                                            <option value="0" id="select-type">请选择分类</option> 
+                                         </select>
+                                         <select name="two_type" id="two_type">
+                                            <option value="0" id="select-type">请选择分类</option> 
+                                         </select>
+                                         <br><span>请选择课程包分类,一级分类必选</span>
+                                    </div>
+    							</div>
+								<label class="control-label">售卖类型：</label>
+								<div class="controls">
+    								<div class="control-group">
+    								<?php if($list){?>
+    									<input name="sell_type" type="radio" id="y_sell_type" <?php if($list['sell_type']==1){?>checked="checked"<?php }?> value="1"/> 普通课程包
+    									<input name="sell_type" type="radio" id="n_sell_type" <?php if($list['sell_type']==2){?>checked="checked"<?php }?>value="2"/> 会员专享包
+    								<?php }else{?>
+    								    <input name="sell_type" type="radio" id="y_sell_type" checked="checked" value="1"/>  普通课程包
+    									<input name="sell_type" type="radio" id="n_sell_type" value="2"/> 会员专享包
+    								<?php }?>
+    								</div>
+								</div>													
+								<div class="control-group" id="one_price">
+									<label class="control-label">普通价：</label>
+									<div class="controls">
+										<input name="price" id="price" class="input-xlarge" type="text" value="<?php echo $list ? $list['price'] : ""?>"
+											placeholder="普通用户购买单价"> 元
+									</div>
+								</div>
+								<div class="control-group" id="two_price">
+									<label class="control-label">会员价：</label>
+									<div class="controls">
+										<input name="original_price" id="original_price" class="input-xlarge" type="text" value="<?php echo $list ? $list['original_price'] : ""?>"
+											placeholder="会员用户购买单价"> 元
+									</div>
+								</div>
+								<label class="control-label">是否推荐：</label>
+								<div class="controls">
+    								<div class="control-group">
+    								<?php if($list){?>
+    									<input name="recommend" type="radio" id="y_recommend" <?php if($list['recommend']==1){?>checked="checked"<?php }?> value="1"/> 推荐
+    									<input name="recommend" type="radio" id="n_recommend" <?php if($list['recommend']==2){?>checked="checked"<?php }?>value="2"/> 不推荐
+    								<?php }else{?>
+    								    <input name="recommend" type="radio" id="y_recommend" checked="checked" value="1"/> 推荐
+    									<input name="recommend" type="radio" id="n_recommend" value="2"/> 不推荐
+    								<?php }?>
+    								</div>
+								</div>
+								<div class="control-group" id="n_sort" ">
+									<label class="control-label">推荐排序序号：</label>
+									<div class="controls">
+										<input name="sort" id="sort" maxlength="11"
+											class="input-xlarge" type="text" value="<?php echo $list ? $list['sort'] : ""?>"
+											placeholder="请输入排序序号">
+											<br><span>若推荐课程包,此课程包可在公众号个人中心的“推荐课程包”版块显示</span>
+									</div>
+								</div>
+							<div>
+    							    <label class="control-label">课程包列表封面：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img class="show_img" id="img_0" width="400" height="150" border="1" src="<?php echo  $this->basePath().(isset($list['img']) && $list['img'] ? '/'.UPLOAD_PATH.$list['img'] :'/images/portrait.png');?>" alt="">
+    										<!-- 图片路径是否正确? -->
+    									</div>
+    									<br><span class="span">（注：像素120x120或者宽高比与此相同）</span>
+    									<div style="display: none;">
+    										<input type="hidden" id="img_id_0" name="img_id_0" value="<?php if(isset($list['image']) && $list['image']){echo $list['image'];} ?>" />
+    										<input id="img_path_0" type="hidden" name="img_path_0" value="<?php if(isset($list['img']) && $list['img']){echo $list['img'];} ?>"/>
+    										<!-- <input type="file" accept="" id="uploadImage"
+    											capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img0" name="Filedata[]" onchange="return ajaxFileUpload('0');"/>
+    									</div>
+    								</div>
+							     </div>
+							     <br>
+							     <div>
+    							    <label class="control-label">课程包详情封面：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img class="show_img" id="img_1" width="400" height="150" border="1" src="<?php echo  $this->basePath().(isset($list['d_img']) && $list['d_img'] ? '/'.UPLOAD_PATH.$list['d_img'] :'/images/portrait.png');?>" alt="">
+    										<!-- 图片路径是否正确? -->
+    									</div>
+    									<br><span>（注：像素750x420或者宽高比与此相同）</span>
+    									<div style="display: none;">
+    										<input type="hidden" id="img_id_1" name="img_id_1" value="<?php if(isset($list['details_image']) && $list['details_image']){echo $list['details_image'];}else {echo 0;} ?>" />
+    										<input id="img_path_1" type="hidden" name="img_path_1" value="<?php if(isset($list['d_img']) && $list['d_img']){echo $list['d_img'];} ?>"/>
+    										<!-- <input type="file" accept="" id="uploadImage"
+    											capture="camera" onchange="selectFileImage(this);" hidden /> -->
+											<input class="img" type="file" id="img1" name="Filedata[]" onchange="return ajaxFileUpload('1');"/>
+    									</div>
+    								</div>
+							     </div>
+							     <br>
+						
+							   <div class="control-group">
+						            <label class="control-label">课程介绍：</label>
+    								<div class="controls portraits">
+    								    <div><textarea id="cc1" name="synopsis" rows="20" style="width: 90%;" placeholder="请输入课程介绍"><?php echo $list ? $list['audios_synopsis'] : ""?></textarea></div>
+    								</div>
+							     </div>
+							     
+    						     <div id="div_code_img" style="display: none">
+    							    <label class="control-label">预览二维码：</label>
+    								<div class="controls portraits">
+    									<div style="border: 2px solid #ccc; width: 200px">
+    										<img id="code_img" width="400" height="150" border="1" src="" alt="">
+    									</div>
+    									<br><span>请使用微信客户端扫描！</span>
+    								</div>
+    							 </div>
+							</div>
+							
+							
+						</section>
+						<div class="control-group">
+							<label class="control-label" for="focusedInput"></label>
+							<div class="controls" style="margin-top: 10px;">
+								<div class="controls" style="margin-top: 10px;">
+								    <input type="hidden" name="add" value="<?php echo $add ? $add : 0 ?>"/>
+									<input name="sb"  type="button" class="btn btn-large btn-primary" id="submit-button" value="保存" />
+								   <?php  if(!$list){?>
+                                    <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+                                    <?php }else{?>
+								        <button type="button" class="btn btn-large btn-primary" id="ap2" onclick="realPreview()">预览</button>
+								    <?php }?>
+									<input class="btn btn-large btn-primary resetHref" type="reset" value="取消" />
+									
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<SCRIPT type="text/javascript">
+// http://192.168.1.14/nightbird/public/web/Audio/details/t2?id=11
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'detailsPreview','types'=>2));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+
+</SCRIPT>
+<script>
+    $('.iphone-iframe').css({
+        'width':$(window).width()+'px',
+        'height':$(window).height()+'px'
+    });
+    $('.iphone-bg').css({
+        'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+        'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+    });
+    $('#ap1').click(function(){
+        $('.iphone-iframe').toggle();
+    });
+    $('.iphone-btn').click(function() {
+        $('.iphone-iframe').toggle();
+    });
+</script>
+<script type="text/javascript">
+    var ue1 = UE.getEditor('cc1', {
+    	"initialFrameWidth" : "100%",
+    	"initialFrameHeight" : 400,
+    	"maximumWords" : 8000,
+    });
+</script>
+<script type="text/javascript">
+//取消按钮
+$(".resetHref").click(function(){
+    location.href = '<?php echo $this->url('admin',array('controller'=>'ContentList','action'=>'coursesList'));?>';
+});
+
+function realPreview(){
+	var id = "<?php echo $list ? $list['id'] : 0 ?>";
+	if(!id){
+		alert("预览失败！");
+		return false;
+	}
+	var url = '<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'ajaxRealPreview'));?>';
+	$.post(url,{id:id,type:2},function(result) {
+	   if(result){
+		   $("#div_code_img").show();
+		   $("#code_img").attr('src',result);		   
+	   }
+    },"json")
+
+}
+
+//推荐排序
+recommend = $("input[name='recommend']:checked").val();
+if(recommend == 1){
+	$("#n_sort").show();	
+	
+}else{
+	$("#n_sort").hide();
+	
+}
+$("#y_recommend").click(function(){
+	 $("#n_sort").show();
+});
+$("#n_recommend").click(function(){
+	 $("#n_sort").hide();
+});
+
+
+//售卖类型
+price = $("input[name='sell_type']:checked").val();
+if(price == 1){
+	$("#one_price").show();
+	$("#two_price").show();
+}else{
+	$("#one_price").hide();
+}
+
+$("#y_sell_type").click(function(){
+	 $("#one_price").show();
+	 $("#two_price").show();
+});
+$("#n_sell_type").click(function(){
+	 $("#one_price").hide();
+});
+//提交表单
+var info = '<?php echo $list?$list['id']:0;?>';
+$("#submit-button").click(function(){
+    var department = $("#department").val();
+    var name = $("#name").val();
+    var type = $("#type").val();
+    var one_type = $("#one_type").val();
+    var img1 = $('#img_id_0').val();
+	var img2 = $('#img_id_1').val();
+//     var two_type = $("#two_type").val();
+//     var price = $("#price").val();
+    //var original_price = $("#original_price").val();
+//     var img_id = $("#img_id_1").val();
+    var synopsis = $("#cc1").val();
+    
+    if(!info){
+        if(department == 0){
+        	alert('请选择课程包类型！'); // message.js
+        	return false;
+        }else if(!name){
+        	alert('课程包名称不能为空！'); // message.js
+        	return false;
+        }else if(one_type == 0){
+        	alert('请选择课程包分类！'); // message.js
+        	return false;
+        }
+    }
+    if(!img1){
+        alert('课程包列表封面不能为空！');
+   	   return false;
+	}else if(img2 == 0){
+      	alert('课程包详情封面不能为空！');
+   	   return false;
+	}
+    var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+    
+});
+//上传封面
+var upload_url = '<?php //echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+// $("#show_image_1").click(function(){
+//   $("#uploadImage").click();
+// });
+$(".show_img").click(function () {
+	$(this).parent().parent().find(".img").click();
+})
+
+//获取课程包类型和子类型
+type = $("#department").val();
+masetr(type,1); 
+masetr(type,2,0);
+$("#department").bind("change", function(){
+	type = $("#department").val();
+	masetr(type,1); 
+	 if(type == 3){
+		$('.span').html('（注：像素120x120或者宽高比与此相同）');
+	 } else if(type == 4){
+		 $('.span').html('（注：像素280x200或者宽高比与此相同）');
+	 }
+	
+})
+function masetr(type,genre,par_id=0){
+	var one_type = "<?php echo $list ? $list['courses_one_type'] : 0?>";
+	var two_type = "<?php echo $list ? $list['courses_two_type'] : 0?>";
+	$.post("<?php echo $this->url('admin', array('controller' => 'ContentList', 'action' => 'getcategory'));?>",{type:type,genre:genre,par_id:par_id},function(result) {
+	    if(result.num == 1){
+		    if(genre == 1){
+		    	$("#one_type").html("");
+		    	$("#one_type").append("<option value='0'>请选择分类</option>");
+		    }else{
+		    	$("#two_type").html("");
+		    	$("#two_type").append("<option value='0'>请选择分类</option>");
+		    }	
+	    }else if(result.num == 2){
+		    if(genre == 1){
+		    	$("#one_type").html("");
+			    $("#one_type").append("<option value='0'>请选择分类</option>");
+		    	$.each(result.data, function(i,val){
+			    	if(one_type == val.id){
+			    		$("#one_type").append("<option selected='true' value='"+val.id+"'>"+val.name+"</option>");
+			    	}else{
+			    		$("#one_type").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			    	} 		
+	    		});  
+		    	var id = "<?php echo $list ? $list['id'] : 0 ?>";
+		    	if(id){	
+		    		type = $("#department").val();
+		    		par_id = $("#one_type").val();
+		    		masetr(type,2,par_id);
+		    	}
+		    }else{
+		    	$("#two_type").html("");
+		    	$.each(result.data, function(i,val){
+		    		if(two_type == val.id){
+			    		$("#two_type").append("<option selected='true' value='"+val.id+"'>"+val.name+"</option>");
+			    	}else{
+			    		$("#two_type").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			    	} 
+	    		});  
+		    }
+	    }
+    },"json")
+	
+}
+$("#one_type").bind("change", function(){
+	par_id = $("#one_type").val();
+	type = $("#department").val();
+	masetr(type,2,par_id);
+}) 
+
+</script>
+

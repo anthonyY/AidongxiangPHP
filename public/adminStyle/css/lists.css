@@ -1,0 +1,140 @@
+﻿    .submit{
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        color: #fff;
+        background-color: #5bc0de;
+        border-color: #46b8da;
+    }
+    .pannel{
+        padding:0 2% 0 2%;
+    }
+    .grid_box1{
+        float: left;
+    }
+    #search{
+        float: left;
+    }
+    .forsh{
+        width:70%;
+        text-align: right;
+    }
+    .forda{
+        width: 35%;
+        text-align: right;
+    }
+    .search{
+        width:70%;
+    }
+    .submit{
+        width: 55px;
+        height:40px;
+    }
+    .form-control1{
+        float: left;
+    }
+    .inp{
+        width:30%;
+    }
+    .text{
+        width:40px;
+    }
+    .bs-example4{
+        padding-bottom: 0;
+    }
+    .page-control{
+        text-align: center;
+    }
+    .ce{
+        text-align: center;
+    }
+    .ad{
+        text-align: center;
+    }
+    .type{
+        text-align: right;
+        width: 15%;
+    }
+    .input-append{
+        float: right;
+        margin-right:10px;
+    }
+	.pannel-body .check-footer {
+		width:152px;
+		overflow:hidden;
+		margin:0 auto;
+		text-align:center;	
+		display:block;
+	}
+.pannel-body .check-footer 	.tac	{
+	width: 120px;
+	float:left;
+	margin-top:3px;
+	
+}
+.pannel-body .check-footer .back{
+	float:left;
+	width:16px;
+    cursor: pointer;
+}
+.pannel-body .check-footer .go{
+	float:right;
+	width:16px;
+	cursor: pointer;
+	transform:rotate(180deg);
+	-ms-transform:rotate(180deg); 	/* IE 9 */
+	-moz-transform:rotate(180deg); 	/* Firefox */
+	-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+	-o-transform:rotate(180deg);
+}
+ .input-append .search{
+ height: 18px !important;
+ }
+/* 黄色 btn-warning */
+ .btn-info4 {
+  background-color: #ec5c00;
+  background-image: -webkit-linear-gradient(top,  #f76000, #dd5600));
+}
+/* 红色 btn-danger*/
+ .btn-info3 {
+  background-color: #d41e24;
+  background-image: -webkit-linear-gradient(top,  #dd1f26,  #c71c22));
+}
+.submit {
+    float: right;
+    margin-left: 8px;
+}
+.ml8 {
+    margin-left: 48px;
+}
+.row input, .row select {
+    margin-bottom:0px;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id："144617" */
+  src: url('//at.alicdn.com/t/font_1474862685_457878.eot');
+  src: url('//at.alicdn.com/t/font_1474862685_457878.eot') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1474862685_457878.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1474862685_457878.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1474862685_457878.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont";
+    font-size:16px;
+    font-style:normal;
+}

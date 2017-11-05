@@ -1,0 +1,67 @@
+<link href="<?php echo $this->basePath() . '/adminStyle/css/basis.css'?>" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $this->basePath();?>/adminStyle/template/js/thescript.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.config.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/ueditor.all.min.js"></script>
+<script src="<?php echo $this->basePath();?>/ueditor/lang/zh-cn/zh-cn.js"></script>
+<style type="text/css">
+	.tab_menu li.on {
+		background-color: #0099CC;
+		color: #fff;
+		border-color: #0099CC;
+		width:20%;
+	}
+	.manage-box header ul li {
+		width:20%;
+	}
+    .tab_box > section{
+     display: none; 
+    }
+    .tab_box > section:first-child {
+     display: block;
+    }
+</style>
+<article class="manage-box">
+	<div class="tab_box">
+		<section class="content">
+			<div class="row-fluid sortable">
+				<div class="box span12">
+					<div class="box-content">
+						<form class="form-horizontal" method="post" action="<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'protocol'));?>" id="submitForm1" onsubmit="return false;" enctype="multipart/form-data">
+							<div class="control-group">
+								<div class="col-md-8">
+								   <div><textarea id="cc1" name="content" rows="20" style="width: 90%;" placeholder="请输入用户协议"><?php echo $users ? $users->content : '';?></textarea></div>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="col-md-2 control-label"></label>
+								<div class="col-md-8">
+									<input name="id"  type="hidden" value="<?php echo $users ? $users['id'] : 0; ?>" />
+									<input class="btn btn-large btn-primary tijiao" type="submit" id="submit-button1" value="保存" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</article>
+
+<script type="text/javascript">
+    var ue1 = UE.getEditor('cc1', {
+    	"initialFrameWidth" : "100%",
+    	"initialFrameHeight" : 400,
+    	"maximumWords" : 8000,
+    });
+    $(".tijiao").click(function(){
+        var formno = $(this).parents("form").attr("id");
+        var url = '<?php echo $this->url('admin',array('controller'=>'System','action'=>'protocol'));?>';
+  		var arr = $('#'+formno).serialize();
+  		$.post(url,arr,function(data){
+  			alert(data.message);
+  		},'json');
+
+ 		//$("#"+formno).submit();
+    });
+</script>

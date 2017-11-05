@@ -1,0 +1,65 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+
+<title>首页</title>
+<style>
+    body{
+
+        background-color: #f0f0f5; 
+    }
+.toolbar{
+    font-size: 1.2rem;
+}
+</style>
+<html>
+<body>
+    <div class="change_name">
+        <input type="text" maxlength="10" value="<?php echo $data->name;?>">
+        <span>10</span>
+        <div>好名字可以让你的朋友更容易记住你。</div>
+        <button>保存</button>
+    </div>
+</body>   
+</html>
+<script>
+
+$(function(){
+    pushHistory(); 
+    window.addEventListener("popstate", function(e) { 
+        var url = "<?php echo $this->url('web-common', array('controller' => 'User', 'action' => 'userDetails','id'=>$_SESSION['user_id']))?>";
+    	location.href = url;
+
+    }, false); 
+});
+    var t = $(".change_name input").val().length;
+    $(".change_name span").text(10-t);
+    //通知标题
+    $(".change_name input").on("input propertychange",function(){
+        t = $(this).val().length;
+        if(t>=10){
+            t=10;
+        }
+        $(".change_name span").text(10-t);
+    })
+    
+    $("button").click(function(){
+ 	   var text = $(".change_name input").val();
+ 	   if(!text){
+ 	 	   alert('名称不能为空');
+ 	 	   return false;
+ 	   }else{
+ 	 	  var id = "<?php echo $data->id?>";
+          var url = "<?php echo $this->url('web-common', array('controller' => 'User', 'action' => 'ajaxAmendUser'))?>";
+      	   $.post(url,{id:id,text:text,type:3},function(data) {
+          	   if(data.code == 200){
+            		 history.go(-1);
+          	   }else{
+              	   alert(data.message);
+          	   }
+      	   },'json');
+ 	   }
+    });
+</script>

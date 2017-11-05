@@ -1,0 +1,142 @@
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+input, textarea {
+    width: 400px;
+}
+.controls2 input {
+    width: 193px;
+}
+.controls2{
+     width: 420px;
+}
+</style>
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>充值设置：</span>
+            </legend>
+            <form id="submitForm" class="form-horizontal" method="post" action="">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">顶部寄语：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="top" id="top" value="<?php echo $info ? $info['top_content'] : '';?>" />
+                        <br/><span>10字内</span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">底部寄语：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="bottom" id="bottom" value="<?php echo $info ? $info['bottom_content'] : '';?>" />
+                        <br/><span>30字内</span></div>
+                    </div>
+                </div>
+            	<div>
+				    <label class="control-label">充值金额：</label>
+				    <div class="col-md-8">
+                        <div class="controls controls2">
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['0'] : 0;?>" />
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['1'] : 0;?>" />
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['2'] : 0;?>" />
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['3'] : 0;?>" />
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['4'] : 0;?>" />
+                            <input required="required" type="number" name="price[]" id="price" value="<?php echo $info ? $info['price']['5'] : 0;?>" />
+                            <br/><span>用于管理公众号充值页面的快捷充值金额</span>
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label class="col-md-2 control-label">账户说明：</label>
+                        <div class="col-md-8">
+                           <div><textarea name="content" id="status" style="resize:none;width:80%;height:55px;"onkeydown='countChar("status","counter");' 
+                        onkeyup='countChar("status","counter");'><?php echo isset($info['account_content']) && $info['account_content'] ? $info['account_content'] : '';?></textarea>
+                        <span class="wordwrap tr" style="width: 40px;"><i id="counter"></i></span></div>
+                        </div>
+                        <br>
+                    </div>
+					<!--<div class="controls portraits">
+						<div style="border: 2px solid #ccc; width: 200px">
+							<img id="show_image_1" width="250" height="402" border="1" src="<?php echo isset($info['img_path']) ? $this->basePath().'/'.UPLOAD_PATH.$info['img_path'] : $this->basePath().'/adminStyle/img/index.png';?>" alt="">
+						</div>
+						<span>用于管理公众号会员中心页面内容(注：像素750*1206或宽高比与此相同)</span>
+						<div style="display: none;">
+							<input type="hidden" id="img_id_1" name="img_id" value="<?php echo $info ? $info['img_id']:'';?>" />
+							<input id="imgPath" type="hidden" name="image" value="<?php echo $info ? $info['img_path']:'';?>"/>
+							<input type="file" accept="" id="uploadImage"
+								capture="camera" onchange="selectFileImage(this);" hidden />
+						</div>
+					</div>
+			     </div>-->
+              
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="hidden" value="<?php echo $info ? $info['id'] : 0;?>" name="id" />
+                          <input type="hidden" value="03" name="ajax" />
+                         <input type="button" class="btn btn-large btn-primary" id="ap" value="保存" onclick="save()"/>
+                         <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<script>
+<?php if(isset($info) && $info){?>
+countChar("status","counter");
+<?php }?>
+    function countChar(textareaName,spanName)
+    {
+        document.getElementById(spanName).innerHTML = document.getElementById(textareaName).value.length;
+    }
+function save(){
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+}
+
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'rechargeIndex'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+$('.iphone-iframe').css({
+    'width':$(window).width()+'px',
+    'height':$(window).height()+'px'
+});
+$('.iphone-bg').css({
+    'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+    'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+});
+$('#ap1').click(function(){
+    $('.iphone-iframe').toggle();
+});
+$('.iphone-btn').click(function() {
+    $('.iphone-iframe').toggle();
+});
+</script>
+<script>
+//上传封面
+var upload_url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+$("#show_image_1").click(function(){
+  $("#uploadImage").click();
+});
+</script>

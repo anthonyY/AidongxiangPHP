@@ -1,0 +1,209 @@
+<script type="text/javascript" src="<?php echo $this->basePath()?>/adminStyle/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/adminStyle/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/adminStyle/js/exif.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+.box-content span{line-height:25px;}
+</style>	 
+	<div id="content" >
+	<div class="row-fluid">
+		<div class="box span12">
+			<div class="box-content">
+				<form action="" method="post" class="form-horizontal" id="submitForm">
+			<!-- content starts -->		
+<!--     			sortable -->
+				<legend class="lg_title">
+                <span>手机首页设置：</span>
+            </legend>
+    			<div class=" row-fluid">
+    			<?php if($data){foreach ($data['image'] as $k => $v){?>
+    			    <div data-rel="tooltip" class="well span3 top-block">
+<!--     			    controls -->
+    			         <div class=" portraits">
+    						   <div >
+                                  <img id="show_image_<?php echo $k+1;?>" width="100" height="100"  border="1" src="<?php echo $this->basePath().'/'.UPLOAD_PATH.($v['path']?$v['path']:'other/201607/01/long.jpg');?>" alt=""><!-- 图片路径是否正确? -->
+                                </div>
+                                <div style="display:none;">
+                                    <input type="hidden" id="img_id_<?php echo $k+1;?>" name="img_id[]"  value="<?php echo $v['id']?>"/>
+                                     <input type="hidden" id="path_<?php echo $k+1;?>" name="paths[]" value="<?php echo $v['path']?>" />
+                                    <input type="file" accept="image/*" id="uploadImage_<?php echo $k+1;?>" capture="camera" onchange="selectFileImage(this);" hidden/>
+                                </div>
+    						</div>
+<!--     						control-label -->
+						<div class="control-group" style="margin-top: 10px;">
+							<label class="" style="line-height: 30px;float: left;">名称：</label>
+<!-- 							controls -->
+							<div class="">
+							    <input name="name[]" id="name"  type="text" required="required" style="width: 64%;" value="<?php echo $data['name'][$k]?>">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="" style="line-height: 30px;float: left;">链接：</label>
+							<div class="">
+							    <input name="link[]" id="link" required="required" type="text"  style="width: 64%;" value="<?php echo $data['link'][$k];?>">
+							</div>
+						</div>
+    				</div> 
+    				<?php }}else{for($k=0;$k<4;$k++){?>
+    				 <div data-rel="tooltip" class="well span3 top-block">
+<!--     			    controls -->
+    			         <div class=" portraits">
+    						   <div >
+                                  <img id="show_image_<?php echo $k+1;?>" width="100" height="100" border="1" src="<?php echo $this->basePath().('/images/portrait.png');?>" alt=""><!-- 图片路径是否正确? -->
+                                </div>
+                                <div style="display:none;">
+                                    <input type="hidden" id="img_id_<?php echo $k+1;?>" name="img_id[]"  value=""/>
+                                     <input type="hidden" id="path_<?php echo $k+1;?>" name="paths[]" value="" />
+                                    <input type="file" accept="image/*" id="uploadImage_<?php echo $k+1;?>" capture="camera" onchange="selectFileImage(this);" hidden/>
+                                </div>
+    						</div>
+<!--     						control-label -->
+						<div class="control-group" style="margin-top: 10px;">
+							<label class="" style="line-height: 30px;float: left;">名称：</label>
+<!-- 							controls -->
+							<div class="">
+							    <input name="name[]" id="name"  type="text" required="required" style="width: 64%;" value="">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="" style="line-height: 30px;float: left;">链接：</label>
+							<div class="">
+							    <input name="link[]" id="link" required="required" type="text"  style="width: 64%;" value="">
+							</div>
+						</div>
+    				</div> 
+    				<?php }}?>
+			</div>
+			<span>(注：像素100*100或宽高比与此相同)</span>
+			<legend class="control-group lg_title">
+                <span>第一板块名称：</span>
+					<div class="control-group">
+						<label class="control-label" style="line-height: 30px;float: left;">板块名称：</label>
+						<div class="controls">
+							<input name="first_name" id="first_name" required="required" class="input-xlarge" type="text" value="<?php echo $data?$data['first_name']:'';?>">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" style="line-height: 30px;float: left;">链接：</label>
+						<div class="controls">
+							<input name="first_url_link" style="width: 50%" id="first_url_link" required="required" class="input-xlarge" type="text" value="<?php echo $data?$data['first_url_link']['first_url_link']:'';?>">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" style="line-height: 30px;float: left;">待上架链接：</label>
+						<div class="controls">
+							<input name="to_stay_on" style="width: 50%" id="to_stay_on" required="required" class="input-xlarge" type="text" value="<?php echo $data?$data['first_url_link']['to_stay_on']:'';?>">
+							<span style="font-size:13px">上架时间：</span>
+							<input name="stay_time" readOnly   type="text" id="" class="input-medium"  value="<?php echo date('Y-m-d H:i:s',strtotime(date('Y-m-d',time())." 06:00:00") + 24*3600)?>">
+						</div>
+					</div>
+            </legend>
+            <legend class="lg_title">
+                <span>第二板块名称：</span>
+                	   <div class="control-group">
+							<label class="control-label" style="line-height: 30px;float: left;">板块名称：</label>
+							<div class="controls">
+							    <input name="second_name" style="width: 50%" id="second_name" required="required" class="input-xlarge" type="text" value="<?php echo $data?$data['second_name']:'';?>" >
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" style="line-height: 30px;float: left;">链接：</label>
+							<div class="controls">
+							    <input name="second_url_link" style="width: 50%" id="second_url_link" required="required" class="input-xlarge" type="text" value="<?php echo $data?$data['second_url_link']:'';?>" >
+							</div>
+						</div>
+            </legend>
+            <div class="control-group" style="text-align: center;">
+							<label class="control-label" for="focusedInput"></label>
+								<input name="ajax"  type="hidden" value="16" />
+								<div style="margin-top: 10px;">
+								<input name="sb"  type="button" class="btn btn-large btn-primary" id="submit-button" value="保存" onclick="save()"/>
+								<button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+<!-- 									<input class="btn btn-large btn-primary resetHref" type="reset" value="取消" /> -->
+								</div>
+						</div>
+    		  </form>
+<!-- 			</div> -->
+<!-- 		</div> -->
+	</div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<script>
+function save(){
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+}
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'indexPreview'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+$('.iphone-iframe').css({
+    'width':$(window).width()+'px',
+    'height':$(window).height()+'px'
+});
+$('.iphone-bg').css({
+    'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+    'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+});
+$('#ap1').click(function(){
+    $('.iphone-iframe').toggle();
+});
+$('.iphone-btn').click(function() {
+    $('.iphone-iframe').toggle();
+});
+</script>
+<script>
+//上传封面
+var galleryType;
+var upload_url = '<?php echo $this->url('admin', array('controller' => 'Admin', 'action' => 'image1'));?>'; // uploadImage.js
+$("#show_image_1").click(function(){
+	var str = $(this).attr('id');
+    galleryType = str.substr(str.length-1);
+// 	console.log(str,str.length,galleryType);return;
+	$("#uploadImage_"+galleryType).click();
+// 	$("#uploadImage").click();
+}); 
+$("#show_image_2").click(function(){
+	var str = $(this).attr('id');
+    galleryType = str.substr(str.length-1);
+	$("#uploadImage_"+galleryType).click();
+}); 
+$("#show_image_3").click(function(){
+	var str = $(this).attr('id');
+    galleryType = str.substr(str.length-1);
+	$("#uploadImage_"+galleryType).click();
+}); 
+$("#show_image_4").click(function(){
+	var str = $(this).attr('id');
+    galleryType = str.substr(str.length-1);
+	$("#uploadImage_"+galleryType).click();
+}); 
+</script>
+			
+			
+			
+			
+			
+			
+			
+			

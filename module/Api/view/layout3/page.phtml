@@ -1,0 +1,47 @@
+<?php if ($this->pageCount): ?>
+<?php 
+$arr =array();
+foreach($condition as $k => $v){
+	//if($v){
+         $arr[$k] =$v;
+    //}
+}
+?>
+    <div class="pagination pagination-centered">
+        <ul>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a <?php                			
+                			 if(isset($this->previous)){ 
+                			 	     $arr['page'] =$this->first;                			 	                 					
+                					echo 'href="'.$this->url($this->route,$arr).'"';}
+                		?>>首页</a></li>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->previous)){ 
+                				    $arr['page']=$this->previous;               				
+                				echo 'href="'. $this->url($this->route, $arr).'"';
+               			 }
+                		?>>上一页</a></li>
+
+
+            <!-- Numbered page links -->            
+            <?php foreach ($this->pagesInRange as $page): ?>
+            		<?php $arr['page'] = $page; ?>
+                <li <?php echo $page == $this->current ? 'class="active"' : ''; ?>><a <?php if($page != $this->current){ echo 'href="'.$this->url($this->route, $arr).'"';} ?>>
+                        <?php echo $page; ?>
+                    </a></li>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->next)){ 
+                	$arr['page'] = $this->next; 
+                	echo 'href="'. $this->url($this->route, $arr).'"'; } 
+                	?>>下一页</a></li>
+            <!-- Last page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a <?php if(isset($this->next)){ 
+                	$arr['page'] = $this->last;
+                	echo 'href="'. $this->url($this->route, $arr).'"';}?>>尾页</a></li>
+        </ul>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,37 @@
+
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>敏感词管理(关键字用|线隔开)：</span>
+            </legend>
+            <form id="send_word_form" onsubmit="return false;" class="form-horizontal" method="post" action="#">
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                       <div><textarea name="content" id="status" style="resize:none;width:80%;height:450px;"><?php echo isset($list) && $list ? $list : '';?></textarea>
+                    <span class="wordwrap tr" style="width: 40px;"></span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+    				<label class="col-md-2 control-label"></label>
+    				<div class="col-md-8">
+    					<input class="btn btn-large btn-primary tijiao" type="button" id="submit-button1" value="保存" />
+    				</div>
+    			</div>
+            </form>
+        </div>
+</div>
+<script type="text/javascript">
+    $(".tijiao").click(function(){
+    	var content = $('#status').val();
+    	if(!content){
+        	alert('敏感词不能为空!');
+        	return false;
+    	}
+        var url = '<?php echo $this->url('admin',array('controller'=>'ContentList','action'=>'ajaxSensitiveWords'));?>';
+  		$.post(url,{content:content},function(data){
+  			alert(data.message);
+  		},'json');
+    });
+</script>

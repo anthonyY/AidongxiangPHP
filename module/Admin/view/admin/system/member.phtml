@@ -1,0 +1,136 @@
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<script type="text/javascript">
+   // var uploader = '<?php // echo $this->url('admin',array('controller' => 'Admin', 'action'=>'image1'));?>';//图片上传地址
+</script>
+<link rel="stylesheet" href="<?php echo $this->basePath();?>/adminStyle/css/iframe.css">
+<style>
+    .iphone-iframe .iphone-bg {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/device-sprite.png");
+    }
+    .iphone-bg-header {
+        background-image: url("<?php echo $this->basePath();?>/adminStyle/images/status-bar.png");
+    }
+</style>
+<!-- <ul class="breadcrumb"> -->
+<!--     <li><span>轮播图</span></li> -->
+<!--     <li><span>/</span></li> -->
+<!--     <li></li> -->
+<!-- </ul> -->
+<div class="row-fluid">
+    <div class="box span12">
+        <div class="box-content">
+            <legend class="lg_title">
+                <span>会员设置：</span>
+            </legend>
+            <form id="submitForm" class="form-horizontal" method="post" action="<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'setMember'));?>">
+                <div class="control-group">
+                    <label class="col-md-2 control-label">开通价格：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="text" name="price" id="price" value="<?php echo $info ? $info['price'] : 0;?>" />  &nbsp;&nbsp;&nbsp;&nbsp;元
+                        <br/><span>当用户的钱包余额达到设定的开通价格后，即自动为用户开通指定期限的会员资格</span></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="col-md-2 control-label">会员期限：</label>
+                    <div class="col-md-8">
+                        <div class="controls"><input required="required" type="number" name="time" id="time" value="<?php echo $info ? $info['number'] : 0;?>" />  &nbsp;&nbsp;&nbsp;&nbsp;天
+                        <br/><span>请填写整数数值</span></div>
+                    </div>
+                </div>
+            	<div>
+				    <label class="control-label">会员说明：</label>
+					<div class="controls portraits">
+						<div style="border: 2px solid #ccc; width: 200px">
+							<img id="show_image_1" width="250" height="402" border="1" src="<?php echo isset($info['img_path']) ? $this->basePath().'/'.UPLOAD_PATH.$info['img_path'] : $this->basePath().'/adminStyle/img/index.png';?>" alt="">
+							<!-- 图片路径是否正确? -->
+						</div>
+						<span>用于管理公众号会员中心页面内容(注：像素750*1206或宽高比与此相同)</span>
+						<div style="display: none;">
+							<input type="hidden" id="img_id_1" name="img_id" value="<?php echo $info ? $info['img_id']:'';?>" />
+							<input id="imgPath" type="hidden" name="image" value="<?php echo $info ? $info['img_path']:'';?>"/>
+							<input type="file" accept="" id="uploadImage"
+								capture="camera" onchange="selectFileImage(this);" hidden />
+						</div>
+					</div>
+			     </div>
+			     <div class="control-group">
+                    <label class="col-md-2 control-label">会员寄语：</label>
+                    <div class="col-md-8">
+                       <div><textarea name="content" id="status" style="resize:none;width:80%;height:55px;"onkeydown='countChar("status","counter");' 
+                    onkeyup='countChar("status","counter");'><?php echo isset($info) && $info['content'] ? $info['content'] : '';?></textarea>
+                    <span class="wordwrap tr" style="width: 40px;"><i id="counter"></i></span></div>
+                    </div>
+                    <br>
+                </div>
+              
+                <div class="control-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="hidden" value="<?php echo $info ? $info['id'] : 0;?>" name="id" />
+                          <input type="hidden" value="03" name="ajax" />
+                          <input type="button" class="btn btn-large btn-primary" id="ap" value="保存" onclick="save()"/>
+<!--                         <input type="submit" class="btn btn-large btn-primary" id="ap" value="保存"/> -->
+                        <button type="button" class="btn btn-large btn-primary" id="ap1" onclick="preview()">预览</button>
+<!--                         <input class="btn btn-large btn-primary resetHref" type="reset" value="取消"/> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="iphone-iframe" style="display: none;">
+    <div class="zzc"></div>
+    <div class="iphone-bg">
+        <div class="iphone-bg-header"></div>
+        <p class="iphone-btn">关闭预览</p>
+        <iframe id="previewIframe" name="previewIframe" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+<script>
+<?php if(isset($info) && $info){?>
+countChar("status","counter");
+<?php }?>
+    function countChar(textareaName,spanName)
+    {
+        document.getElementById(spanName).innerHTML = document.getElementById(textareaName).value.length;
+    }
+function save(){
+	var url = '';
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.removeAttr("target");//消除target(打开方式)
+	form.submit();
+}
+
+function preview() {
+	var url = '<?php echo $this->url('admin', array('controller' => 'System', 'action' => 'memberPreview'));?>';
+	//$("#editor").val(UE.getEditor('editor').getContent());
+	var form = $("#submitForm");
+	form.attr("action", url);
+	form.attr("target", "previewIframe");
+	form.submit();
+}
+$('.iphone-iframe').css({
+    'width':$(window).width()+'px',
+    'height':$(window).height()+'px'
+});
+$('.iphone-bg').css({
+    'top':($(window).height()-$('.iphone-bg').height())/2+'px',
+    'left':($(window).width()-$('.iphone-bg').width())/2+'px'
+});
+$('#ap1').click(function(){
+    $('.iphone-iframe').toggle();
+});
+$('.iphone-btn').click(function() {
+    $('.iphone-iframe').toggle();
+});
+</script>
+<script>
+//上传封面
+var upload_url = '<?php echo $this->url('admin', array('controller' => 'User', 'action' => 'uploadImage'));?>'; // uploadImage.js
+$("#show_image_1").click(function(){
+  $("#uploadImage").click();
+});
+</script>

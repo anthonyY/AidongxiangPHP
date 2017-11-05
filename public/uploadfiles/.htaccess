@@ -1,0 +1,23 @@
+RewriteEngine On
+# The following rule tells Apache that if the requested filename
+# exists, simply serve it.
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -f 
+RewriteRule ^.*$ - [NC,L]
+# The following rewrites all other queries to index.php. The 
+# condition ensures that if you are using Apache aliases to do
+# mass virtual hosting, the base path will be prepended to 
+# allow proper resolution of the index.php file; it will work
+# in non-aliased environments as well, providing a safe, one-size 
+# fits all solution.
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
+RewriteRule ^(.*) - [E=BASE:%1]
+RewriteRule ^(.*)thumb/([0-9]+)X([0-9]+)X([0-9]+)/([0-9]{6})([0-9]{2})/(.*)\.(.*)$ %{ENV:BASE}uploadfiles/thumb/$2X$3X$4/$5/$6/$7.$8 [NC,L]
+RewriteRule ^(.*)thumb/([0-9]+)X([0-9]+)X([0-9]+)/([0-9]{6})/([0-9]{2})/(.*)\.(.*)$ %{ENV:BASE}getThumb.php?width=$2&height=$3&type=$4&path=$5/$6/&filename=$7.$8 [NC,L]
+RewriteRule ^(.*)thumb/([0-9]+)X([0-9]+)/([0-9]{6})([0-9]{2})/(.*)\.(.*)$ %{ENV:BASE}getThumb.php?width=$2&height=$3&type=1&path=$4/$5/&filename=$6.$7 [NC,L]
+RewriteRule ^(.*)/([0-9]{6})([0-9]{2})/(.*)\.(.*)$ %{ENV:BASE}uploadfiles/$2/$3/$4.$5 [NC,L]
+RewriteRule ^image/(.*)$ %{ENV:BASE}getImage.php?key=$1 [NC,L]
+RewriteRule ^(.*)$ %{ENV:BASE}getImage.php?key=$1 [NC,L]
+

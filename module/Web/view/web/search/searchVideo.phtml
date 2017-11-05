@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/home.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<title>搜索</title>
+<style>
+    body{
+        background-color: #efeff4;
+    }
+</style>
+<html>
+<body>
+    <div class="voice_curriculums_list bg_white" id="video_curriculums_list">
+        <ul>
+        </ul>
+    </div>
+
+</body>   
+</html>
+<script>
+    var finished = false;
+    var page = 1;
+    var key_word = "<?php echo $sk;?>";
+    var play_img = "<?php echo ROOT_PATH;?>"+'webStyle/images/player.png';
+    getDataList(key_word,1);
+    function getDataList(key_word,type){
+        if (finished && type == 2) {
+            return false;
+        }
+        $('.londing_gif1').show();
+        if(type == 1){
+            page = 1;
+        }
+        finished = true;
+        var url = "<?php echo $this->url('web-common', array('controller' => 'search', 'action' => 'ajaxGetAudiolist'))?>";
+        $.post(url,{page:page,type:2,key_word:key_word},function(data) {
+            var dom = $("#video_curriculums_list ul");
+            var li = '';
+            var data = data.list;
+            $('.londing_gif1').hide();
+            if (data.length > 0) {
+                if (data.length > 0) {
+                    $.each(data,function(i,v){
+                        var play_img = "<?php echo ROOT_PATH;?>"+'webStyle/images/player.png';
+                        var detail_img = "<?php echo ROOT_PATH;?>webStyle/images/gray_more.png";
+                        if(v.type == 2){
+                            var url = "<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details'))?>";
+                            var image = "<?php echo ROOT_PATH.UPLOAD_PATH."/";?>"+v.image_path;
+                            var ids = [v.id,2];
+                            li += '<li>';
+                            li += '<a href='+url+'?id='+ids+'&type='+2+'>';
+                            li += '<div class="cover"><img class="video_image" src="'+image+'" alt="">';
+                            li += '<img class="player" src="'+play_img+'" alt="">';
+                            li += '</div>';
+
+                            li += '<div class="content">';
+                            li += '<div>'+v.title+'</div>';
+                            //li += '<div class="teacher_name">'+v.teacher_name+'</div>';
+                            li += '<div class="information">';
+                            li += '<div><span>非会员:</span><span>'+v.price+'</span></div>';
+                            li += '<div class="counting"><span>会员:</span><span class="font_color_055773">'+v.original_price+'</span></div>';
+                            li += '</div></div>';
+                            li += '<div class="more">';
+                            li += '<img src="'+detail_img+'" alt="">';
+                            li += '</div></a></li>';
+                        }else{
+                            var url = "<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details'))?>";
+                            var time_img = '<?php echo ROOT_PATH;?>webStyle/images/clock.png';
+                            var image = "<?php echo ROOT_PATH.UPLOAD_PATH."/";?>"+v.image_path;
+                            var ids = [v.id,1];
+                            li += '<li>';
+                            li += '<a href='+url+'?id='+ids+'&type='+1+'>';
+                            li += '<div class="cover"><img class="video_image" src="'+image+'" alt="">';
+                            li += '<img class="player" src="'+play_img+'" alt="">';
+                            li += '</div>';
+
+                            li += '<div class="content">';
+                            li += '<div>'+v.title+'</div>';
+                            li += '<div class="teacher_name">'+v.teacher_name;
+                            if(v.count != "0%"){
+                                if(v.count != "100%"){
+                                    li += '<span class="ml40"><span>已播</span><span class=" font_color_055773">'+v.count+'</span></span>';
+                                }else{
+                                    li += '<span class="ml40 ">已学完</span>';
+                                }
+                            }
+                            li += '</div>'
+                            li += '<div class="information2">';
+                            if(v.price == '仅限会员'){
+                                li += '<div><span class="font_color_055773">'+v.price+'</span></div>';
+                            }else{
+                                li += '<div><span>非会员:</span><span>'+v.price+'</span></div>';
+                            }
+                            li += '<div class="counting"><span>会员:</span><span class="font_color_055773">'+v.original_price+'</span></div>';
+                            li += '</div></div>';
+                            li += '<div class="more">';
+                            li += '<img src="'+detail_img+'" alt="">';
+                            li += '</div></a></li>';
+                        }
+                    });
+                    if(type == 1){
+                        $('#video_curriculums_list ul li').remove();
+                    }
+                    $("#video_curriculums_list ul").append(li);
+                    finished = false;
+                    page ++;
+                }
+            }
+            else {
+                if(type == 1){
+                    $('#video_curriculums_list ul li').remove();
+                }
+            }
+            $(".londing_gif1").hide();
+        },'json')
+    }
+
+    function loadmore(obj){
+        var scrollTop = $(obj).scrollTop();
+        var scrollHeight = $(document).height();
+        var windowHeight = window.innerHeight;
+        if (scrollHeight - scrollTop - windowHeight<=120) {
+            getDataList(key_word,2);
+        }
+    };
+    $(window).scroll(function (){
+        if (loadmore) {
+            loadmore($(this));
+        }
+    });
+
+//    wx.ready(function(){
+//         shareData = {title: '一起聚餐 | 中国5000万餐饮人的学习平台',desc: '学习改变命运 | 让餐饮赞美生命',imgUrl: '<?php //echo 'http://'.$_SERVER['HTTP_HOST'].ROOT_PATH?>//webStyle/images/nightbird_log.png'};
+//         share(shareData);
+//    });
+
+
+</script>

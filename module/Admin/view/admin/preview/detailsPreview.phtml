@@ -1,0 +1,186 @@
+
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/play-num-deal.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/weui.min.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/weui.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/mine.css">
+<script src="<?php echo ROOT_PATH;?>webStyle/js/city-picker.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/jquery-weui.min.css">
+<script src="<?php echo ROOT_PATH;?>webStyle/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/mobileBUGFix.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/uploadImage.js"></script>
+<script type="text/javascript" src="<?php echo $this->basePath()?>/js/uploadPicture/exif.js"></script>
+<title>音频详情</title>
+<style>
+    body{
+        padding-bottom: 60px;
+    }
+	.buyAset,.member_pay,.present_window,.pay_success,.common_pay,.perfect_data{
+		top:57vw;
+		margin-top:0;
+	}
+
+        /*进度条样式*/
+</style>
+<html>
+<body>
+    <!-- 遮罩层 -->
+    <div class="bgb"></div>
+    <div></div>
+    <div class="details_banner">
+        <img src="<?php echo ROOT_PATH.UPLOAD_PATH.$data['image'];?>" alt="">
+        <?php if(!$data['auditions_time']){?>
+        <div class="audition_over">
+            <div>试听结束</div>
+            <div>更多干货还在后面...</div>
+            <a href="">立即购买</a>
+        </div>
+        <?php }else{?>
+        <div class="tips">
+            你可免费收听<?php echo $data['auditions_time'];?>分钟，收听完整版请立即购买
+        </div>
+        <?php }?>
+    </div>
+    <div class="audio_play">
+        <audio id="audio" -webkit-playsinline webkit-playsinline>
+            <!-- <source src="<?php echo ROOT_PATH;?>webStyle/audio/influencer.mp3" type="audio/mp3" /> -->
+        </audio> 
+        <div class="controller">
+            <div class="schedule">
+                <span  class="currentTime" id="currentTime">0:00</span>
+                <section class="progressBar">
+                    <div class="progressBac"></div>
+                    <div class="speed" id="speed"></div>
+                    <div class="drag" id="drag"></div>
+                </section>
+                <span class="allTime" id="allTime"><?php echo $data['full_time']?></span>
+            </div>
+            
+            <div class="operation">
+                <a href="#"><img src="<?php echo ROOT_PATH;?>webStyle/images/previous_audio.png" alt=""></a>
+                <a id="control" class="play"></a>
+                
+                <a href="#"><img src="<?php echo ROOT_PATH;?>webStyle/images/next_audio.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+    <div class="run">
+        <span><span class="label"><?php echo $data['category_name']?></span></span>
+        <span><?php echo 'because of love';//$data['title']?></span>
+            <span class="collect" id ="collected">已收藏 </span>
+    </div>
+    <div class="price"><span class="font_size16 mr10">￥<?php echo $data['price']?></span><span class="font_color_055773">(会员￥<?php echo $data['original_price']?>)</span><span class="fr mr10"><span class="font_color_055773"><?php echo 0;//$data['study_num']?></span>人在学</span></div>
+    <?php if($type == 2){?>
+    <div class="other_content">
+        <div class="title">
+            此课程包的其他内容
+        </div>
+        <div class="voice_curriculums_list">
+            <ul>
+                <?php //if($data['audio_other']){?>
+                <?php //foreach ($data['audio_other'] as $v){?>
+                <li>
+                    <a href="#">
+                        <div  class="cover">
+                            <img src="<?php echo ROOT_PATH.UPLOAD_PATH.'images/portrait.png';?>" alt="">
+                            <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                        </div>
+                        
+                        <div class="content">
+                            <div>他是谁<?php //echo $v['title']?></div>
+                            <div class="teacher_name">李老师<?php //echo $v['teacher_name']?></div>
+                            <div class="information2">
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/video_view.png" alt=""><span>123<?php //echo $v['study_num']?></span></div>
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span>3分2秒<?php //echo $v['audio_length']?></span></div>
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/date.png" alt=""><span>04-05<?php //echo $v['putaway']?></span></div>
+                            </div>
+                        </div>
+                        <div  class="more">
+                            <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                
+                  <li>
+                    <a href="#">
+                        <div  class="cover">
+                            <img src="<?php echo ROOT_PATH.UPLOAD_PATH.'images/portrait.png';?>" alt="">
+                            <img class="player" src="<?php echo ROOT_PATH;?>webStyle/images/player.png" alt="">
+                        </div>
+                        
+                        <div class="content">
+                            <div>我是谁<?php //echo $v['title']?></div>
+                            <div class="teacher_name">洪老师<?php //echo $v['teacher_name']?></div>
+                            <div class="information2">
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/video_view.png" alt=""><span>45<?php //echo $v['study_num']?></span></div>
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/clock.png" alt=""><span>1时36分22秒<?php //echo $v['audio_length']?></span></div>
+                                <div><img src="<?php echo ROOT_PATH;?>webStyle/images/date.png" alt=""><span>04-05<?php //echo $v['putaway']?></span></div>
+                            </div>
+                        </div>
+                        <div  class="more">
+                            <img src="<?php echo ROOT_PATH;?>webStyle/images/gray_more.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <?php //}}?>
+            </ul>
+        </div>
+    </div>
+    <?php }?>
+    <div class="other_information">
+        <div class="select_top">
+            <a href="javascript:(0);" class="select_on">简介</a>
+            <a href="javascript:(0);">概要</a>
+            <a href="javascript:(0);" onclick="commentList(0)">评论</a>
+        </div>
+        <section class="select_none">
+            <div class="introduce">
+                <div class="primary">
+                    <div>
+                        <img src="<?php echo ROOT_PATH.UPLOAD_PATH.$data['teacher_img'];?>" alt="">
+                    </div>
+                    <div>
+                        <div><?php echo $data['teacher_name']?></div>
+                        <div><?php echo $data['teacher_title']?></div>
+                    </div>
+                </div>
+                <div>
+                <?php echo $data['audio_synopsis']?>
+                </div>
+            </div>
+            <div class="outline" style="display:none">
+            <?php echo $data['outline']?>
+            </div>
+            <div class="comment" style="display:none">
+                <ul>
+                    <div class="import_question">
+                    <form action="">
+                        <input type="hidden" id="id" name="id" value=""/>
+                        <input type="hidden" id="user_id" name="user_id" value=""/>
+                        <input type="hidden" name="type" value=""/>
+                        <textarea id="content" class="" placeholder="点击输入您的问题"></textarea>
+                        <button id="butn">提交问题</button>
+                    </form>
+                    
+                    </div>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <footer class="audio_footer">
+        <ul>
+            <li><a href="javascript:(0);"><p>送给好友</p></a></li>
+            <li><a href="javascript:(0);"><p>立即购买</p></a></li>
+        </ul>
+    </footer>
+</body>   
+</html>
+
+<script>
+
+</script>

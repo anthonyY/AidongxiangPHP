@@ -1,0 +1,138 @@
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH;?>webStyle/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/common.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/audio.css">
+<link rel="stylesheet" href="<?php echo ROOT_PATH;?>webStyle/css/nightbird.css">
+<title>视频</title>
+<style>
+    body{
+        padding-bottom: 56px;
+    }
+
+</style>
+<html>
+<body>
+    <div class="voice_details">
+        <div class="select_top">
+            <?php foreach ($data as $k => $v){?>
+                <a href="javascript:;" id="<?php echo  $v['id']?>" onclick="getCategory(<?php echo $v['id']?>);" <?php if($k==0){?>class="select_on"<?php }?> class=""><?php echo $v['name'];?></a>
+            <?php }?>
+        </div>
+        <div class="classify" id="classifys">
+            <!-- <div> -->
+            <!-- </div> -->
+        </div>
+        <div class="curriculums_table television">课程列表</div>
+        <div class="voice_curriculums_list" id="video_curriculums_list">
+            <ul>
+               
+            </ul>
+        </div>
+    </div>
+    
+    <footer class="home_footer">
+        <ul>
+            <li class=""><a href="<?php echo $this->url('web-common',array('controller' => 'index','action' => 'index'));?>"><img src="<?php echo ROOT_PATH;?>webStyle/images/home.png" alt=""><p>首页</p></a></li>
+            <li class=""><a href="<?php echo $this->url('web-common',array('controller' => 'audio','action' => 'index'));?>"><img src="<?php echo ROOT_PATH;?>webStyle/images/voice.png" alt=""><p>音频</p></a></li>
+            <li class=""><a href="javascript:(0);"><img src="<?php echo ROOT_PATH;?>webStyle/images/video_on.png" alt=""><p class="select_on">视频</p></a></li>
+            <li class=""><a href="<?php echo $this->url('web-common',array('controller' => 'user','action' => 'index'));?>"><img src="<?php echo ROOT_PATH;?>webStyle/images/mine.png" alt=""><p>我的</p></a></li>
+        </ul> 
+    </footer>
+</body>   
+</html>
+<script>
+$(".select_top a").on("click",function(){
+	$(this).siblings().removeClass("select_on").end().addClass("select_on");
+});
+
+var id = $(".select_top a")[0].id;
+getCategory(id);
+function getCategory(id){
+	$.post("<?php echo $this->url('web-common',array('controller' => 'Video','action' => 'getCategory'));?>",{id : id},function(result){
+		$(".classify").html('');
+		$(".classify").append("<span class='select_on' id="+0+" onclick='getDataList("+id+','+0+','+1+")'>全部</span>");
+		$.each(result,function(i,v){
+		     $(".classify").append("<span id="+v.id+" onclick='getDataList("+id+','+v.id+','+1+")'>"+v.name+"</span>");
+		});
+		$("#classifys span").on("click",function(){
+			$(this).siblings().removeClass("select_on").end().addClass("select_on");
+		});
+	},'json');
+	getDataList(id,0,1);
+}
+
+var finished = false;
+var page = 1;
+// getDataList(id,0);
+function getDataList(sid,pid,type){
+     if (finished && type == 2) {
+         return false;
+     }
+     if(type == 1){
+    	 page = 1;
+     }
+     finished = true;
+     var url = "<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'ajaxgetFreeVideoList'))?>";
+     $.post(url,{page:page,oid:sid,tid:pid},function(data) {
+         var dom = $("#video_curriculums_list ul");
+         var li = '';
+         if (data.length > 0) {            
+             if (data.length > 0) {
+                 $.each(data,function(i,v){
+                    var play_img = "<?php echo ROOT_PATH;?>"+'webStyle/images/player.png';
+                    var detail_img = "<?php echo ROOT_PATH;?>webStyle/images/gray_more.png";
+                	 var url = "<?php echo $this->url('web-common', array('controller' => 'video', 'action' => 'details','type' => 1,))?>";
+                	 var time_img = '<?php echo ROOT_PATH;?>webStyle/images/clock.png';
+                     var image = "<?php echo ROOT_PATH.UPLOAD_PATH."/";?>"+v.image_path;
+                     li += '<li>';
+                     li += '<a href='+url+'?id='+v.id+'>';
+                     li += '<div class="cover"><img class="video_image" src="'+image+'" alt="">';
+                     li += '<img class="player" src="'+play_img+'" alt="">';
+                     li += '</div>';
+                     
+                     li += '<div class="content">';
+                     li += '<div>'+v.title+'</div>';
+                     li += '<div class="teacher_name">'+v.teacher_name+'</div>';
+                     li += '<div class="information2">';
+                     li += '<div>'
+                	 li += '<img class="player" src="'+time_img+'" alt=""><span>'+v.audio_length+'</span></div>';	
+                     li += '<div class="counting"><span class="font_color_055773">'+v.study_num+'</span>人在学</div>'
+                     li += '</div></div>';
+                     li += '<div class="more">';
+                     li += '<img src="'+detail_img+'" alt="">';
+                     li += '</div></a></li>';
+                 });
+                 if(type == 1){
+                	 $('#video_curriculums_list ul li').remove();
+                 }  
+                 $("#video_curriculums_list ul").append(li);
+                 finished = false;
+                 page ++;
+             }
+         }
+         else {
+             if(type == 1){
+            	 $('#video_curriculums_list ul li').remove();
+             }         	
+         }
+     },'json')
+}
+
+function loadmore(obj){    
+    var scrollTop = $(obj).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = window.innerHeight;
+    if (scrollHeight - scrollTop - windowHeight<=120) {
+        //console.log(scrollHeight - scrollTop - windowHeight);
+    	sid = $(".select_top .select_on")[0].id;
+    	pid = $("#classifys .select_on")[0].id
+    	getDataList(sid,pid,2);
+    }
+};
+$(window).scroll(function (){
+    if (loadmore) {
+        loadmore($(this));
+    }
+});
+
+</script>
