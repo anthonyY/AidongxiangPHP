@@ -4,14 +4,14 @@ namespace Api\Controller;
 use AiiLibrary\UploadFile\UploadfileApi;
 use AiiLibray\WxPayApi\AiiWxPay;
 use AiiLibrary\UploadFile\File;
-use Platform\Controller\Table;
+use Admin\Controller\Table;
 use Api\Controller\Common\Login;
 use Api\Controller\Common\Structure;
 use Api\Controller\Common\Request;
 use Api\Controller\Common\TableRequest;
 use Api\Controller\Common\WhereRequest;
 use Api\Controller\Common\Response;
-use Platform\Controller\CommonController as PlatformController;
+use Admin\Controller\CommonController as AdminController;
 
 class CommonController extends Table
 {

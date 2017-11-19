@@ -1,5 +1,5 @@
 <?php
-namespace Admin\Controller\Controller;
+namespace Admin\Controller;
         
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;

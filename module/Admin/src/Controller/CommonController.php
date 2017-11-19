@@ -1,10 +1,10 @@
 <?php
-namespace Platform\Controller;
+namespace Admin\Controller;
 
 use Seller\Controller\Upload\UploadfileApi;
 use Seller\Controller\Upload\Uploadfile as Uploadfiles;
 use Seller\Controller\Upload\Image;
-use Platform\Controller\Table;
+use Admin\Controller\Table;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Captcha\Image as imageCaptcha;

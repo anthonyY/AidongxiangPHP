@@ -15,7 +15,7 @@ define("APP_PATH", __DIR__);					//系统目录//相对路径
 define("UPLOAD_PATH","public/uploadfiles/");   //上传文件的路径
 define("PLUGIN_URL","/public/plugins/");   //上传文件的路径
 define('MODULE_API', 'api.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/api');
-define('MODULE_PLATFORM', 'admin.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/platform');
+define('MODULE_ADMIN', 'admin.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/admin');
 define('MODULE_WAP', 'wap.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/wap');
 define('MODULE_SELLER', 'seller.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/seller');
 define('MODULE_MAIL', 'mail.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/mail');
@@ -23,24 +23,11 @@ define('MODULE_ADMINWAP', 'adminwap.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '
 define('MODULE_WWW', 'www.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/www');
 define('SITE_URL', 'http://'.$_SERVER['SERVER_NAME']);
 
-//数据库配置
-if(IS_DEBUG == 1)
-{
-    define("DB_HOST", 'rm-wz953iy91uvwuiy9b.mysql.rds.aliyuncs.com');        //测试演示地址
-    define("DB_NAME", 'ketx');     //数据库名
-    define("DB_USER", 'ketx');     //数据库用户名
-    define("DB_PASSWORD", 'xcDS2009@tawKetx');     //数据密码
-}
-else
-{
-    define("DB_HOST", '192.168.1.14');     //数据链接IP
-    define("DB_NAME", 'ktx');     //数据库名
-    define("DB_USER", 'root');     //数据库用户名
-    define("DB_PASSWORD", 'aiitecphp2009');//192.168.1.14数据库密码
-
-
-}
-define("DB_PREFIX", 'k_');     //数据表前缀
+define("DB_HOST", '127.0.0.1');     //数据链接IP
+define("DB_NAME", 'aidongxiang');     //数据库名
+define("DB_USER", 'root');     //数据库用户名
+define("DB_PASSWORD", '');//192.168.1.14数据库密码
+define("DB_PREFIX", 'dx_');     //数据表前缀
 define("DB_CHARSET", 'utf8mb4'); // 数据库编码utf8mb4
 define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
 
