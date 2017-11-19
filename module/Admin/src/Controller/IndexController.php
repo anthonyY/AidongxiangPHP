@@ -13,7 +13,9 @@ class IndexController extends CommonController
 {
     public function indexAction()
     {
-        echo 33;exit;
+        $view = new ViewModel();
+        $view->setTemplate("admin/index/index");
+        return $this->setMenu($view);
     }
 
 }

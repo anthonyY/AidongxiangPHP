@@ -47,7 +47,7 @@
         ],
         'controller_plugins' => array(
             'invokables' => array(
-                'PlatformPlugin'   => 'Platform\Controller\Plugin\PlatformPlugin',
+                'AdminPlugin'   => 'Admin\Controller\Plugin\AdminPlugin',
             )
         ),
         'controllers' => [
