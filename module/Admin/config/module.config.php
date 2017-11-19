@@ -5,7 +5,7 @@
      * @license   http://framework.zend.com/license/new-bsd New BSD License
      */
     
-    namespace Platform;
+    namespace Admin;
     
     use Zend\Router\Http\Literal;
     use Zend\Router\Http\Segment;
@@ -337,7 +337,7 @@
             'not_found_template'       => 'error/404',
             'exception_template'       => 'error/index',
             'template_map' => ['layout/layout' => __DIR__ . '/../view/layout/layout.phtml', 'page' => __DIR__ . '/../view/layout/page.phtml',
-                'platform/index/index' => __DIR__ . '/../view/platform/index/index.phtml',
+                'admin/index/index' => __DIR__ . '/../view/admin/index/index.phtml',
                 'error/404'               => __DIR__ . '/../view/error/404.phtml',
                 'error/index'             => __DIR__ . '/../view/error/index.phtml',
             ],
