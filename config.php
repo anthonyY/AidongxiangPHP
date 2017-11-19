@@ -15,7 +15,7 @@ define("APP_PATH", __DIR__);					//系统目录//相对路径
 define("UPLOAD_PATH","public/uploadfiles/");   //上传文件的路径
 define("PLUGIN_URL","/public/plugins/");   //上传文件的路径
 define('MODULE_API', 'api.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/api');
-define('MODULE_PLATFORM', 'admin.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/platform');
+define('MODULE_ADMIN', 'admin.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/admin');
 define('MODULE_WAP', 'wap.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/wap');
 define('MODULE_SELLER', 'seller.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/seller');
 define('MODULE_MAIL', 'mail.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/mail');
