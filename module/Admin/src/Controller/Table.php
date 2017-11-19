@@ -3,7 +3,38 @@ namespace Admin\Controller;
         
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;
-use Admin\Controller\AdminGateway;use Admin\Controller\AdminCategoryGateway;use Admin\Controller\AdsGateway;use Admin\Controller\AlbumGateway;use Admin\Controller\ArticleGateway;use Admin\Controller\AudioGateway;use Admin\Controller\BuyLogGateway;use Admin\Controller\CategoryGateway;use Admin\Controller\CommentGateway;use Admin\Controller\DeviceUserGateway;use Admin\Controller\DownloadGateway;use Admin\Controller\FavoriteGateway;use Admin\Controller\FinancialGateway;use Admin\Controller\FocusRelationGateway;use Admin\Controller\ImageGateway;use Admin\Controller\LabelGateway;use Admin\Controller\LoginGateway;use Admin\Controller\MicroblogGateway;use Admin\Controller\MobileAppealGateway;use Admin\Controller\ModuleGateway;use Admin\Controller\NavigationGateway;use Admin\Controller\NotificationGateway;use Admin\Controller\NotificationRecordsGateway;use Admin\Controller\PraiseGateway;use Admin\Controller\RegionGateway;use Admin\Controller\ReportGateway;use Admin\Controller\ScreenGateway;use Admin\Controller\SetupGateway;use Admin\Controller\SmsCodeGateway;use Admin\Controller\UserGateway;use Admin\Controller\UserPartnerGateway;use Admin\Controller\WatchRecordGateway;
+use Admin\Model\AdminGateway;
+use Admin\Model\AdminCategoryGateway;
+use Admin\Model\AdsGateway;
+use Admin\Model\AlbumGateway;
+use Admin\Model\ArticleGateway;
+use Admin\Model\AudioGateway;
+use Admin\Model\BuyLogGateway;
+use Admin\Model\CategoryGateway;
+use Admin\Model\CommentGateway;
+use Admin\Model\DeviceUserGateway;
+use Admin\Model\DownloadGateway;
+use Admin\Model\FavoriteGateway;
+use Admin\Model\FinancialGateway;
+use Admin\Model\FocusRelationGateway;
+use Admin\Model\ImageGateway;
+use Admin\Model\LabelGateway;
+use Admin\Model\LoginGateway;
+use Admin\Model\MicroblogGateway;
+use Admin\Model\MobileAppealGateway;
+use Admin\Model\ModuleGateway;
+use Admin\Model\NavigationGateway;
+use Admin\Model\NotificationGateway;
+use Admin\Model\NotificationRecordsGateway;
+use Admin\Model\PraiseGateway;
+use Admin\Model\RegionGateway;
+use Admin\Model\ReportGateway;
+use Admin\Model\ScreenGateway;
+use Admin\Model\SetupGateway;
+use Admin\Model\SmsCodeGateway;
+use Admin\Model\UserGateway;
+use Admin\Model\UserPartnerGateway;
+use Admin\Model\WatchRecordGateway;
         
 class Table extends AbstractActionController
 {

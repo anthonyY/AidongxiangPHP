@@ -13,6 +13,9 @@ class IndexController extends CommonController
 {
     public function indexAction()
     {
+        $admin_table = $this->getAdminTable();
+        $admin_table->id = 1;
+        $res = $admin_table->getList();
         $view = new ViewModel();
         $view->setTemplate("admin/index/index");
         return $this->setMenu($view);

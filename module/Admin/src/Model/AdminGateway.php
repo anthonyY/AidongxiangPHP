@@ -59,4 +59,9 @@ class AdminGateway extends BaseGateway {
 
     public $table = DB_PREFIX . 'admin';
 
+    public function getList()
+    {
+        return $this->getAll(['delete'=>DELETE_FALSE]);
+    }
+
 }
