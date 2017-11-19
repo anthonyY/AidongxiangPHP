@@ -31,6 +31,15 @@ define("DB_PREFIX", 'dx_');     //数据表前缀
 define("DB_CHARSET", 'utf8mb4'); // 数据库编码utf8mb4
 define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
 
+/**
+ * 腾讯云对象存储配置
+ */
+define("COS_APP_ID", '1255490419');     //数据链接IP
+define("COS_SECRET_ID", 'AKIDqaBfy5lx7i7KKApFhLq9KI7jDVcjmgU7');
+define("COS_SECRET_KEY", '6RcaMvMtIfjeZR9e3PxMYYL4g6A2mOsA');
+define("COS_REGION", 'gz'); // bucket所属地域：华北 'tj' 华东 'sh' 华南 'gz'
+define("COS_TIMEOUT", 60);
+
 //周边设置
 define('EARTH_RADIUS', '6378.137'); // 地球半径
 define('DISTANCE_1','10'); // 周边距离1
