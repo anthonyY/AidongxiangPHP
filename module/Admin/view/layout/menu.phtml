@@ -1,0 +1,791 @@
+<?php
+if (!array_key_exists('action_list', $_SESSION)) {
+    $_SESSION['action_list'] = 'all';
+}
+$menu = array(
+    array(
+        'name' => '数据统计',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_index', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-tachometer',
+        'sub' => array(
+            array(
+                'route' => $this->url('platform', array('action' => 'index')),
+                'name' => '数据统计', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_index_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+    array(
+        'name' => '用户管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_user', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-user', array('action' => 'index')),
+                'name' => '用户列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_user_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-user', array('action' => 'level')),
+                'name' => '用户等级', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_user_level', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '门店管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'glyphicon glyphicon-asterisk',
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-store', array('action' => 'index')),
+                'name' => '门店列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-store', array('action' => 'level')),
+                'name' => '门店等级',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store_level', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-store', array('action' => 'type')),
+                'name' => '门店类型',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store_type', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-store', array('action' => 'label')),
+                'name' => '门店标签',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store_label', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+    array(
+        'name' => '商品管理',
+        'icon' => 'glyphicon glyphicon-apple',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_product', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-product', array('action' => 'index')),
+                'name' => '商品列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_product_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-product', array('action' => 'package')),
+                'name' => '商品套餐管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_product_package', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-product', array('action' => 'category')),
+                'name' => '商品分类',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_product_category', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-product', array('action' => 'label')),
+                'name' => '商品标签',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_product_label', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+    array(
+        'name' => '服务管理',
+        'icon' => 'glyphicon glyphicon-cloud',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-service', array('action' => 'index')),
+                'name' => '服务列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-service', array('action' => 'package')),
+                'name' => '服务套餐管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service_package', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-service', array('action' => 'category')),
+                'name' => '服务分类',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service_category', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-service', array('action' => 'label')),
+                'name' => '服务标签',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service_label', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-service', array('action' => 'type')),
+                'name' => '服务类型',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_service_type', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+    array(
+        'name' => '订单管理',
+        'icon' => 'glyphicon glyphicon-leaf',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_order', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-order', array('action' => 'product')),
+                'name' => '商品订单',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_order_porduct', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-order', array('action' => 'service')),
+                'name' => '服务订单',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_order_service', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-order', array('action' => 'productSaleManagement')),
+                'name' => '商品售后',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_order_productSaleManagement', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-order', array('action' => 'serviceSaleManagement')),
+                'name' => '服务售后',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_order_serviceSaleManagement', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '评论管理',
+        'icon' => 'glyphicon glyphicon-list-alt',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_comment', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-comment', array('action' => 'index')),
+                'name' => '评论列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_comment_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-comment',array('action'=>'storeIndex')),
+                'name'=>'商家申诉',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_comment_storeIndex', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '优惠券管理',
+        'icon' => 'glyphicon glyphicon-list-alt',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_coupon', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route'=>$this->url('platform-coupon',['action'=>'index']),
+                'name' => '优惠券列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_coupon_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-coupon',['action'=>'consumption']),
+                'name' => '优惠券消耗',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_coupon_consumption', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-coupon',['action'=>'couponCount']),
+                'name' => '优惠券统计',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_coupon_couponCount', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+
+
+    ),
+
+    array(
+        'name' => '分销管理',
+        'icon' => 'glyphicon glyphicon-list-alt',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route'=>$this->url('platform-distribution',['action'=>'userShare']),
+                'name' => '新用户分享',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution_userShare', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-distribution',['action'=>'userConsume']),
+                'name' => '分销设置',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution_userConsume', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-distribution',['action'=>'orderShare']),
+                'name' => '订单分享设置',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution_orderShare', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-distribution',['action'=>'evaluateShare']),
+                'name' => '评价分享设置',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution_evaluateShare', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-distribution',['action'=>'distributionCount']),
+                'name' => '分销统计',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_distribution_distributionCount', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '推送管理',
+        'icon' => 'glyphicon glyphicon-envelope',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platfom_push', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-message', array('action' => 'push')),
+                'name' => '推送列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platfom_message_push', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '申请审核',
+        'icon' => 'glyphicon glyphicon-leaf',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_check', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-check', array('action' => 'activity')),
+                'name' => '活动审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_check_activity', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-check', array('action' => 'productCategory')),
+                'name' => '商品分类申请',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_check_productCategory', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-check', array('action' => 'serviceCategory')),
+                'name' => '服务分类申请',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('plarform_chenk_serviceCategory', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-check', array('action' => 'league')),
+                'name' => '门店加盟申请',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('plarform_chenk_league', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-check', array('action' => 'protection')),
+                'name' => '权益保障申请',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('plarform_chenk_sprotection', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '意见反馈',
+        'icon' => 'glyphicon glyphicon-grain',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_message', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-message', array('action' => 'feedback')),
+                'name' => '意见反馈列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_message_feedback', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '配送员管理',
+        'icon' => 'glyphicon glyphicon-modal-window',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_delivery', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-delivery', array('action' => 'index')),
+                'name' => '配送员列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_delivery_index', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '增值服务审核',
+        'icon' => 'glyphicon glyphicon-modal-window',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'messagePushCheck')),
+                'name' => '消息推送审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_messagePushCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'adsCheck')),
+                'name' => '轮播广告审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_adsCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'storeCheck')),
+                'name' => '门店推广审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_storeCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'goodsCheck')),
+                'name' => '商品推广审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_goodsCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'serviceCheck')),
+                'name' => '服务推广审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_serviceCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-appreciation', array('action' => 'groupCheck')),
+                'name' => '拼团审核',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_appreciation_groupCheck', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '运营管理',
+        'icon' => 'glyphicon glyphicon-apple',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-business', array('action' => 'index')),
+                'name' => '首页导航管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'advertMaterial')),
+                'name' => '广告物料',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_advertMaterial', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'advertList')),
+                'name' => '广告列表',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_advertList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'communityProv')),
+                'name' => '社区管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_communityProv', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'scareBuying')),
+                'name' => '限时抢购',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_scareBuying', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'tour')),
+                'name' => '拼团管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_tour', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'activity')),
+                'name' => '活动管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_activity', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'storeSpread')),
+                'name' => '门店推广管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_storeSpread', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'goodsSpread')),
+                'name' => '商品推广管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_goodsSpread', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'serviceSpread')),
+                'name' => '服务推广管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_serviceSpread', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'setSeo')),
+                'name' => 'SEO设置',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_setSeo', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'shoppingCard')),
+                'name' => '购物卡管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_shoppingCard', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'information')),
+                'name' => '资讯管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_information', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'marketingStrategyAdd')),
+                'name' => '营销策略',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_marketingStrategyAdd', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-business', array('action' => 'featuredFirst')),
+                'name' => 'PC首页推荐',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_business_featuredFirst', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '财务管理',
+        'icon' => 'glyphicon glyphicon-book',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-finance', array('action' => 'platform')),
+                'name' => '平台财务',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_platform', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-finance', array('action' => 'statement')),
+                'name' => '平台流水',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_statement', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-finance', array('action' => 'store')),
+                'name' => '门店财务',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_store', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-finance', array('action' => 'user')),
+                'name' => '用户财务',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_user', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route'=>$this->url('platform-finance', array('action' => 'userWithdrawCash')),
+                'name'=>'用户提现',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_userWithdrawCash', explode('|', $_SESSION['action_list'])) ? true : false
+              ),
+            array(
+                'route' => $this->url('platform-finance', array('action' => 'storeWithdrawCash')),
+                'name' => '门店提现',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_finance_storeWithDrawCash', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '操作日志',
+        'icon' => 'glyphicon glyphicon-duplicate',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_log', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-log', array('action' => 'platform')),
+                'name' => '平台操作日志',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_log_platform', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-log', array('action' => 'userLogin')),
+                'name' => '会员登录日志',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_log_userLogin', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-log', array('action' => 'storeLogin')),
+                'name' => '门店登录日志',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_log_storeLogin', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+    array(
+        'name' => '平台管理',
+        'icon' => 'glyphicon glyphicon-bed',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting', explode('|', $_SESSION['action_list'])) ? true : false,
+        'sub' => array(
+            array(
+                'route' => $this->url('platform-setting', array('action' => 'index')),
+                'name' => '职务管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-setting', array('action' => 'adminList')),
+                'name' => '管理员管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_adminList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-setting', array('action' => 'sensitiveWord')),
+                'name' => '敏感词管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_sensitiveWord', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-setting',['action'=>'agreement']),
+                'name' => '协议管理',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_agreement', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('platform-setting',['action'=>'privacyAgreement']),
+                'name' => '隐私协议',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_privacyAgreement', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    )
+);
+?>
+<?php
+$url = $_SERVER['REQUEST_URI'];
+$navigate_arr = [
+    '/index' => ['/index' => '数据统计'],
+    '/user' => ['/user' => '用户列表', '/user/adetails' => '用户详情'],
+    '/user/alevel' => ['/user/alevel' => '用户等级','/user/alevelAdd'=>'新增用户等级', '/user/alevelEdit' => '编辑用户等级'],
+    '/store' => ['/store' => '门店列表', '/store/aadd' => '新增门店', '/store/aedit' => '编辑门店', '/store/aaccount' => '门店账户', '/store/aaddAccount' => '新增门店账户'],
+    '/store/alevel' => ['/store/alevel' => '门店等级', '/store/alevelAdd' => '新增门店等级', '/store/alevelEdit' => '编辑门店等级'],
+    '/store/atype' => ['/store/atype' => '门店类型', '/store/atypeAdd' => '新增门店类型', '/store/atypeEdit' => '编辑门店类型'],
+    '/store/alabel' => ['/store/alabel' => '门店标签', '/store/alabelAdd' => '新增门店标签', '/store/alabelEdit' => '编辑门店标签'],
+    '/product' => ['/product' => '商品列表', '/product/aproductEdit' => '编辑商品'],
+    '/product/apackage' => ['/product/apackage' => '商品套餐管理', '/product/apackageEdit' => '编辑商品套餐'],
+    '/product/acategory' => ['/product/acategory' => '商品分类', '/product/achangeCategory' => '转移商品', '/product/acategoryEdit' => '编辑商品分类', '/product/acategoryAdd' => '新增商品分类'],
+    '/product/alabel' => ['/product/alabel' => '商品标签', '/product/alabelAdd' => '新增商品标签', '/product/alabelEdit' => '编辑商品标签'],
+    '/service' => ['/service' => '服务列表', '/service/aserviceEdit' => '编辑服务'],
+    '/service/apackage' => ['/service/apackage' => '服务套餐管理', '/service/apackageEdit' => '编辑服务套餐'],
+    '/service/acategory' => ['/service/acategory' => '服务分类', '/service/acategoryAdd' => '新增服务分类', '/service/acategoryEdit' => '编辑服务分类', '/service/achangeCategory' => '转移服务'],
+    '/service/alabel' => ['/service/alabel' => '服务标签', '/service/alabelAdd' => '新增服务标签', '/service/alabelEdit' => '编辑服务标签'],
+    '/service/atype' => ['/service/atype' => '服务类型', '/service/atypeAdd' => '新增服务类型', '/service/atypeEdit' => '编辑服务类型', '/service/aattribute' => '属性列表', '/service/aattributeAdd' => '新增服务属性', '/service/aattributeEdit' => '编辑服务属性'],
+    '/order/aproduct' => ['/order/aproduct' => '商品订单', '/order/aproductDetails' => '商品订单详情'],
+    '/order/aservice' => ['/order/aservice' => '服务订单', '/order/aserviceDetails' => '服务订单详情'],
+    '/order/aproductSaleManagement' => ['/order/aproductSaleManagement' => '商品售后', '/order/aproductSaleDetails' => '商品售后订单详情'],
+    '/order/aserviceSaleManagement' => ['/order/aserviceSaleManagement' => '服务售后', '/order/aserviceSaleDetails' => '服务售后订单详情'],
+    '/comment' => ['/comment' => '评论列表', '/comment/adetails' => '评论详情'],
+    '/comment/astoreIndex' => ['/comment/astoreIndex' => '商家申诉', '/comment/astoreDetail' => '申诉审核'],
+    '/coupon' => ['/coupon' => '优惠券列表','/coupon/aaddCoupon'=>'新增优惠券','/coupon/aeditCoupon'=>'编辑优惠券'],
+    '/distribution' => ['/distribution' => '新用户分享'],
+    '/distribution/auserConsume'=>['/distribution/auserConsume'=>'分销设置'],
+    '/distribution/aorderShare'=>['/distribution/aorderShare'=>'订单分享设置'],
+    '/distribution/aevaluateShare'=>['/distribution/aevaluateShare'=>'评价分享设置'],
+    '/distribution/adistributionCount'=>['/distribution/adistributionCount'=>'分销统计'],
+    '/coupon/aconsumption' => ['/coupon/aconsumption' => '优惠券消耗'],
+    '/coupon/acouponCount'=>['/coupon/acouponCount'=>'优惠券统计'],
+    '/message/apush' => ['/message/apush' => '推送列表', '/message/aaddPush' => '新增推送', '/message/apushDetail' => '推送详情'],
+    '/check/aactivity' => ['/check/aactivity' => '活动审核'],
+    '/check/aproductCategory' => ['/check/aproductCategory' => '商品分类申请'],
+    '/check/aserviceCategory' => ['/check/aserviceCategory' => '服务分类审核'],
+    '/check/aleague' => ['/check/aleague' => '门店加盟申请','/check/aleagueCheck' => '门店加盟申请详情'],
+    '/check/aprotection' => ['/check/aprotection' => '权益保障申请'],
+    '/message/afeedback' => ['/message/afeedback' => '意见反馈列表', '/message/afeedbackReply' => '意见反馈详情'],
+    '/delivery' => ['/delivery' => '配送员列表', '/delivery/adeliveryManAdd' => '新增配送员', '/delivery/adeliveryManDetails' => '配送员详情'],
+    '/appreciation/amessagePushCheck' => ['/appreciation/amessagePushCheck' => '消息推送申请', '/appreciation/amessagePushCheckDetails' => '消息推送审核'],
+    '/appreciation/aadsCheck' => ['/appreciation/aadsCheck' => '轮播广告申请', '/appreciation/aadsCheckDetails' => '轮播广告审核'],
+    '/appreciation/astoreCheck' => ['/appreciation/astoreCheck' => '门店推广申请', '/appreciation/astoreCheckDetails' => '门店推广审核'],
+    '/appreciation/agoodsCheck' => ['/appreciation/agoodsCheck' => '商品推广申请', '/appreciation/agoodsCheckDetails' => '商品推广审核'],
+    '/appreciation/aserviceCheck' => ['/appreciation/aserviceCheck' => '服务推广申请', '/appreciation/aserviceCheckDetails' => '服务推广审核'],
+    '/appreciation/agroupCheck' => ['/appreciation/agroupCheck' => '拼团申请', '/appreciation/agroupCheckDetails' => '拼团审核'],
+    '/business' => ['/business' => '首页导航管理', '/business/navigationAdd' => '新增导航', '/business/navigationDetails' => '编辑导航'],
+    '/business/aadvertMaterial' => ['/business/aadvertMaterial' => '广告物料', '/business/amaterialAdd' => '新增广告物料', '/business/amaterialDetails' => '编辑广告物料'],
+    '/business/aadvertList' => ['/business/aadvertList' => '广告列表', '/business/aadvertAdd' => '新增广告', '/business/aadvertEdit' => '编辑广告'],
+    '/business/acommunityProv' => ['/business/acommunityProv' => '社区管理-省', '/business/acommunityCity' => '社区管理-市', '/business/acommunityList' => '社区管理-社区'],
+    '/business/ascareBuying' => ['/business/ascareBuying' => '限时抢购', '/business/ascareBuyingAdd' => '新增抢购', '/business/ascareBuyingDetails' => '抢购详情'],
+    '/business/aactivity' => ['/business/aactivity' => '活动管理', '/business/aactivityAdd' => '新增活动', '/business/aactivityEdit' => '编辑活动'],
+    '/business/astoreSpread' => ['/business/astoreSpread' => '门店推广管理', '/business/astoreSpreadAdd' => '新增门店推广', '/business/astoreSpreadEdit' => '编辑门店推广'],
+    '/business/agoodsSpread' => ['/business/agoodsSpread' => '商品推广管理', '/business/agoodsSpreadAdd' => '新增商品推广', '/business/agoodsSpreadEdit' => '编辑商品推广'],
+    '/business/aserviceSpread' => ['/business/aserviceSpread' => '服务推广管理', '/business/aserviceSpreadAdd' => '新增服务推广', '/business/aserviceSpreadEdit' => '编辑服务推广'],
+    '/business/asetSeo' => ['/business/asetSeo' => 'SEO设置'],
+    '/business/ashoppingCard' => ['/business/ashoppingCard' => '购物卡管理', '/business/ashoppingCardAdd' => '新增购物卡','/business/ashoppingCardDetails' => '购物卡详情','/business/ashoppingCardNumberDetails' => '购物卡详情'],
+    '/business/atour' => ['/business/atour' => '拼团管理', '/business/atourAdd' => '新增拼团', '/business/atourDetails' => '查看拼团'],
+    '/business/amarketingStrategyAdd' => ['/business/amarketingStrategyAdd' => '新增营销策略'],
+    '/business/ainformation' => ['/business/ainformation' => '资讯列表', '/business/ainformationAdd' => '新增资讯', '/business/ainformationDetails' => '资讯详情'],
+    '/business/afeaturedFirst' => ['/business/afeaturedFirst' => 'PC首页推荐'],
+    '/finance/aplatform' => ['/finance/aplatform' => '平台财务'],
+    '/finance/astatement' => ['/finance/astatement' => '平台流水'],
+    '/finance/astore' => ['/finance/astore' => '门店财务'],
+    '/finance/auser' => ['/finance/auser' => '用户财务'],
+    '/finance/auserWithdrawCash' => ['/finance/auserWithdrawCash' => '用户提现'],
+    '/finance/astoreWithdrawCash' => ['/finance/astoreWithdrawCash' => '门店提现'],
+    '/log/aplatform' => ['/log/aplatform' => '平台操作日志'],
+    '/log/auserLogin' => ['/log/auserLogin' => '会员登录日志'],
+    '/log/astoreLogin' => ['/log/astoreLogin' => '门店登录日志'],
+    '/setting' => ['/setting' => '职务管理', '/setting/aaddRole' => '新增职务', '/setting/aviewRole' => '编辑职务'],
+    '/setting/aadminList' => ['/setting/aadminList' => '管理员管理', '/setting/aadminList/aaddAdmin' => '新增管理员', '/setting/aadminList/aviewAdmin' => '编辑管理员'],
+    '/setting/asensitiveWord' => ['/setting/asensitiveWord' => '敏感词管理'],
+    '/setting/aagreement'=>['/setting/aagreement'=>'协议管理'],
+    '/setting/aprivacyAgreement'=>['/setting/aprivacyAgreement'=>'隐私协议']
+];
+function array_remove(&$arr, $offset)
+{
+    array_splice($arr, $offset, 1);
+}
+$arr = array_keys($navigate_arr);
+if (strpos($url, '?')) {
+    $url = substr($url, 0, strpos($url, '?'));
+}
+$url_arr = explode('/', $url);
+$active = '';
+$navigate = '';
+$url_header = '';
+$active_header = '';
+$index = array_search('index.php',$url_arr);
+if($index){
+    array_remove($url_arr,$index);
+    $active_header .= '/index.php';
+    $url_header .= '/index.php';
+}
+$module = array_search('platform',$url_arr);
+if($module){
+    array_remove($url_arr,$module);
+    $active_header .= '/platform';
+    $url_header .= '/platform';
+}
+$url = implode('/', $url_arr);
+if (in_array($url, $arr)) {
+    $navigate = '<li class="active1">' . $navigate_arr[$url][$url] . '</li>';
+    $active = $active_header.$url;
+} else {
+    foreach ($navigate_arr as $k1 => $v1) {
+        foreach ($v1 as $k2 => $v2) {
+            $arr1 = explode('/', $url);
+            $arr2 = explode('/', $k2);
+            if (isset($arr2[2]) && isset($arr1[2]) && $arr2[2] == $arr1[2] && $arr2[1] == $arr1[1]) {
+                $navigate = '<li class="active1"><a href="' .$url_header. $k1 . '">' . $v1[$k1] . '</a></li>' . '<li class="active1">' . $v1[$k2] . '</li>';
+                $active = $active_header.$k1;
+            } else if (isset($arr2[1]) && $arr2[1] == $arr1[1] && !isset($arr2[2])) {
+                $navigate = '<li class="active1"><a href="' .$url_header. $k1 . '">' . $v1[$k1] . '</a></li>' . '<li class="active1">' . $v1[$k2] . '</li>';
+                $active = $active_header.$k1;
+            }
+        }
+    }
+}
+?>
+
+
+<div id="navbar" class="navbar navbar-default          ace-save-state">
+    <div class="navbar-container ace-save-state" id="navbar-container">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        <div class="navbar-header pull-left">
+            <a href="<?php echo $this->url('platform', ['action' => 'index']) ?>" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    客天下平台管理
+                </small>
+            </a>
+        </div>
+
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue dropdown-modal">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="/adminStyle/images/avatars/user.jpg" alt="Jason's Photo"/>
+                        <span class="user-info">
+                            <small>Welcome,</small>
+                            <?php echo array_key_exists('p_admin_name', $_SESSION) ? $_SESSION['p_admin_name'] : '未登录' ?>
+                        </span>
+
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="<?php echo $this->url('platform-user', ['action' => 'changePassword']) ?>">
+                                <i class="ace-icon fa fa-cog"></i>
+                                修改密码
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="<?php echo $this->url('platform-user', ['action' => 'logout']) ?>">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.navbar-container -->
+</div>
+
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('sidebar')
+            } catch (e) {
+            }
+        </script>
+
+        <ul class="nav nav-list">
+            <?php foreach ($menu as $main_menu) : ?>
+                <?php if ($main_menu['authority']) { ?>
+                    <li class="">
+                        <a href="" class="dropdown-toggle">
+                            <i class="menu-icon <?php echo $main_menu['icon'] ?>"></i>
+                            <span class="menu-text"><?php echo $main_menu['name'] ?></span>
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            <?php foreach ($main_menu['sub'] as $drop_menu) : ?>
+                                <?php if ($drop_menu['authority']) { ?>
+                                    <li class="">
+                                        <a href="<?php echo $drop_menu['route'] ?>">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            <span class="menu-content"><?php echo $drop_menu['name'] ?></span>
+                                        </a>
+
+                                        <b class="arrow"></b>
+                                    </li>
+                                <?php } ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php } ?>
+            <?php endforeach; ?>
+        </ul>
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+               data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <!--                    <li>
+                                            <i class="ace-icon fa fa-home home-icon"></i>
+                                            <a href="<?php echo $this->url('platform', ['action' => 'index']) ?>">Home</a>
+                                        </li>-->
+                    <?php echo $navigate ?>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+
+                        <?php echo $this->main; ?>
+
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    <div class="footer">
+        <div class="footer-inner">
+            <div class="footer-content">
+                <span class="bigger-120">
+                    <span class="blue bolder">农电商</span>
+                    &copy; 2017
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div><!-- /.main-container -->
+<script>
+    var active = '<?php echo $active ?>';
+    var nav_a = $(".nav li a");
+    nav_a.each(function () {
+        var href = $(this).attr("href");
+        if (active == href) {
+            $(this).parents("ul").parent("li").addClass("active open");
+            $(this).parent("li").addClass("active");
+        }
+    });
+</script>
+
+
