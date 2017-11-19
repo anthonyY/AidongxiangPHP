@@ -28,11 +28,6 @@ return [
     'Zend\Validator',
     'ZendDeveloperTools',
     'Api',
-    'Wap',
-    'Mail',
-    'Seller',
-    'Platform',
-    'Adminwap',
-    'Www'
+    'Admin',
     //'Zend\Captcha',
 ];
