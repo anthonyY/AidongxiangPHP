@@ -7,7 +7,7 @@
  * Copyright © 2017年 Aiitec. All rights reserved.
  */
 
-namespace Platform\Model;
+namespace Admin\Model;
 
 interface BaseGatewayInterface
 {
