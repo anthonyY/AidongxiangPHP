@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>平台管理后台</title>
+
+		<meta name="description" content="User login page" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="/adminStyle/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/adminStyle/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="/adminStyle/css/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="/adminStyle/css/ace.min.css" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/adminStyle/css/ace-part2.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="/adminStyle/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/adminStyle/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/adminStyle/js/html5shiv.min.js"></script>
+		<script src="/adminStyle/js/respond.min.js"></script>
+		<![endif]-->
+        <script src="/plugins/layui/layui.js"></script>
+        <script src="/plugins/layui/layui_component.js"></script>
+	</head>
+
+	<body class="login-layout blur-login">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<!-- <i class="ace-icon fa fa-leaf green"></i>
+									<span class="red">2017</span> -->
+									<span class="white" id="id-text2">平台管理后台密码找回</span>
+								</h1>
+								<h4 class="blue" id="id-company-text">&copy; 爱特安为</h4>
+							</div>
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="ace-icon fa fa-coffee green"></i>
+												请输入相应信息进行密码找回
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form action="<?php echo $this->url('admin', ['action'=>'passRetrieval']) ?>" method="post" id="form">
+								
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" name="mobile" required pattern="^1[3,4,5,7,8]\d{9}$" oninvalid="setCustomValidity('请输入11位手机号');" oninput="setCustomValidity('')" class="form-control" placeholder="请输入手机号码" />
+														</span>
+													</label>
+                                                    <label class="block clearfix">
+														<span class="inline-block input-icon input-icon-right">
+															<input type="text" name="checkCode" required class="form-control" style="width:100%;padding-left: 2%;padding-right: 6%" placeholder="请输入验证码" />
+														</span>
+                                                        <img style="width:32%;height:35px;display: inline;float:right" src="<?php echo $checkCode?>" onclick="changeCode()" id="checkCode">
+                                                    </label>
+                                                    <label class="block clearfix">
+														<span class="inline-block input-icon input-icon-right">
+															<input type="text" required name="mobileCode" class="form-control" style="width:100%;padding-left: 2%;padding-right: 6%" placeholder="请输入短信验证码" />
+														</span>
+                                                        <input type="hidden" name="msgCodeId" value="" id="msgCode">
+                                                        <input type="button" id="getMsgCode" class="btn btn-xs btn-success" value="获取短信验证码" style="float:right">
+                                                    </label>
+                                                    <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" name="password" required class="form-control" placeholder="请输入新密码" />
+														</span>
+                                                    </label>
+                                                    <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" required name="repassword" class="form-control" placeholder="再次输入新密码" />
+														</span>
+                                                    </label>
+
+													<div class="clearfix">
+														<button type="submit" name="submit" class="btn btn-sm btn-primary">
+															<i class="ace-icon fa fa-key"></i>
+															<span class="bigger-110">完成</span>
+														</button>
+                                                        <a class="btn btn-sm btn-grey" onclick="window.history.back(-1);" style="margin-left: 20%">
+                                                            <i class="ace-icon fa fa-key"></i>
+                                                            <span class="bigger-110">取消</span>
+                                                        </a>
+													</div>
+
+													<div class="space-4"></div>
+												
+											</form>
+											<div class="space-6"></div>
+										</div><!-- /.widget-main -->
+									</div><!-- /.widget-body -->
+								</div><!-- /.login-box -->
+							</div><!-- /.position-relative -->
+
+<!--							<div class="navbar-fixed-top align-right">-->
+<!--								<br />-->
+<!--								&nbsp;-->
+<!--								<a id="btn-login-dark" href="#">Dark</a>-->
+<!--								&nbsp;-->
+<!--								<span class="blue">/</span>-->
+<!--								&nbsp;-->
+<!--								<a id="btn-login-blur" href="#">Blur</a>-->
+<!--								&nbsp;-->
+<!--								<span class="blue">/</span>-->
+<!--								&nbsp;-->
+<!--								<a id="btn-login-light" href="#">Light</a>-->
+<!--								&nbsp; &nbsp; &nbsp;-->
+<!--							</div>-->
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="/adminStyle/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="/adminStyle/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='/adminStyle/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- inline scripts related to this page -->
+        <script src="/js/ajaxSubmit.js"></script>
+		<script type="text/javascript">
+            $(form).submit(function (e) {
+              if($('input[name="password"]').val() != $('input[name="repassword"]').val()){
+                  showMessage('两次密码输入不一致！',0);
+                  return false;
+              }
+                ajaxForm(e);
+              return true;
+            });
+            function changeCode(){
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url('admin',['action'=>'getChechCode'])?>",
+                    data: {"code":1},
+                    dataType: "JSON",
+                    async: false,
+                    success: function (data) {
+                        $('#checkCode').attr('src',data);
+                    },
+                    error: function (res) {
+                        //console.log(res);
+                    }
+                })
+            }
+            $('#getMsgCode').click(function () {
+                sendMsg(this);
+            });
+            var wait = 60;
+            function time(o) {
+                if (wait == 0) {
+                    o.removeAttribute("disabled");
+                    o.value="获取短信验证码";
+                    wait = 60;
+                } else {
+                    o.setAttribute("disabled", true);
+                    o.value="重新发送(" + wait + ")";
+                    wait--;
+                    setTimeout(function() {
+                            time(o)
+                        },
+                        1000)
+                }
+            }
+            function sendMsg(obj){
+                var ex = /1[3,4,5,7,8]\d{9}$/;
+                var mobile = $('input[name="mobile"]').val();
+                if(mobile == '' || !ex.test(mobile)){
+                    showMessage('未填入手机号码或号码格式错误！',0);
+                    return false;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url('admin',['action'=>'sendMsg'])?>",
+                    data: {"mobile":mobile,"type":1},
+                    dataType: "JSON",
+                    async: false,
+                    success: function (data) {
+                        if(data.s == 0){
+                            showMessage('发送成功，请注意查收！',1);
+                            $('#msgCode').val(data.id);
+                            time(obj);
+                        }else{
+                            showMessage(data.d,0);
+                        }
+                    },
+                    error: function (res) {
+                        console.log(res,'error');
+                    }
+                })
+            }
+			jQuery(function($) {
+			 $(document).on('click', '.toolbar a[data-target]', function(e) {
+				e.preventDefault();
+				var target = $(this).data('target');
+				$('.widget-box.visible').removeClass('visible');//hide others
+				$(target).addClass('visible');//show target
+			 });
+			});
+			
+			
+			
+			//you don't need this, just used for changing background
+			jQuery(function($) {
+			 $('#btn-login-dark').on('click', function(e) {
+				$('body').attr('class', 'login-layout');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-light').on('click', function(e) {
+				$('body').attr('class', 'login-layout light-login');
+				$('#id-text2').attr('class', 'grey');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-blur').on('click', function(e) {
+				$('body').attr('class', 'login-layout blur-login');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'light-blue');
+				
+				e.preventDefault();
+			 });
+			 
+			});
+		</script>
+	</body>
+</html>

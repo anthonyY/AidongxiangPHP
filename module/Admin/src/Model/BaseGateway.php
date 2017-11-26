@@ -103,11 +103,11 @@
          */
         public function getDetails()
         {
-            if (!$this->id && !$this->uuid)
+            if (!$this->id)
             {
-                throw new \Exception("ID不能为空");
+                return false;
             }
-            $where = $this->id ? array("id"=>$this->id) : array("uuid"=>$this->uuid);
+            $where = array("id"=>$this->id);
             return $this->getOne($where);
         }
 

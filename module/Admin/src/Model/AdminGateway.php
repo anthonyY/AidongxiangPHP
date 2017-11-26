@@ -59,9 +59,48 @@ class AdminGateway extends BaseGateway {
 
     public $table = DB_PREFIX . 'admin';
 
-    public function getList()
+    /**
+     * 管理员登录
+     */
+    public function adminLogin()
     {
-        return $this->getAll(['delete'=>DELETE_FALSE]);
+        $where['name'] = $this->name;
+        $where['password'] = $this->password;
+        $where['delete'] = 0;
+        if($admin_info = $this->getOne($where)){
+            if($admin_info['status'] == 2){    //帐号被禁用
+                return ['s'=>10000,'d'=>'账号被禁用'];
+            }else{
+                $_SESSION['admin_id'] = $admin_info['id'];
+                $_SESSION['admin_name'] = $admin_info['name'];
+                $adminCategory = new AdminCategoryGateway($this->adapter);
+                $adminCategory->id = $admin_info['admin_category_id'];
+                $adminCategoryInfo = $adminCategory->getDetails();
+                if($adminCategoryInfo->action_list){
+                    $_SESSION['action_list'] = $adminCategoryInfo->action_list;
+                }else{
+                    $_SESSION['action_list'] = 'all';
+                }
+                return ['s'=>0,'d'=>'登录成功'];
+            }
+        }else{
+            return ['s'=>10000,'d'=>'账号和密码错误'];
+        }
+    }
+
+    /**
+     * 更新管理员，通过ID更新
+     * @param array $set
+     * @param array $where
+     * @return bool|int
+     */
+    public function updateData()
+    {
+        if($this->password)
+        {
+            $this->password = md5($this->password);
+        }
+        return parent::updateData();
     }
 
 }

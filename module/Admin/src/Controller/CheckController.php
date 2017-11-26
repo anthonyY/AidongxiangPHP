@@ -6,7 +6,8 @@
      * @license   http://framework.zend.com/license/new-bsd New BSD License
      */
     
-    namespace Platform\Controller;
+    namespace Admin\Controller;
+    use Admin\Controller\CommonController;
     use Zend\View\Model\ViewModel;
     
     class CheckController extends CommonController

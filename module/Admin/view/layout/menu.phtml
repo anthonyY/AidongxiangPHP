@@ -246,7 +246,7 @@ if (in_array($url, $arr)) {
                         <img class="nav-user-photo" src="/adminStyle/images/avatars/user.jpg" alt="Jason's Photo"/>
                         <span class="user-info">
                             <small>Welcome,</small>
-                            <?php echo array_key_exists('p_admin_name', $_SESSION) ? $_SESSION['p_admin_name'] : '未登录' ?>
+                            <?php echo array_key_exists('admin_name', $_SESSION) ? $_SESSION['admin_name'] : '未登录' ?>
                         </span>
 
                         <i class="ace-icon fa fa-caret-down"></i>

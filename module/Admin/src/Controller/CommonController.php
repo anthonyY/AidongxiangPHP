@@ -801,13 +801,13 @@ class CommonController extends Table
 	 */
 	protected function checkLogin($action_list = '')
 	{
-		if(isset($_SESSION['p_admin_id']) && isset($_SESSION['p_admin_name'])){
+		if(isset($_SESSION['admin_id']) && isset($_SESSION['admin_name'])){
 		    $admin = $this->getAdminTable();
-		    $admin->id = $_SESSION['p_admin_id'];
+		    $admin->id = $_SESSION['admin_id'];
 		    $admin_info = $admin->getDetails();
-		    if($admin_info->status != 1 || $admin_info->delete != 0){
+		    if($admin_info->status != 1 || $admin_info->delete != DELETE_FALSE){
                 $_SESSION = array();
-                $url = $this->url()->fromRoute('platform-user',['action'=>'login']);
+                $url = $this->url()->fromRoute('admin',['action'=>'login']);
                 $this->showMessage('该帐号已被删除或禁用！',false,$url);
             }
 			if(!$this->admin_priv($action_list)){
@@ -816,7 +816,7 @@ class CommonController extends Table
 			}
 			return true;
 		}else{
-			$this->redirect()->toRoute('platform-user', array('action' => 'login'));
+			$this->redirect()->toRoute('admin', array('action' => 'login'));
 		}
 	}
 
@@ -853,7 +853,7 @@ class CommonController extends Table
 	protected function quit()
 	{
 		session_destroy();
-		return $this->redirect()->toRoute('platform-user', array('action' => 'login'));
+		return $this->redirect()->toRoute('admin', array('action' => 'login'));
 	}
 
 	/**
