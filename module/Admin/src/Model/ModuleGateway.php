@@ -39,4 +39,17 @@ class ModuleGateway extends BaseGateway {
 
     public $table = DB_PREFIX . 'module';
 
+    public function getListTree(){
+        $where['parent_id'] = 0;
+        $where['delete'] = 0;
+        $list = $this->fetchAll($where);
+        foreach ($list['list'] as $k => $v){
+            $where2['delete'] = 0;
+            $where2['parent_id'] = $v->id;
+            $childList = $this->fetchAll($where2);
+            $v->children = $childList['list'];
+        }
+        return $list;
+    }
+
 }

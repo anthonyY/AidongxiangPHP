@@ -1,0 +1,117 @@
+<style>
+    .communitySelect{
+        display: inline-block;
+        padding: 5px;
+        background-color: #dddddd;
+        margin: 10px;
+    }
+    .communitySelect a{
+        color: red;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    .form-group label{
+        width: inherit;
+    }
+    .form-horizontal>div{
+        margin-left: 22px !important;
+    }
+</style>
+<style>
+    .authority{
+        margin-left: 3%;
+        width: 70%;
+    }
+    .authority tr{
+        border-bottom: 1px solid #ddd;
+        /*height: 40px;*/
+    }
+    .authority ul li{
+        float: left;
+        width: 150px;
+        text-align: left;
+        line-height: 40px;
+    }
+    .authority ul li input{
+        margin-right: 10px;
+    }
+</style>
+<div class="page-header">
+    <h1>
+        职务管理
+    </h1>
+</div>
+<form class="form-horizontal" id="form" action="<?php echo $this->url('admin-setting',['action'=>'addRole'])?>" method="post" >
+    <div class="form-group">
+        <label class="col-sm-1 control-label no-padding-right" style="font-size:20px;font-weight: bold">职务信息</label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label no-padding-right"> 职务名称：</label>
+
+        <div class="col-sm-9">
+            <input type="text" required name="name" placeholder="请输入职务名称" class="col-xs-10 col-sm-5" style="width: initial;">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-1 control-label no-padding-right" style="font-size:20px;font-weight: bold" for="form-field-1">菜单权限</label>
+    </div>
+    <div class="form-group" >
+        <table class="authority" style="text-align: left;">
+            <?php foreach ($actionList as $k=>$v){?>
+            <tr>
+                <td style="width: 10%"><?php echo $v->name?></td>
+                <td>
+                    <ul>
+                        <li><input type="checkbox" onclick="all_select(this)" name="all">全选</li>
+                        <?php foreach ($v->children as $v2){?>
+                        <li><input type="checkbox" onclick="check_all_select(this)" value="<?php echo $v->action_code.'|'.$v2->action_code?>" name="actionLists[]"><?php echo $v2->name?></li>
+                        <?php }?>
+                    </ul>
+                </td>
+            </tr>
+            <?php }?>
+        </table>
+    </div>
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-2 col-md-9">
+            <input type="hidden" name="type" value="1">
+            <button class="btn btn-info" type="submit" id="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <a class="btn" onclick="window.history.back()">
+                <i class="ace-icon fa fa-undo bigger-110"></i>
+                取消
+            </a>
+        </div>
+    </div>
+
+</form>
+<script>
+    $('#form').submit(function (e) {
+        var name = $('input[name="name"]').val();
+        if(name == '超级管理员'){
+            showMessage('职务名称不能为超级管理员！',0);
+            return false;
+        }
+        ajaxForm(e);
+    })
+
+
+    function check_all_select(obj) {
+        var leng = $(obj).parents('tr').find('input[name="actionLists[]"]').length;
+        var check_leng = $(obj).parents('tr').find('input[name="actionLists[]"]:checked').length;
+        if(leng == check_leng){
+            $(obj).parents('tr').find('input[name="all"]').prop('checked',obj.checked);
+        }else{
+            $(obj).parents('tr').find('input[name="all"]').attr('checked',false);
+        }
+    }
+    function all_select(obj)
+    {
+        $(obj ).parent().parent().find("input" ).prop('checked',obj.checked);
+    }
+</script>

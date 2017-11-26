@@ -103,4 +103,11 @@ class AdminGateway extends BaseGateway {
         return parent::updateData();
     }
 
+    //删除职务时判断职务下是否有管理员
+    public function getByCategoryId(){
+        $where['admin_category_id'] = $this->adminCategoryId;
+        $where['delete'] = 0;
+        return $this->getOne($where,array('id'));
+    }
+
 }

@@ -28,6 +28,21 @@
                         ],
                     ],
                 ],
+                //管理模块
+                'admin-setting' => [
+                    'type'    => Segment::class,
+                    'options' => ['route' => MODULE_ADMIN . '/setting[/a:action][/p:page][/i:id]',
+                        'constraints' => array(
+                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'page' => '[0-9]+'
+                        ),
+                        'defaults' => [
+                            'controller' => Controller\SettingController::class,
+                            'action'     => 'index',
+                        ],
+                    ],
+                ],
 //                //用户管理
 //                'admin-user' => [
 //                    'type'    => Segment::class,
@@ -53,6 +68,7 @@
         'controllers' => [
             'factories' => [
                 Controller\IndexController::class => InvokableFactory::class,
+                Controller\SettingController::class => InvokableFactory::class,
             ],
         ],
         'view_manager' => [
