@@ -36,12 +36,12 @@ $menu = array(
     array(
         'name' => '平台管理',
         'icon' => 'glyphicon glyphicon-bed',
-        'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting', explode('|', $_SESSION['action_list'])) ? true : false,
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting', explode('|', $_SESSION['action_list'])) ? true : false,
         'sub' => array(
             array(
                 'route' => $this->url('admin-setting', array('action' => 'adminList')),
                 'name' => '管理员管理',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_adminList', explode('|', $_SESSION['action_list'])) ? true : false
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_adminList', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(
                 'route' => $this->url('admin-setting', array('action' => 'adminCategory')),
