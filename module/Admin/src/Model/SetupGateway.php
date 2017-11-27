@@ -39,4 +39,14 @@ class SetupGateway extends BaseGateway {
 
     public $table = DB_PREFIX . 'setup';
 
+    /**
+     * 根据ID更新系统设置
+     * @return bool|int
+     * @throws \Exception
+     */
+    public function updateData()
+    {
+        return parent::updateData();
+    }
+
 }

@@ -281,30 +281,12 @@ class SettingController extends CommonController
         return $this->setMenu($view);
     }
 
-    /**
-     * 敏感字添加编辑
-     */
-    public function sensitiveWordAction()
-    {
-        $this->checkLogin('platform_setting_sensitiveWord');
-        if(isset($_POST['submit']))
-        {
-            $this->getApiController()->writtenSensitiveWords($_POST['content']);
-        }
-        $info = $this->getApiController()->getSensitiveWords();
-        if($info){
-            $info = implode($info, '|');
-        }
-        $view = new ViewModel(array('info'=>$info ? $info : '' ));
-        $view->setTemplate('platform/setting/sensitiveWord');
-        return $this->setMenu($view,'sensitiveWords');
-    }
 
     //协议管理
     public function agreementAction()
     {
         $setup = $this->getSetupTable();
-        $setup->id = 20;
+        $setup->id = 1;
         if($_POST){
             $_POST['value'] = $_POST['content'];
             foreach ($_POST as $k=> $v)
@@ -316,7 +298,7 @@ class SettingController extends CommonController
             }
             $res = $setup->updateData();
             if($res){
-                $url = $this->url()->fromRoute('platform-setting',['action'=>'agreement']);
+                $url = $this->url()->fromRoute('admin-setting',['action'=>'agreement']);
                 $this->ajaxReturn(1,'修改成功！',$url);
             }else{
                 $this->ajaxReturn(0,'修改失败！');
@@ -324,7 +306,7 @@ class SettingController extends CommonController
         }
         $info = $setup->getDetails();
         $view = new ViewModel(['info'=>$info]);
-        $view->setTemplate('platform/setting/agreement');
+        $view->setTemplate('admin/setting/agreement');
         return $this->setMenu($view);
     }
 
@@ -332,7 +314,7 @@ class SettingController extends CommonController
     public function privacyAgreementAction()
     {
         $setup = $this->getSetupTable();
-        $setup->id = 21;
+        $setup->id = 2;
         if($_POST){
             $_POST['value'] = $_POST['content'];
             foreach ($_POST as $k=> $v)
@@ -344,7 +326,7 @@ class SettingController extends CommonController
             }
             $res = $setup->updateData();
             if($res){
-                $url = $this->url()->fromRoute('platform-setting',['action'=>'privacyAgreement']);
+                $url = $this->url()->fromRoute('admin-setting',['action'=>'privacyAgreement']);
                 $this->ajaxReturn(1,'修改成功！',$url);
             }else{
                 $this->ajaxReturn(0,'修改失败！');
@@ -352,7 +334,7 @@ class SettingController extends CommonController
         }
         $info = $setup->getDetails();
         $view = new ViewModel(['info'=>$info]);
-        $view->setTemplate('platform/setting/privacyAgreement');
+        $view->setTemplate('admin/setting/privacyAgreement');
         return $this->setMenu($view);
     }
 

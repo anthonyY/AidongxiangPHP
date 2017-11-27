@@ -9,7 +9,7 @@ $menu = array(
         'icon' => 'fa fa-tachometer',
         'sub' => array(
             array(
-                'route' => $this->url('admin', array('action' => 'index')),
+                'route' => '',
                 'name' => '数据统计', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_index_index', explode('|', $_SESSION['action_list'])) ? true : false
             ),
@@ -21,42 +21,15 @@ $menu = array(
         'icon' => 'fa fa-users',
         'sub' => array(
             array(
-                'route' => $this->url('admin', array('action' => 'index')),
+                'route' => '',
                 'name' => '用户列表', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_user_index', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(
-                'route' => $this->url('admin', array('action' => 'level')),
+                'route' => '',
                 'name' => '用户等级', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_user_level', explode('|', $_SESSION['action_list'])) ? true : false
             )
-        )
-    ),
-    array(
-        'name' => '门店管理',
-        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_store', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'glyphicon glyphicon-asterisk',
-        'sub' => array(
-            array(
-                'route' => $this->url('admin', array('action' => 'index')),
-                'name' => '门店列表',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_store_index', explode('|', $_SESSION['action_list'])) ? true : false
-            ),
-            array(
-                'route' => $this->url('admin', array('action' => 'level')),
-                'name' => '门店等级',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_store_level', explode('|', $_SESSION['action_list'])) ? true : false
-            ),
-            array(
-                'route' => $this->url('admin', array('action' => 'type')),
-                'name' => '门店类型',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_store_type', explode('|', $_SESSION['action_list'])) ? true : false
-            ),
-            array(
-                'route' => $this->url('admin', array('action' => 'label')),
-                'name' => '门店标签',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_store_label', explode('|', $_SESSION['action_list'])) ? true : false
-            ),
         )
     ),
 
@@ -76,19 +49,14 @@ $menu = array(
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_adminCategory', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(
-                'route' => $this->url('admin', array('action' => 'sensitiveWord')),
-                'name' => '敏感词管理',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_sensitiveWord', explode('|', $_SESSION['action_list'])) ? true : false
-            ),
-            array(
-                'route' => $this->url('admin',['action'=>'agreement']),
+                'route' => $this->url('admin-setting',['action'=>'agreement']),
                 'name' => '协议管理',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_agreement', explode('|', $_SESSION['action_list'])) ? true : false
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_agreement', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(
-                'route' => $this->url('admin',['action'=>'privacyAgreement']),
+                'route' => $this->url('admin-setting',['action'=>'privacyAgreement']),
                 'name' => '隐私协议',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_privacyAgreement', explode('|', $_SESSION['action_list'])) ? true : false
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_privacyAgreement', explode('|', $_SESSION['action_list'])) ? true : false
             )
         )
     )
