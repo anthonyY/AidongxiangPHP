@@ -1,0 +1,156 @@
+<style>
+    .authority{
+        width: 70%;
+    }
+    .authority tr{
+        border-bottom: 1px solid #ddd;
+        /*height: 40px;*/
+    }
+    .authority ul li{
+        float: left;
+        width: 150px;
+        text-align: left;
+        line-height: 40px;
+    }
+</style>
+<style>
+    .form-group label{
+        text-align: left !important;
+        width:110px;
+    }
+    .form-horizontal>div{
+        margin-left: 22px !important;
+    }
+</style>
+<div class="page-header">
+    <h1>
+        管理员
+    </h1>
+</div>
+<form class="form-horizontal" id="form" method="post" action="<?php echo $this->url('admin-setting',['action'=>'viewAdmin','id'=>$adminInfo->id])?>">
+    <div class="form-group">
+        <label class="col-sm-1 control-label " style="width:150px;font-size:20px;font-weight: bold">管理员信息</label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 姓名：</label>
+
+        <div class="col-sm-9">
+            <input type="text"  required name="realName" value="<?php echo $adminInfo->real_name?>" placeholder="请输入管理员姓名" class="col-xs-10 col-sm-5" style="width: 20%;">
+        </div>
+    </div>
+    <!--<div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 昵称：</label>
+
+        <div class="col-sm-9">
+            <input type="text" required name="" placeholder="请输入管理员昵称" class="col-xs-10 col-sm-5" style="width: 20%;">
+        </div>
+    </div>-->
+    <div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 手机号码：</label>
+
+        <div class="col-sm-9">
+            <input type="text" name="mobile" value="<?php echo $adminInfo->mobile?>" required  pattern="^1[3,4,5,7,8]\d{9}$" oninvalid="setCustomValidity('请输入11位手机号');" placeholder="请输入联系手机号" class="col-xs-10 col-sm-5" style="width: 20%;">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 登录帐号：</label>
+
+        <div class="col-sm-9">
+            <input type="text" required name="name" value="<?php echo $adminInfo->name?>" placeholder="请设置管理员登录帐号" class="col-xs-10 col-sm-5" style="width: 20%;">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 登录密码：</label>
+
+        <div class="col-sm-9">
+            <input type="password" name="password" value="" placeholder="" class="col-xs-10 col-sm-5" style="width: 20%;">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label sm-1"> 选择职务：</label>
+
+        <div class="col-sm-9">
+            <select name="adminCategoryId" style="width:180px;" onchange="getAuthoriry(this)">
+                <option value="">请选择职务</option>
+                <?php foreach ($roleList as $v){?>
+                    <?php if($v->name != '超级管理员'){?>
+                    <option value="<?php echo $v->id?>" <?php if($adminInfo->admin_category_id == $v->id) echo 'selected'?>><?php echo $v->name?></option>
+                <?php }}?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label no-padding-right" style="font-size:20px;font-weight: bold" for="form-field-1">权限菜单</label>
+    </div>
+    <div class="form-group">
+        <div style="margin-left: 3%;"> 请选择职务后查看职务的权限。</div>
+        <table class="authority" id="authority">
+
+        </table>
+    </div>
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-2 col-md-9">
+            <input type="hidden" name="id" value="<?php echo $adminInfo->id?>">
+            <button class="btn btn-info" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <a class="btn" onclick="window.history.back()">
+                <i class="ace-icon fa fa-undo bigger-110"></i>
+                取消
+            </a>
+        </div>
+    </div>
+</form>
+<script>
+    $('#form').submit(function (e) {
+        ajaxForm(e);
+    })
+    var cate_id = $('select[name="adminCategoryId"]');
+    getAuthoriry(cate_id);
+    function getAuthoriry(obj){
+        var role = $(obj).val();
+        var data = <?php echo json_encode($actionList)?>;
+        if(role != ''){
+            $('#authority').html('');
+            var str = '';
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('admin-setting',['action'=>'getPermission'])?>",
+                data: { "categoryId": role},
+                dataType: "JSON",
+                async: false,
+                success: function (res) {
+                    //从服务器获取数据进行绑定
+                    if(res == 'all'){
+                        $.each(data, function (i, item) {
+                            //console.log(i,item);
+                            str += '<tr><td style="width: 10%">'+item.name+'</td><td><ul>';
+                            $.each(item.children,function (i2,item2) {
+                                str += '<li>'+item2.name+'</li>';
+                            })
+                            str += '</ul></td></tr>';
+                        })
+                    }else{
+                        $.each(res, function (i, item) {
+                            str += '<tr><td style="width: 10%">'+i+'</td><td><ul>';
+                            $.each(item,function (i2,item2) {
+                                str += '<li>'+item2.name+'</li>';
+                            })
+                            str += '</ul></td></tr>';
+                        })
+                    }
+                    //将数据添加到省份这个下拉框里面
+                    $('#authority').append(str);
+                },
+                error: function (res) {
+                }
+            });
+            $('#authority').show();
+        }else{
+            $('#authority').hide();
+        }
+    }
+</script>

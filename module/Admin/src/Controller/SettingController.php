@@ -12,6 +12,53 @@ use Zend\View\Model\ViewModel;
 
 class SettingController extends CommonController
 {
+    //管理员列表
+    public function adminListAction()
+    {
+        $this->checkLogin('admin_setting_adminList');
+        $page = $this->params("page",1);
+        $admin = $this->getViewAdminTable();
+        $admin->page =$page;
+        $list = $admin->getList();
+        $view = new ViewModel(['list'=>$list['list'],'paginator'=>$list['paginator'],'condition'=>array("action"=>'adminList')]);
+        $view->setTemplate("admin/setting/adminList");
+        return $this->setMenu($view);
+    }
+
+    //删除管理员
+    public function deleteAdminAction(){
+        $this->checkLogin('admin_setting_adminList');
+        $id = $_POST['id'];
+        $admin = $this->getAdminTable();
+        $admin->id = $id;
+        $res = $admin->deleteData();
+        if($res){
+            die(json_encode(['s'=>0,'d'=>'操作成功']));
+        }else{
+            die(json_encode(['s'=>10000,'d'=>'删除失败']));
+        }
+    }
+
+    //编辑管理员帐号状态
+    public function banAdminAction(){
+        $this->checkLogin('admin_setting_adminList');
+        $id = $_POST['id'];
+        $admin = $this->getAdminTable();
+        $admin->id = $id;
+        $info = $admin->getDetails();
+        if($info['status'] == 1){
+            $admin->status = 2;
+        }else{
+            $admin->status = 1;
+        }
+        $res = $admin->updateData();
+        if($res){
+            die(json_encode(['s'=>0,'d'=>'操作成功']));
+        }else{
+            die(json_encode(['s'=>10000,'d'=>'操作失败']));
+        }
+    }
+
     //职务列表
     public function adminCategoryAction()
     {
@@ -101,38 +148,6 @@ class SettingController extends CommonController
         return $this->setMenu($view);
     }
     
-    //管理员列表
-    public function adminListAction()
-    {
-        $this->checkLogin('platform_setting_adminList');
-        $page = $this->params("page",1);
-        $admin = $this->getViewAdminTable();
-        $keyword = '';
-        $status = '';
-        $category = '';
-        $get = [];
-        if($_GET){
-            $get = $_GET;
-            $keyword = isset($get['keyword'])?$get['keyword']:'';
-            $status = isset($get['status'])?$get['status']:0;
-            $category = isset($get['category'])?$get['category']:0;
-        }
-        $admin->searchKeyWord = $keyword;
-        $admin->status = $status;
-        $admin->adminCategoryId = $category;
-        $admin->page =$page;
-        $admin->type = 1;
-        $admin->merchantId = $this->getAdminTable()->getMerchantId(1);
-        $list = $admin->getList();
-        $role = $this->getAdminCategoryTable();
-        $role->type = 1;
-        $roleList = $role->getList();
-        $view = new ViewModel(['list'=>$list['list'],'paginator'=>$list['paginator'],'condition'=>array("action"=>'adminList'),'keword'=>$keyword,'roleList'=>$roleList['list'],'status'=>$status,'category'=>$category,'keyword'=>$keyword,'where'=>$get]);
-        $view->setTemplate("platform/setting/adminList");
-        return $this->setMenu($view);
-    }
-
-
     //删除职务
     public function deleteRoleAction(){
         $this->checkLogin('admin_setting_deleteRole');
@@ -156,9 +171,8 @@ class SettingController extends CommonController
 
     //新增管理员
     public function addAdminAction(){
-        $this->checkLogin('platform_setting_adminList');
+        $this->checkLogin('admin_setting_adminList');
         $admin = $this->getAdminTable();
-        $merchantId = $this->getAdminTable()->getMerchantId(1);
         if($_POST){
             if(empty($_POST['realName'])){
                 $this->ajaxReturn(0,'姓名不能为空！');
@@ -196,31 +210,27 @@ class SettingController extends CommonController
                     $admin->$k = $v;
                 }
             }
-            $admin->merchantId = $merchantId;
             $res = $admin->addData();
             if($res){
-                $url = $this->url()->fromRoute('platform-setting',['action'=>'adminList']);
+                $url = $this->url()->fromRoute('admin-setting',['action'=>'adminList']);
                 $this->ajaxReturn(1,'添加成功！',$url);
             }else{
                 $this->ajaxReturn(0,'添加失败！');
             }
         }
         $role = $this->getAdminCategoryTable();
-        $role->type = 1;
-        $role->merchantId = $merchantId;
         $roleList = $role->getList();
         $action = $this->getModuleTable();
         $action->orderBy = 'id ASC';
-        $action->type = 1;
         $actionList = $action->getListTree();
         $view = new ViewModel(['roleList'=>$roleList['list'],'actionList'=>$actionList['list']]);
-        $view->setTemplate("platform/setting/addAdmin");
+        $view->setTemplate("admin/setting/addAdmin");
         return $this->setMenu($view);
     }
 
     //编辑管理员
     public function viewAdminAction(){
-        $this->checkLogin('platform_setting_adminList');
+        $this->checkLogin('admin_setting_adminList');
         $id = $this->params('id');
         $admin = $this->getAdminTable();
         $admin->id = $id;
@@ -240,7 +250,6 @@ class SettingController extends CommonController
             }
             $admin->mobile = $_POST['mobile'];
             $admin->name = $_POST['name'];
-            $admin->merchantId = $adminInfo->merchant_id;
             if($admin->queryName()){
                 $this->ajaxReturn(0,'登录帐号已存在！');
             }
@@ -256,59 +265,20 @@ class SettingController extends CommonController
             }
             $res = $admin->updateData();
             if($res){
-                $url = $this->url()->fromRoute('platform-setting',['action'=>'adminList']);
+                $url = $this->url()->fromRoute('admin-setting',['action'=>'adminList']);
                 $this->ajaxReturn(1,'修改成功！',$url);
             }else{
                 $this->ajaxReturn(0,'修改失败！');
             }
         }
         $role = $this->getAdminCategoryTable();
-        $role->type = 1;
-        $role->merchantId = $this->getAdminTable()->getMerchantId(1);
         $roleList = $role->getList();
         $action = $this->getModuleTable();
         $action->orderBy = 'id ASC';
-        $action->type = 1;
         $actionList = $action->getListTree();
         $view = new ViewModel(['adminInfo'=>$adminInfo,'roleList'=>$roleList['list'],'actionList'=>$actionList['list']]);
-        $view->setTemplate("platform/setting/viewAdmin");
+        $view->setTemplate("admin/setting/viewAdmin");
         return $this->setMenu($view);
-    }
-
-    //删除管理员
-    public function deleteAdminAction(){
-        $this->checkLogin('platform_setting_adminList');
-        $id = $_POST['id'];
-        $admin = $this->getAdminTable();
-        $admin->id = $id;
-        $res = $admin->deleteData();
-        if($res){
-            echo 1;
-        }else{
-            echo 2;
-        }
-        die;
-    }
-
-    //编辑管理员帐号状态
-    public function banAdminAction(){
-        $this->checkLogin('platform_setting_adminList');
-        $id = $_POST['id'];
-        $admin = $this->getAdminTable();
-        $admin->id = $id;
-        $info = $admin->getDetails();
-        if($info['status'] == 1){
-            $admin->status = 2;
-        }else{
-            $admin->status = 1;
-        }
-        $res = $admin->updateData();
-        if($res){
-            echo 1;
-        }else{
-            echo 2;
-        }
-        die;
     }
 
     /**

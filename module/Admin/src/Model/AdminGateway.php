@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 管理员表
 *
@@ -103,11 +105,72 @@ class AdminGateway extends BaseGateway {
         return parent::updateData();
     }
 
+    /**
+     * 删除管理员
+     */
+    public function deleteData()
+    {
+        return parent::deleteData();
+    }
+
     //删除职务时判断职务下是否有管理员
     public function getByCategoryId(){
         $where['admin_category_id'] = $this->adminCategoryId;
         $where['delete'] = 0;
         return $this->getOne($where,array('id'));
+    }
+
+    /**
+     * 查询管理名字是否存在数据
+     */
+    public function queryName()
+    {
+        $where = new Where();
+        $where->equalTo('name',$this->name);
+        if($this->type)
+        {
+            $where->equalTo('type',$this->type);
+        }
+        if($this->id)
+        {
+            $where->notEqualTo('id',$this->id);
+        }
+        return $this->getOne($where);
+    }
+
+    /**
+     * 查询管理号码是否存在数据
+     */
+    public function queryMobile()
+    {
+        $where = new Where();
+        $where->equalTo('mobile',$this->mobile);
+        if($this->type){
+            $where->equalTo('type',$this->type);
+        }
+        if($this->id)
+        {
+            $where->notEqualTo('id',$this->id);
+        }
+        return $this->getOne($where);
+    }
+
+    /**
+     * @return int
+     * 新增管理员
+     */
+    public function addData()
+    {
+        if($this->password)
+        {
+            $this->password = md5($this->password);
+        }
+        $data = $this->queryName();//查询登录是否存在
+        if($data)
+        {
+            return false;
+        }
+        return parent::addData();
     }
 
 }

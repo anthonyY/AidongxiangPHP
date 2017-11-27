@@ -66,7 +66,7 @@ $menu = array(
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting', explode('|', $_SESSION['action_list'])) ? true : false,
         'sub' => array(
             array(
-                'route' => $this->url('admin', array('action' => 'adminList')),
+                'route' => $this->url('admin-setting', array('action' => 'adminList')),
                 'name' => '管理员管理',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('platform_setting_adminList', explode('|', $_SESSION['action_list'])) ? true : false
             ),

@@ -52,4 +52,13 @@ class ModuleGateway extends BaseGateway {
         return $list;
     }
 
+    public function getOneByCode(){
+        if(!$this->actionCode){
+            throw new \Exception("action_code不能为空");
+        }
+        $where['delete'] = 0;
+        $where['action_code'] = $this->actionCode;
+        return $this->getOne($where);
+    }
+
 }
