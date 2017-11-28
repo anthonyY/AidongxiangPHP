@@ -4,31 +4,145 @@ if (!array_key_exists('action_list', $_SESSION)) {
 }
 $menu = array(
     array(
-        'name' => '数据统计',
+        'name' => '首页',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_index', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-tachometer',
+        'icon' => 'fa fa-users',
         'sub' => array(
             array(
-                'route' => '',
+                'route' => $this->url('admin', array('action' => 'index')),
                 'name' => '数据统计', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_index_index', explode('|', $_SESSION['action_list'])) ? true : false
             ),
         )
     ),
+
     array(
         'name' => '用户管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_user', explode('|', $_SESSION['action_list'])) ? true : false,
         'icon' => 'fa fa-users',
         'sub' => array(
             array(
-                'route' => '',
+                'route' => $this->url('admin-user', array('action' => 'index')),
                 'name' => '用户列表', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_user_index', explode('|', $_SESSION['action_list'])) ? true : false
             ),
+        )
+    ),
+
+    array(
+        'name' => '运营管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
             array(
-                'route' => '',
-                'name' => '用户等级', 'other' => '',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_user_level', explode('|', $_SESSION['action_list'])) ? true : false
+                'route' => $this->url('admin-business', array('action' => 'adsList')),
+                'name' => '广告列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_adsList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-business', array('action' => 'navigation')),
+                'name' => '导航列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_navigation
+List', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-business', array('action' => 'mobileAppealList')),
+                'name' => '手机申诉列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_mobileAppealList
+List', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '视频管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_video', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-video', array('action' => 'index')),
+                'name' => '视频列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_video_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-video', array('action' => 'videoCategoryList')),
+                'name' => '视频分类', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_video_videoCategoryList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '音频管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_audio', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-audio', array('action' => 'index')),
+                'name' => '视频列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_audio_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-audio', array('action' => 'audioCategoryList')),
+                'name' => '音频分类', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_audio_audioCategoryList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '微博管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_microblog', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-microblog', array('action' => 'index')),
+                'name' => '微博列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_microblog_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '资讯管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_article', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-article', array('action' => 'index')),
+                'name' => '资讯列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_article_index', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-article', array('action' => 'articleCategoryList')),
+                'name' => '资讯分类列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_article_articleCategoryList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+        )
+    ),
+
+    array(
+        'name' => '评论管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_comment', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-comment', array('action' => 'index')),
+                'name' => '评论列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_comment_index', explode('|', $_SESSION['action_list'])) ? true : false
+            )
+        )
+    ),
+
+    array(
+        'name' => '财务管理',
+        'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_finance', explode('|', $_SESSION['action_list'])) ? true : false,
+        'icon' => 'fa fa-users',
+        'sub' => array(
+            array(
+                'route' => $this->url('admin-finance', array('action' => 'index')),
+                'name' => '财务列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_finance_index', explode('|', $_SESSION['action_list'])) ? true : false
             )
         )
     ),
@@ -57,6 +171,11 @@ $menu = array(
                 'route' => $this->url('admin-setting',['action'=>'privacyAgreement']),
                 'name' => '隐私协议',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_privacyAgreement', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-setting',['action'=>'reportCategoryList']),
+                'name' => '举报类型设置',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting_reportCategoryList', explode('|', $_SESSION['action_list'])) ? true : false
             )
         )
     )
