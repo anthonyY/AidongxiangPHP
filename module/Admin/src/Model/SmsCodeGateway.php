@@ -30,7 +30,7 @@ class SmsCodeGateway extends BaseGateway {
     /**
     *网页session或者移动端session
     */
-    public $session;
+    public $sessionId;
 
     /**
     *验证状态：0未验证；1已验证 2发送失败
