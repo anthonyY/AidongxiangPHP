@@ -108,4 +108,17 @@ class UserGateway extends BaseGateway {
     protected $columns_array = ["id","nickName","realName","mobile","cash","points","sex","password","status","lastLoginTime","description","regionId","regionInfo","street","address","longitude","latitude","headImageId","backImageId","delete","timestamp"];
 
     public $table = DB_PREFIX . 'user';
+
+    /**
+     * 更新用户状态
+     * @return bool|int
+     * @throws \Exception
+     */
+    public function updateStatus()
+    {
+        if(!$this->id || !$this->status){
+            return false;
+        }
+        return $this->updateData();
+    }
 }

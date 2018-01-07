@@ -36,13 +36,16 @@ use Admin\Model\UserGateway;
 use Admin\Model\UserPartnerGateway;
 use Admin\Model\WatchRecordGateway;
 use Admin\Model\ViewAdminGateway;
+use Admin\Model\ViewUserGateway;
         
 class Table extends AbstractActionController
 {
         
     public $adapter;
-protected $AdminTable;protected $AdminCategoryTable;protected $AdsTable;protected $AlbumTable;protected $ArticleTable;protected $AudioTable;protected $BuyLogTable;protected $CategoryTable;protected $CommentTable;protected $DeviceUserTable;protected $DownloadTable;protected $FavoriteTable;protected $FinancialTable;protected $FocusRelationTable;protected $ImageTable;protected $LabelTable;protected $LoginTable;protected $MicroblogTable;protected $MobileAppealTable;protected $ModuleTable;protected $NavigationTable;protected $NotificationTable;protected $NotificationRecordsTable;protected $PraiseTable;protected $RegionTable;protected $ReportTable;protected $ScreenTable;protected $SetupTable;protected $SmsCodeTable;protected $UserTable;protected $UserPartnerTable;protected $WatchRecordTable;
+    protected $AdminTable;protected $AdminCategoryTable;protected $AdsTable;protected $AlbumTable;protected $ArticleTable;protected $AudioTable;protected $BuyLogTable;protected $CategoryTable;protected $CommentTable;protected $DeviceUserTable;protected $DownloadTable;protected $FavoriteTable;protected $FinancialTable;protected $FocusRelationTable;protected $ImageTable;protected $LabelTable;protected $LoginTable;protected $MicroblogTable;protected $MobileAppealTable;protected $ModuleTable;protected $NavigationTable;protected $NotificationTable;protected $NotificationRecordsTable;protected $PraiseTable;protected $RegionTable;protected $ReportTable;protected $ScreenTable;protected $SetupTable;protected $SmsCodeTable;protected $UserTable;protected $UserPartnerTable;protected $WatchRecordTable;
     protected $ViewAdminTable;
+    protected $ViewUserTable;
+
     public function __construct()
     {
         $driver = array(
@@ -289,5 +292,13 @@ protected $AdminTable;protected $AdminCategoryTable;protected $AdsTable;protecte
             $this->ViewAdminTable = new ViewAdminGateway($this->adapter);
         }
         return $this->ViewAdminTable;
+    }
+    protected function getViewUserTable()
+    {
+        if (! $this->ViewUserTable)
+        {
+            $this->ViewUserTable = new ViewUserGateway($this->adapter);
+        }
+        return $this->ViewUserTable;
     }
 }
