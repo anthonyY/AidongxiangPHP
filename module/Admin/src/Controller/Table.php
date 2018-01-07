@@ -37,6 +37,7 @@ use Admin\Model\UserPartnerGateway;
 use Admin\Model\WatchRecordGateway;
 use Admin\Model\ViewAdminGateway;
 use Admin\Model\ViewUserGateway;
+use Admin\Model\ViewAdsGateway;
         
 class Table extends AbstractActionController
 {
@@ -45,6 +46,7 @@ class Table extends AbstractActionController
     protected $AdminTable;protected $AdminCategoryTable;protected $AdsTable;protected $AlbumTable;protected $ArticleTable;protected $AudioTable;protected $BuyLogTable;protected $CategoryTable;protected $CommentTable;protected $DeviceUserTable;protected $DownloadTable;protected $FavoriteTable;protected $FinancialTable;protected $FocusRelationTable;protected $ImageTable;protected $LabelTable;protected $LoginTable;protected $MicroblogTable;protected $MobileAppealTable;protected $ModuleTable;protected $NavigationTable;protected $NotificationTable;protected $NotificationRecordsTable;protected $PraiseTable;protected $RegionTable;protected $ReportTable;protected $ScreenTable;protected $SetupTable;protected $SmsCodeTable;protected $UserTable;protected $UserPartnerTable;protected $WatchRecordTable;
     protected $ViewAdminTable;
     protected $ViewUserTable;
+    protected $ViewAdsTable;
 
     public function __construct()
     {
@@ -300,5 +302,13 @@ class Table extends AbstractActionController
             $this->ViewUserTable = new ViewUserGateway($this->adapter);
         }
         return $this->ViewUserTable;
+    }
+    protected function getViewAdsTable()
+    {
+        if (! $this->ViewAdsTable)
+        {
+            $this->ViewAdsTable = new ViewAdsGateway($this->adapter);
+        }
+        return $this->ViewAdsTable;
     }
 }

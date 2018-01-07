@@ -995,24 +995,11 @@ class CommonController extends Table
      * 返回json信息
      */
 	public function ajaxReturn($status, $msg, $url=''){
-        if($status == 1){
-            if($msg !== ''){
-                if($url){
-                    echo json_encode(['status'=>$status, 'msg'=>$msg, 'redirect'=>$url]);
-                    die;
-                }
-                else{
-                    echo json_encode(['status'=>$status, 'msg'=>$msg]);
-                    die;
-                }
-            }
-            else{
-                echo json_encode(['status'=>$status, 'redirect'=>$url]);
-                die;
-            }
-        }
-        else if($status == 0){
-            echo json_encode(['status'=>$status, 'error_msg'=>$msg]);
+        if($url){
+            echo json_encode(['s'=>$status, 'd'=>$msg, 'url'=>$url]);
+            die;
+        }else{
+            echo json_encode(['s'=>$status, 'd'=>$msg]);
             die;
         }
     }
