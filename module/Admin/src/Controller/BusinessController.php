@@ -124,4 +124,77 @@ class BusinessController extends CommonController
         $view->setTemplate("admin/business/adsAdd");
         return $this->setMenu($view);
     }
+
+    //编辑广告
+    public function adsEditAction(){
+        $this->checkLogin('admin_business_adsList');
+        $request = $this->getRequest();
+        $ads_id = $this->params('id');
+        $ads = $this->getAdsTable();
+        $ads->id = $ads_id;
+        if($request->isPost()){
+            $post = $request->getPost()->toArray();
+            //验证数据
+            if(empty($post['name'])){
+                $this->ajaxReturn(0, '廣告名称不能为空');
+            }
+            if(empty($post['sort']) || !is_numeric($_POST['sort'])){
+                $this->ajaxReturn(0, '排序序号不能为空且必须为数字');
+            }
+            if(empty($post['start_time'])){
+                $this->ajaxReturn(0, '开始时间不能为空');
+            }
+            if(empty($post['end_time'])){
+                $this->ajaxReturn(0, '结束时间不能为空');
+            }
+            if(empty($post['image_id'])){
+                $this->ajaxReturn(0, '广告图片不能为空');
+            }
+            if($post['type'] == 3){
+                if(empty($post['content'])){
+                    $this->ajaxReturn(0, '图文消息不能为空');
+                }
+            }
+            else if($post['type'] == 4){
+                if(empty($post['link'])){
+                    $this->ajaxReturn(0, '自定义链接不能为空');
+                }
+                if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
+                    $this->ajaxReturn(0, '自定义链接不符合规则');
+                }
+            }
+
+            //添加数据
+            $ads->name = $post['name'];
+            $ads->sort = $post['sort'];
+            $ads->startTime = $post['start_time'];
+            $ads->endTime = $post['end_time'];
+            $ads->imageId = $post['image_id'];
+            $ads->position = $post['position'];
+            $ads->type = $post['type'];
+            if($post['type'] == 3){
+                $ads->content = $post['content'];
+            }
+            elseif($post['type'] == 4) {
+                $ads->content = $post['link'];
+            }
+
+            //保存
+            if(!$ads->updateData()){
+                $this->ajaxReturn(10000, '编辑失败');
+            }
+            else{
+                //跳转到广告列表页
+                $this->ajaxReturn(0, '编辑成功', $this->url()->fromRoute('admin-business', ['action'=>'adsList']));
+            }
+        }
+
+        $adsView = $this->getViewAdsTable();
+        $adsView->id = $ads_id;
+        $ads_info = $adsView->getDetails();
+
+        $view = new ViewModel(['ads_info'=>$ads_info]);
+        $view->setTemplate("admin/business/adsEdit");
+        return $this->setMenu($view);
+    }
 }
