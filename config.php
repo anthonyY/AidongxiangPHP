@@ -148,6 +148,12 @@ define("KTX_API_KEY", "ktxMallKey98765#$%");
  * 客天下API 请求地址
  */
 define("KTX_API_URL", "http://120.76.84.158:8080/ktx-inter/inter/mallapi");
+define("UPLOADFILIS_ROOT", "/uploadfiles/");
+
+/**
+ * 默認的用戶頭像
+ */
+define('DEFAULT_HEAD_IMAGE','/adminStyle/images/avatars/profile-pic.jpg');
 
 include_once 'status_config.php';
 include_once 'message_template.php';

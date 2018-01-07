@@ -56,4 +56,30 @@ class UserController extends CommonController
             die(json_encode(['s'=>10000,'d'=>'操作失败']));
         }
     }
+
+    //用户详细信息
+    public function detailsAction()
+    {
+        $this->checkLogin('admin_user_index');
+        $userId = $this->params('id');
+        $user = $this->getViewUserTable();
+        $user->id = $userId;
+        $userInfo= $user->getDetails();
+        $sexArr = array(1=>'男',2=>'女',3=>'保密');
+        $userInfo['sex'] = $sexArr[$userInfo['sex']];
+        if($userInfo['head_image_id']){
+            $image = $this->getImageTable();
+            $image->id = $userInfo['head_image_id'];
+            $userImage = $image->getDetails();
+        }
+
+        $region = [];
+        if($userInfo->region_info)
+        {
+            $region = json_decode($userInfo->region_info,true);
+        }
+        $view = new ViewModel(['userInfo'=>$userInfo,'region'=>$region]);
+        $view->setTemplate("admin/user/details");
+        return $this->setMenu($view);
+    }
 }

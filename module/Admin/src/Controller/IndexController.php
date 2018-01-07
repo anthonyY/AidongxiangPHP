@@ -11,6 +11,47 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends CommonController
 {
+    /**
+     * 前端接收表单文件域传过来文件
+     * 用于上传文件处理
+     * 4:3
+     * @return string 用于模板页面JS处理
+     */
+    public function getAdminFileAction()
+    {
+        if (isset($_FILES) && $_FILES['Filedata']['error'] == 0 && $this->check_file_type($_FILES['Filedata']['tmp_name']))
+        {
+            $file = $this->Uploadfile();
+            $path = ROOT_PATH . 'uploadfiles/' . $file['path'] . $file['filename'];
+            $image_model = $this->getImageTable();
+            foreach ($file as $key=>$val) {
+                $image_model->$key = $val;
+            }
+
+            $image_id = $image_model->addData();
+
+            if (! $file)
+            {
+                $error = '上传失败，未知错误！';
+            }
+            else
+            {
+                $error = '';
+            }
+            echo json_encode(['path'=>$path, 'image_id'=>$image_id]);
+            die();
+        }
+        else
+        {
+            $error = '文件类型不正确，或未选择上传图片！';
+            $path = '';
+            $image_id = '';
+            echo json_encode(['path'=>$path, 'image_id'=>$image_id]);
+            die();
+        }
+        die();
+    }
+
     public function indexAction()
     {
         $this->checkLogin('admin_index_index');

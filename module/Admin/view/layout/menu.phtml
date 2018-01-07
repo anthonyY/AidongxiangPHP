@@ -277,11 +277,11 @@ if($index){
     $active_header .= '/index.php';
     $url_header .= '/index.php';
 }
-$module = array_search('platform',$url_arr);
+$module = array_search('admin',$url_arr);
 if($module){
     array_remove($url_arr,$module);
-    $active_header .= '/platform';
-    $url_header .= '/platform';
+    $active_header .= '/admin';
+    $url_header .= '/admin';
 }
 $url = implode('/', $url_arr);
 if (in_array($url, $arr)) {
@@ -419,10 +419,10 @@ if (in_array($url, $arr)) {
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
                 <ul class="breadcrumb">
-                    <!--                    <li>
-                                            <i class="ace-icon fa fa-home home-icon"></i>
-                                            <a href="<?php echo $this->url('admin', ['action' => 'index']) ?>">Home</a>
-                                        </li>-->
+<!--                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="<?php echo $this->url('admin', ['action' => 'index']) ?>">Home</a>
+                    </li>-->
                     <?php echo $navigate ?>
                 </ul><!-- /.breadcrumb -->
             </div>

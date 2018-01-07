@@ -1,9 +1,9 @@
 <?php
 namespace Admin\Controller;
 
-use Seller\Controller\Upload\UploadfileApi;
-use Seller\Controller\Upload\Uploadfile as Uploadfiles;
-use Seller\Controller\Upload\Image;
+use Admin\Controller\Upload\UploadfileApi;
+use Admin\Controller\Upload\Uploadfile as Uploadfiles;
+use Admin\Controller\Upload\Image;
 use Admin\Controller\Table;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
