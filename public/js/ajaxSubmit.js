@@ -63,21 +63,21 @@ function ajaxForm(e){
         data:$(form).serializeArray(),
         dataType:'json',
         success: function (rs) {
-            if(rs.status == 0) {
+            if(rs.s) {
                 layer.close(index);
-                showMessage(rs.error_msg, 0);
+                showMessage(rs.d, 0);
                 $(form).find('button[type="button"]').attr('type', 'submit');
                 return;
-            }
-            if(rs.status == 1) {
+            }else{
                 layer.close(index);
-                if (rs.msg){
-                    showMessage(rs.msg, 1);
+                if (rs.d){
+                    showMessage(rs.d, 1);
                 }
             }
-            if(rs.redirect) {
+
+            if(rs.url) {
                 setTimeout(function () {
-                    location.href = rs.redirect;
+                    location.href = rs.url;
                 }, 700);
             }
         },
