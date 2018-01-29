@@ -38,6 +38,7 @@ use Admin\Model\WatchRecordGateway;
 use Admin\Model\ViewAdminGateway;
 use Admin\Model\ViewUserGateway;
 use Admin\Model\ViewAdsGateway;
+use Admin\Model\ViewNavigationGateway;
         
 class Table extends AbstractActionController
 {
@@ -47,6 +48,7 @@ class Table extends AbstractActionController
     protected $ViewAdminTable;
     protected $ViewUserTable;
     protected $ViewAdsTable;
+    protected $ViewNavigation;
 
     public function __construct()
     {
@@ -310,5 +312,13 @@ class Table extends AbstractActionController
             $this->ViewAdsTable = new ViewAdsGateway($this->adapter);
         }
         return $this->ViewAdsTable;
+    }
+    protected function getViewNavigationTable()
+    {
+        if (! $this->ViewNavigation)
+        {
+            $this->ViewNavigation = new ViewNavigationGateway($this->adapter);
+        }
+        return $this->ViewNavigation;
     }
 }

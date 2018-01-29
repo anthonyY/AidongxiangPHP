@@ -197,4 +197,24 @@ class BusinessController extends CommonController
         $view->setTemplate("admin/business/adsEdit");
         return $this->setMenu($view);
     }
+
+    public function navigationAction()
+    {
+        $this->checkLogin('admin_business_navigation');
+        $page = $this->params("page");
+        $viewNavigation = $this->getViewNavigationTable();
+        $viewNavigation->page = $page;
+
+        $get = [];
+        if($_GET){
+            $get = $_GET;
+            $viewNavigation->type = $get['type']??0;
+        }
+
+        $list = $viewNavigation->getList();
+
+        $view = new ViewModel(array('list'=>$list['list'],'paginator'=>$list['paginator'],'condition'=>array("action"=>'navigation'), 'where'=>$get));
+        $view->setTemplate("admin/business/navigation");
+        return $this->setMenu($view);
+    }
 }
