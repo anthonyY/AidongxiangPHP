@@ -46,7 +46,7 @@
                         <td><?php echo $v->sort ?></td>
                         <td>
                             <div class="hidden-sm hidden-xs action-buttons">
-                                <a class="btn btn-xs btn-primary" href="<?php echo $this->url('admin-business', ['action' => 'navigationDetails', 'navigation_id' => $v->id]) ?>">编辑</a>
+                                <a class="btn btn-xs btn-primary" href="<?php echo $this->url('admin-business', ['action' => 'navigationDetails', 'id' => $v->id]) ?>">编辑</a>
                                 <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认删除这个导航吗？', del, '', this)">
                                     删除
                                 </a>
@@ -104,12 +104,12 @@
 
             success:  function (msg) {
                 layer.close(index);
-                if(msg.status == 1){
+                if(msg.s){
+                    showMessage('删除失败', 0);
+                }
+                else if(msg.s == 0){
                     showMessage('删除成功', 1);
                     $(obj).parents('tr').remove();
-                }
-                else if(msg.status == 0){
-                    showMessage('删除失败', 0);
                 }
             },
             error : function () {

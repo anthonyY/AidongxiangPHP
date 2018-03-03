@@ -1,0 +1,189 @@
+<div class="page-header">
+    <h1>
+        视频列表
+    </h1>
+</div>
+
+<div class="page-header">
+    <a href="<?php echo $this->url('admin-video', ['action' => 'videoAdd']) ?>" class="btn btn-xs btn-primary">新增视频</a>
+    <form action="<?php echo $this->url('admin-video', ['action' => 'index']) ?>">
+        <!--        <a href="javascript:downloadUser();" class="btn btn-xs btn-primary">导出用户</a>-->
+        <div style="float: right">
+            视频分类：
+            <select name="category_id">
+                <option value="0">全部</option>
+                <?php foreach ($categoryList as $v) { ?>
+                    <option value="<?php echo $v->id ?>" <?php if ($category_id == $v->id) echo 'selected'; ?>><?php echo $v->name ?></option>
+                <?php } ?>
+            </select>
+            状态：
+            <select name="status">
+                <option value="0">全部</option>
+                <option value="1" <?php if ($status == 1) echo 'selected'; ?>>正常</option>
+                <option value="2" <?php if ($status == 2) echo 'selected'; ?>>下架</option>
+            </select>
+            <input type="text" name="keyword" value="<?php echo $keyword; ?>" placeholder="请输入视频名称">
+            <button class="btn btn-xs btn-primary" type="submit">搜索</button>
+        </div>
+    </form>
+</div>
+
+<!-- div.dataTables_borderWrap -->
+<div>
+    <table id="" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>视频名称</th>
+                <th>视频封面</th>
+                <th>视频价格</th>
+                <th>视频时长</th>
+                <th>视频分类</th>
+                <th>播放量</th>
+                <th>点赞量</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php if ($list) : ?>
+                <?php foreach ($list as $k =>$v) { ?>
+                    <tr>
+                        <input type="hidden" name="id<?php echo $k ?>" value="<?php echo $v->id ?>">
+                        <input type="hidden" name="status<?php echo $k ?>" value="<?php echo $v->status ?>">
+                        <td><?php echo $v->name?></td>
+                        <td><img width="50" height="50" src="<?php echo '/uploadfiles/' . $v->image_path . $v->image_filename ?>"></td>
+                        <td><?php echo $v->price ?></td>
+                        <td><?php echo $v->audio_length ?></td>
+                        <td><?php echo $v->category_name ?></td>
+                        <td><?php echo $v->play_num ?></td>
+                        <td><?php echo $v->praise_num ?></td>
+                        <td>
+                            <span class="label <?php echo $v->status==1?"label-success":"label-danger"?>">
+                                <?php echo $v->status ==1?"正常":"已下架"?>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="btn btn-xs btn-primary" href="<?php echo $this->url('admin-video', ['action' => 'videoDetails', 'id' => $v->id]) ?>">编辑</a>
+                                <?php if($v->status ==1){?>
+                                <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认下架这个视频吗？', changeStatus, '', this)">
+                                    下架
+                                </a>
+                                <?php }else{?>
+                                    <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认上架这个视频吗？', changeStatus, '', this)">
+                                        上架
+                                    </a>
+                                <?php }?>
+                                <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认删除这个视频吗？', del, '', this)">
+                                    删除
+                                </a>
+                            </div>
+                            <div class="hidden-md hidden-lg">
+                                <div class="inline pos-rel">
+                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto" aria-expanded="false">
+                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                        <li>
+                                            <a href="<?php echo $this->url('admin-video', ['action' => 'videoDetails', 'id' => $v->id]) ?>" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="blue">
+																				编辑
+																			</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <?php if($v->status ==1){?>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认下架这个视频吗？', changeStatus, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="red">
+																				下架
+																			</span>
+                                            </a>
+                                            <?php }else{?>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认上架这个视频吗？', changeStatus, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+                                                                        <span class="red">
+                                                                            上架
+                                                                        </span>
+                                            </a>
+                                            <?php }?>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认删除这个视频吗？', del, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="red">
+																				删除
+																			</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+    <div class="pagination pagination-centered">
+        <?php if(isset($where)){$condition['where'] = $where;} ?>
+        <?php echo $this->paginationControl($paginator, 'Sliding', 'page', array('route' => 'admin-video', 'condition' => $condition)); ?>
+    </div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    //单个删除
+    function del(obj){
+        var id = $(obj).parents('tr').find('input[name^="id"]').val();
+        var index = showLoad();
+        //发送ajax请求
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url:  "<?php echo $this->url('admin-video', ['action' => 'videoDel']) ?>",
+            data: {"id":id} ,
+            success:  function (msg) {
+                layer.close(index);
+                if(msg.s){
+                    showMessage('删除失败', 0);
+                }
+                else if(msg.s == 0){
+                    showMessage('删除成功', 1);
+                    $(obj).parents('tr').remove();
+                }
+            },
+            error : function () {
+                layer.close(index);
+                showMessage('请求异常, 请稍后重试', 0);
+            }
+        });
+    }
+
+    function changeStatus(obj){
+        var id = $(obj).parents('tr').find('input[name^="id"]').val();
+        var status = $(obj).parents('tr').find('input[name^="status"]').val();
+        var index = showLoad();
+        //发送ajax请求
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url:  "<?php echo $this->url('admin-video', ['action' => 'changeStatus']) ?>",
+            data: {"id":id,"status":status==1?2:1} ,
+            success:  function (msg) {
+                layer.close(index);
+                if(msg.s){
+                    showMessage(msg.d, 0);
+                }
+                else if(msg.s == 0){
+                    showMessage(msg.d, 1);
+                    location.reload();
+                }
+            },
+            error : function () {
+                layer.close(index);
+                showMessage('请求异常, 请稍后重试', 0);
+            }
+        });
+    }
+</script>

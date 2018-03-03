@@ -217,4 +217,163 @@ class BusinessController extends CommonController
         $view->setTemplate("admin/business/navigation");
         return $this->setMenu($view);
     }
+
+    //导航删除
+    public function navigationDelAction(){
+        $this->checkLogin('admin_business_index');
+        $navigation_id = $_POST['id'];
+        $navigation = $this->getNavigationTable();
+        $navigation->type = 1;
+        $navigation->id = $navigation_id;
+
+        if($navigation->deleteData()){
+            $this->ajaxReturn(0, '删除成功');
+        }
+        else{
+            $this->ajaxReturn(10000, '删除失败');
+        }
+    }
+
+    //新增导航
+    public function navigationAddAction(){
+        $this->checkLogin('admin_business_index');
+        $request = $this->getRequest();
+        $navigation = $this->getNavigationTable();
+        $post = $request->getPost()->toArray();
+        if($request->isPost()){
+
+            //验证数据
+            if(empty($post['name'])){
+                $this->ajaxReturn(10000, '导航名称不能为空');
+            }
+            if(empty($post['sort']) || !is_numeric($_POST['sort'])){
+                $this->ajaxReturn(10000, '排序序号不能为空且必须为数字');
+            }
+            if(empty($post['link'])){
+                $this->ajaxReturn(10000, '跳转链接不能为空');
+            }
+            if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
+                $this->ajaxReturn(10000, '自定义链接不符合规则');
+            }
+            if(empty($post['image_id'])){
+                $this->ajaxReturn(10000, '导航图片不能为空');
+            }
+
+            //添加数据
+            $navigation->name = $post['name'];
+            $navigation->link = $post['link'];
+            $navigation->icon = $post['image_id'];
+            $navigation->sort = $post['sort'];
+
+            //保存
+            if(!$navigation->addData()){
+                $this->ajaxReturn(10000, '添加失败');
+            }
+            else{
+                //跳转到导航列表页
+                $this->ajaxReturn(0, '添加成功', $this->url()->fromRoute('admin-business', ['action'=>'navigation']));
+            }
+        }
+
+        $view = new ViewModel();
+        $view->setTemplate("admin/business/navigationAdd");
+        return $this->setMenu($view);
+    }
+
+    //导航详情
+    public function navigationDetailsAction(){
+        $this->checkLogin('admin_business_index');
+        $request = $this->getRequest();
+        $navigation_id = $this->params('id');
+        $navigationView = $this->getViewNavigationTable();
+        $post = $request->getPost()->toArray();
+        $navigation = $this->getNavigationTable();
+        $navigation->id = $navigation_id;
+        $navigationView->id = $navigation_id;
+        if($request->isPost()){
+            //验证数据
+            if(empty($post['name'])){
+                $this->ajaxReturn(10000, '导航名称不能为空');
+            }
+            if(empty($post['sort']) || !is_numeric($_POST['sort'])){
+                $this->ajaxReturn(10000, '排序序号不能为空且不能为数字');
+            }
+            if(empty($post['link'])){
+                $this->ajaxReturn(10000, '跳转链接不能为空');
+            }
+            if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
+                $this->ajaxReturn(10000, '自定义链接不符合规则');
+            }
+            if(empty($post['image_id'])){
+                $this->ajaxReturn(10000, '导航图片不能为空');
+            }
+
+            //添加数据
+            $navigation->name = $post['name'];
+            $navigation->link = $post['link'];
+            $navigation->icon = $post['image_id'];
+            $navigation->sort = $post['sort'];
+
+            //保存
+            if(!$navigation->updateData()){
+                $this->ajaxReturn(10000, '编辑失败');
+            }
+            else{
+                //跳转到导航列表页
+                $this->ajaxReturn(0, '编辑成功', $this->url()->fromRoute('admin-business', ['action'=>'navigation']));
+            }
+        }
+
+        $navigation_info = $navigationView->getDetails();
+
+
+        $view = new ViewModel(['navigation_info'=>$navigation_info]);
+        $view->setTemplate("admin/business/navigationDetails");
+        return $this->setMenu($view);
+    }
+
+    //手机申诉列表
+    public function mobileAppealListAction()
+    {
+        $this->checkLogin('admin_business_mobileAppeal');
+        $page = $this->params("page");
+        $ViewMobileAppeal = $this->getViewMobileAppealTable();
+        $ViewMobileAppeal->page = $page;
+        $status = 0;
+
+        $get = [];
+        if($_GET){
+            $get = $_GET;
+            $status = isset($get['status'])?$get['status']:0;
+            $ViewMobileAppeal->status = $status;
+        }
+
+        $list = $ViewMobileAppeal->getList();
+        $statusArr = [
+            0=>'全部',
+            1=>'待审核',
+            2=>'审核通过',
+            3=>'审核失败'
+        ];
+
+        $view = new ViewModel(array('list'=>$list['list'],'paginator'=>$list['paginator'],'condition'=>array("action"=>'mobileAppealList'),'status'=>$status, 'where'=>$get,'statusArr'=>$statusArr));
+        $view->setTemplate("admin/business/mobileAppealList");
+        return $this->setMenu($view);
+    }
+
+    //手机申诉处理
+    public function mobileAppealAction()
+    {
+        $id = $_POST['id'];
+        $action = $_POST['action'];
+        if(!$id || !in_array($action,['SUCCESS','FAIL']))
+        {
+            $this->ajaxReturn(10000,'非法操作');
+        }
+        $mobileAppeal = $this->getMobileAppealTable();
+        $mobileAppeal->id = $id;
+        $res = $mobileAppeal->mobileAppeal($action);
+        $this->ajaxReturn($res['s'],$res['d']);
+    }
 }
+

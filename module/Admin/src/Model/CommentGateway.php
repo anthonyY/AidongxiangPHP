@@ -38,7 +38,7 @@ class CommentGateway extends BaseGateway {
     public $commentNum;
 
     /**
-    *显示状态：1现实，2隐藏
+    *显示状态：1显示，2隐藏
     */
     public $display;
 

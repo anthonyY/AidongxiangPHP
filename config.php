@@ -35,6 +35,7 @@ define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
  * 腾讯云对象存储配置
  */
 define("COS_APP_ID", '1255490419');     //数据链接IP
+define("COS_BUCKET", 'yarstick');
 define("COS_SECRET_ID", 'AKIDqaBfy5lx7i7KKApFhLq9KI7jDVcjmgU7');
 define("COS_SECRET_KEY", '6RcaMvMtIfjeZR9e3PxMYYL4g6A2mOsA');
 define("COS_REGION", 'gz'); // bucket所属地域：华北 'tj' 华东 'sh' 华南 'gz'

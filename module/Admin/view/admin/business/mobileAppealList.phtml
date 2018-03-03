@@ -1,0 +1,90 @@
+<div class="page-header">
+    <h1>
+        手机申诉列表
+    </h1>
+</div>
+<div class="page-header">
+    <form action="<?php echo $this->url('admin-business', ['action' => 'mobileAppealList']) ?>">
+<!--        <a href="javascript:downloadUser();" class="btn btn-xs btn-primary">导出用户</a>-->
+        <div style="float: right">
+            状态：
+            <select name="status" id="status">
+                <?php foreach ($statusArr as $k=>$v) { ?>
+                    <option value="<?php echo $k ?>" <?php if ($status == $k) echo 'selected'; ?>><?php echo $v ?></option>
+                <?php } ?>
+            </select>
+            <button class="btn btn-xs btn-primary" type="submit">搜索</button>
+        </div>
+    </form>
+</div>
+
+<!-- div.dataTables_borderWrap -->
+<div>
+    <table id="" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>昵称</th>
+                <th>旧手机号码</th>
+                <th>新手机号码</th>
+                <th>注册时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody id="data">
+            <?php foreach ($list as $v) { ?>
+                <tr>
+                    <input type="hidden" value="<?php echo $v->id?>" name="id"/>
+                    <td><?php echo $v->nick_name ?></td>
+                    <td><?php echo $v->mobile ?></td>
+                    <td><?php echo $v->new_mobile ?></td>
+                    <td><?php echo $v->register_time ?></td>
+                    <td>
+                        <label class="<?php echo $v->status==1?"label label-danger":"" ?><?php echo $v->status==2?"label label-success":"" ?><?php echo $v->status==3?"label label-info":"" ?>">
+                            <?php echo isset($statusArr[$v->status])?$statusArr[$v->status]:'' ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php if($v->status==1){?>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a class="btn btn-xs btn-success" data-action="SUCCESS" onclick="confirm_handle('确认通过该用户请求吗？',mobileAppeal,'',this)">通过</a>
+                            <a class="btn btn-xs btn-danger" data-action="FAIL" onclick="confirm_handle('确认不通过该用户请求吗？',mobileAppeal,'',this)">不通过</a>
+                        </div>
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php } ?>
+
+        </tbody>
+    </table>
+    <div class="pagination pagination-centered">
+        <?php if(isset($where)){$condition['where'] = $where;} ?>
+        <?php echo $this->paginationControl($paginator, 'Sliding', 'page', array('route' => 'admin-business', 'condition' => $condition)); ?>
+    </div>
+</div>
+<script>
+    //禁用启用用户帐号
+    function mobileAppeal(obj) {
+        var id = $(obj).parents('tr').find('input[name^="id"]').val();
+        var action = $(obj).attr('data-action');
+        $.ajax({
+            type: "POST",
+            url: "<?php echo $this->url('admin-business', ['action' => 'mobileAppeal']) ?>",
+            data: {"id": id,action:action},
+            dataType: "JSON",
+            async: false,
+            success: function (data) {
+                if(data.s){
+                    showMessage(data.d,0);
+                }else{
+                    showMessage(data.d,1);
+                    location.reload();
+                }
+            },
+            error: function (res) {
+                console.log(res,'error');
+            }
+        });
+    }
+</script>

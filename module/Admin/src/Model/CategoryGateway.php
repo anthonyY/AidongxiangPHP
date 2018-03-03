@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 分类表
 *
@@ -43,10 +45,34 @@ class CategoryGateway extends BaseGateway {
     public $parentId;
 
     /**
+     * 是否需要分页 1是 2否
+     */
+    public $needPage = 1;
+
+    /**
     *字段数组
     */
     protected $columns_array = ["id","type","name","icon","sort","status","parentId","delete","timestamp"];
 
     public $table = DB_PREFIX . 'category';
+
+    public function getList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',$this->type);
+        if($this->status)
+        {
+            $where->equalTo('status',$this->status);
+        }
+        if($this->needPage != 2)
+        {
+            return $this->getAll($where,['name']);
+        }
+        else
+        {
+            return $this->fetchAll($where,['*'],['name']);
+        }
+
+    }
 
 }

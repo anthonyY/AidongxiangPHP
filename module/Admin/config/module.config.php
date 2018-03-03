@@ -166,6 +166,22 @@
                     ],
                 ],
 
+                //腾讯对象存储模块
+                'admin-cos' => [
+                    'type'    => Segment::class,
+                    'options' => ['route' => MODULE_ADMIN . '/cos[/a:action][/p:page][/i:id]',
+                        'constraints' => array(
+                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'page' => '[0-9]+'
+                        ),
+                        'defaults' => [
+                            'controller' => Controller\CosController::class,
+                            'action'     => 'index',
+                        ],
+                    ],
+                ],
+
             ],
         ],
         'controller_plugins' => array(
@@ -185,6 +201,7 @@
                 Controller\MicroblogController::class => InvokableFactory::class,
                 Controller\UserController::class => InvokableFactory::class,
                 Controller\VideoController::class => InvokableFactory::class,
+                Controller\CosController::class => InvokableFactory::class,
             ],
         ],
         'view_manager' => [

@@ -161,10 +161,10 @@
                     data:$(form).serializeArray(),
                     dataType:'json',
                     success: function (rs) {
-                        if(rs.status == 0) {
+                        if(rs.s == 0) {
                             err = err+1;
                             layer.close(index);
-                            showMessage(rs.error_msg, 0);
+                            showMessage(rs.d, 0);
                             $(form).find('button[type="button"]').attr('type', 'submit');
                             if(err > 2){
                                 window.location.reload();
@@ -173,13 +173,13 @@
                         }
                         if(rs.status == 1) {
                             layer.close(index);
-                            if (rs.msg){
-                                showMessage(rs.msg, 1);
+                            if (rs.d){
+                                showMessage(rs.d, 1);
                             }
                         }
-                        if(rs.redirect) {
+                        if(rs.url) {
                             setTimeout(function () {
-                                location.href = rs.redirect;
+                                location.href = rs.url;
                             }, 700);
                         }
                     },

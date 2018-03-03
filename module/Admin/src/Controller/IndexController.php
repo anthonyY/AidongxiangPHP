@@ -83,9 +83,9 @@ class IndexController extends CommonController
             $res = $admin->adminLogin();
             if($res['s'] === 0){
                 if(isset($_POST['remember'])){
-                    setcookie("ketx_admin_name",$_POST['name'],time()+7200);
+                    setcookie("admin_name",$_POST['name'],time()+7200);
                 }else{
-                    setcookie("ketx_admin_name",'');
+                    setcookie("admin_name",'');
                 }
                 $action_list = $_SESSION['action_list'];
                 $url = $this->url()->fromRoute('admin');

@@ -39,6 +39,8 @@ use Admin\Model\ViewAdminGateway;
 use Admin\Model\ViewUserGateway;
 use Admin\Model\ViewAdsGateway;
 use Admin\Model\ViewNavigationGateway;
+use Admin\Model\ViewMobileAppealGateway;
+use Admin\Model\ViewAudioGateway;
         
 class Table extends AbstractActionController
 {
@@ -48,7 +50,9 @@ class Table extends AbstractActionController
     protected $ViewAdminTable;
     protected $ViewUserTable;
     protected $ViewAdsTable;
-    protected $ViewNavigation;
+    protected $ViewNavigationTable;
+    protected $ViewMobileAppealTable;
+    protected $ViewAudioTable;
 
     public function __construct()
     {
@@ -315,10 +319,26 @@ class Table extends AbstractActionController
     }
     protected function getViewNavigationTable()
     {
-        if (! $this->ViewNavigation)
+        if (! $this->ViewNavigationTable)
         {
-            $this->ViewNavigation = new ViewNavigationGateway($this->adapter);
+            $this->ViewNavigationTable = new ViewNavigationGateway($this->adapter);
         }
-        return $this->ViewNavigation;
+        return $this->ViewNavigationTable;
+    }
+    protected function getViewMobileAppealTable()
+    {
+        if (! $this->ViewMobileAppealTable)
+        {
+            $this->ViewMobileAppealTable = new ViewMobileAppealGateway($this->adapter);
+        }
+        return $this->ViewMobileAppealTable;
+    }
+    protected function getViewAudioTable()
+    {
+        if (! $this->ViewAudioTable)
+        {
+            $this->ViewAudioTable = new ViewAudioGateway($this->adapter);
+        }
+        return $this->ViewAudioTable;
     }
 }
