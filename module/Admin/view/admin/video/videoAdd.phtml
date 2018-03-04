@@ -72,7 +72,7 @@
 
             <div class="col-sm-9">
                 <div class="layui-input-inline">
-                    <input type="text" name="price" class="form-control" style="height: 30px;">
+                    <input type="number" name="price" class="form-control" style="height: 30px;">
                 </div>
             </div>
         </div>
@@ -97,9 +97,9 @@
                     <input type="hidden" name="size" id="size"/>
                     <input type="hidden" name="filename" id="filename"/>
                     <a class="btn btn-xs btn-info" id="full_video_upload">上传完成视频</a>
-                    <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
                     &nbsp;|--文件地址：<span id="full_path_span"><input type="text" readonly id="full_path" name="full_path"  /></span>
                     |--时长：<span id="audio_length_spans"><input type="text" style="width: 80px;" readonly id="audio_length" name="audio_length"></span>
+                    |--进度 <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
                 </div>
             </div>
         </div>
@@ -111,9 +111,9 @@
                 <div class="mot_tright">
                     <input type="file" name="auditions_file" id="auditions_video_input" style="display: none"/>
                     <a class="btn btn-xs btn-info" id="auditions_video_upload">上传试播视频</a>
-                    <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
                     &nbsp;|--文件地址：<span id="auditions_path_span"><input type="text" readonly id="auditions_path" name="auditions_path"  /></span>
                     |--时长：<span id="auditions_length_span"><input type="text" style="width: 80px;" readonly id="auditions_length" name="auditions_length"></span>
+                    |--进度 <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
                 </div>
             </div>
         </div>
@@ -168,9 +168,9 @@
         function getTime(type) {
             setTimeout(function () {
                 if(type == 1){
-                    var duration = $("#full_audio_audio")[0].duration;
+                    var duration = $("#full_audio")[0].duration;
                 }else{
-                    var duration = $("#auditions_audio_audio")[0].duration;
+                    var duration = $("#auditions_audio")[0].duration;
                 }
                 if(isNaN(duration)){
                     getTime(type);
@@ -184,6 +184,34 @@
                     }
                 }
             }, 10);
+        }
+
+        //获取时间转换为时分秒
+        function formatSeconds(value) {
+            if(value <= 0){
+                return '';
+            }
+            var theTime = parseInt(value);// 秒
+            var theTime1 = 0;// 分
+            var theTime2 = 0;// 小时
+            if(theTime > 60) {
+                theTime1 = parseInt(theTime/60);
+                theTime = parseInt(theTime%60);
+                if(theTime1 > 60) {
+                    theTime2 = parseInt(theTime1/60);
+                    theTime1 = parseInt(theTime1%60);
+                }
+            }
+            var result = parseInt(theTime)>10?parseInt(theTime):"0"+theTime;
+
+            if(true) {
+                //result = ""+parseInt(theTime)
+                result = parseInt(theTime1)>10?""+parseInt(theTime1)+":"+result:"0"+parseInt(theTime1)+":"+result;
+            }
+            if(true) {
+                result = parseInt(theTime2)>10?""+parseInt(theTime2)+":"+result:"0"+parseInt(theTime2)+":"+result;
+            }
+            return result;
         }
 
         var auditionsSuccessCallBack = function (result) {
@@ -246,10 +274,10 @@
                 var file_name = files.name;
                 var path = '/video/full/'+output+'/'+file_name;
                 //console.log(files);
-                // if(files.type != 'video/mp4'){
-                //     layer.msg('请选择mp4文件');
-                //     return false;
-                // }
+                if(files.type != 'video/mp4'){
+                    layer.msg('请选择mp4文件');
+                    return false;
+                }
                 if(files && files.size > 0){
                     $('#size').val(files.size);
                     $('#filename').val(file_name);
@@ -266,11 +294,28 @@
             return false;
         });
 
-        $('.video-upload').on('click',function(){
-            var file_obj = $(this).parents('.mot_tright').find('input[type="file"]');
-            var files = file_obj.prop('files');
-            console.log(files);
+        $('#auditions_video_upload').on('click', function () {
+            $('#auditions_video_input').off('change').on('change', function (e) {
+                var files = e.target.files[0];
+                var file_name = files.name;
+                var path = '/video/auditions/'+output+'/'+file_name;
+                //console.log(files);
+                if(files.type != 'video/mp4'){
+                    layer.msg('请选择mp4文件');
+                    return false;
+                }
+                if(files && files.size > 0){
+                    //开始上传
+                    cos.sliceUploadFile(auditionsSuccessCallBack, auditionsErrorCallBack, auditionsProgressCallBack,bucket,path,files,0);
+                }else{
+                    layer.msg('请选择上传文件');
+                }
+            })
+            setTimeout(function () {
+                $('#auditions_video_input').click();
+            }, 0);
 
+            return false;
         });
 
     });
@@ -302,29 +347,6 @@
 
 <script type="text/javascript">
     $('form').submit(function (e) {
-        if(!dateValidate()){
-            return false;
-        }
-        if(!$('input[name="image_id"]').val()){
-          showMessage('必须选择图片', 0);
-          return false;
-        }
-        if($('select[name="type"]').val() == 3){
-            if(!$('textarea[name="content"]').val()){
-                showMessage('图文详情不能为空', 0);
-                return false;
-            }
-        }
-        else if($('select[name="type"]').val() == 4){
-            if(!$('input[name="link"]').val()){
-                showMessage('自定义链接不能为空', 0);
-                return false;
-            }
-            if(!/^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/.test($('input[name="link"]').val())){
-                showMessage('自定义链接不合法', 0);
-                return false;
-            }
-        }
         ajaxForm(e);
     });
 </script>

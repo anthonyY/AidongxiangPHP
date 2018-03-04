@@ -82,28 +82,58 @@ class VideoController extends CommonController
         $audio = $this->getAudioTable();
         $post = $request->getPost()->toArray();
         if($request->isPost()){
+//            var_dump($post);
             //验证数据
             if(empty($post['name'])){
                 $this->ajaxReturn(10000, '视频名称不能为空');
             }
-            if(empty($post['sort']) || !is_numeric($_POST['sort'])){
-                $this->ajaxReturn(10000, '排序序号不能为空且必须为数字');
+            if(empty($post['category_id'])){
+                $this->ajaxReturn(10000, '视频分类不能为空');
             }
-            if(empty($post['link'])){
-                $this->ajaxReturn(10000, '跳转链接不能为空');
-            }
-            if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
-                $this->ajaxReturn(10000, '自定义链接不符合规则');
+            if($post['pay_type']  == 2 && empty($post['price'])){
+                $this->ajaxReturn(10000, '收费视频，请填写视频价格');
             }
             if(empty($post['image_id'])){
-                $this->ajaxReturn(10000, '导航图片不能为空');
+                $this->ajaxReturn(10000, '视频封面不能为空');
+            }
+            if(empty($post['size'])){
+                $this->ajaxReturn(10000, '视频大小错误');
+            }
+            if(empty($post['filename'])){
+                $this->ajaxReturn(10000, '视频原文件名称不能为空');
+            }
+            if(empty($post['full_path'])){
+                $this->ajaxReturn(10000, '视频完整路径不能为空');
+            }
+            if(empty($post['audio_length'])){
+                $this->ajaxReturn(10000, '视频时长错误');
+            }
+            if(empty($post['auditions_path'])){
+                $this->ajaxReturn(10000, '试播视频路径不能为空');
+            }
+            if(empty($post['auditions_length'])){
+                $this->ajaxReturn(10000, '试播视频时长错误');
+            }
+            if(empty($post['description'])){
+                $this->ajaxReturn(10000, '视频简介不能为空');
             }
 
             //添加数据
             $audio->name = $post['name'];
-            $audio->link = $post['link'];
-            $audio->icon = $post['image_id'];
-            $audio->sort = $post['sort'];
+            $audio->categoryId = $post['category_id'];
+            if($post['pay_type'] == 2)
+            {
+                $audio->payType = 2;
+                $audio->price = $post['price'];
+            }
+            $audio->imageId = $post['image_id'];
+            $audio->size = $post['size'];
+            $audio->filename = $post['filename'];
+            $audio->fullPath = $post['full_path'];
+            $audio->audioLength = $post['audio_length'];
+            $audio->auditionsPath = $post['auditions_path'];
+            $audio->auditionsLength = $post['auditions_length'];
+            $audio->description = $post['description'];
 
             //保存
             if(!$audio->addData()){
