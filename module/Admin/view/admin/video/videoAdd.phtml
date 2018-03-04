@@ -24,11 +24,6 @@
     .form-horizontal>div{
         margin-left: 22px !important;
     }
-    .video-upload{
-        margin-top: 10px;
-        display:block;
-        width:45px;
-    }
 </style>
 <div class="page-header">
     <h1>
@@ -98,11 +93,13 @@
             <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完整视频：</label>
             <div class="col-sm-9">
                 <div class="mot_tright">
-                    <input type="file"/>
-                    <input type="hidden" id="full_path" name="full_path"  />
-                    <input type="hidden" id="audio_length" name="audio_length">
-                    <div class="col-sm-3" style="background-color: #cccccc;padding:0px;margin-top:5px;"></div><br/>
-                    <a class="btn btn-xs btn-info video-upload">上传</a>
+                    <input type="file" name="full_file" id="full_video_input" style="display: none"/>
+                    <input type="hidden" name="size" id="size"/>
+                    <input type="hidden" name="filename" id="filename"/>
+                    <a class="btn btn-xs btn-info" id="full_video_upload">上传完成视频</a>
+                    <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                    &nbsp;|--文件地址：<span id="full_path_span"><input type="text" readonly id="full_path" name="full_path"  /></span>
+                    |--时长：<span id="audio_length_spans"><input type="text" style="width: 80px;" readonly id="audio_length" name="audio_length"></span>
                 </div>
             </div>
         </div>
@@ -112,11 +109,11 @@
             <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 试播视频：</label>
             <div class="col-sm-9">
                 <div class="mot_tright">
-                    <input type="file"/>
-                    <input type="hidden" id="auditions_path" name="auditions_path"  />
-                    <input type="hidden" id="auditions_length" name="auditions_length">
-                    <div class="col-sm-3" style="background-color: #cccccc;padding:0px;margin-top:5px;"></div><br/>
-                    <a class="btn btn-xs btn-info video-upload">上传</a>
+                    <input type="file" name="auditions_file" id="auditions_video_input" style="display: none"/>
+                    <a class="btn btn-xs btn-info" id="auditions_video_upload">上传试播视频</a>
+                    <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                    &nbsp;|--文件地址：<span id="auditions_path_span"><input type="text" readonly id="auditions_path" name="auditions_path"  /></span>
+                    |--时长：<span id="auditions_length_span"><input type="text" style="width: 80px;" readonly id="auditions_length" name="auditions_length"></span>
                 </div>
             </div>
         </div>
@@ -145,6 +142,10 @@
     </form>
 </div>
 <script>
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var day = (d.getDate()<10 ? '0' : '') + d.getDate();
+    var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month + day ;
     jQuery(function($) {
         //腾讯云 获取签名
         var url = '<?php echo $this->url('admin-cos', ['action' => 'getSign'])?>';
@@ -157,74 +158,119 @@
             region: region,//地域信息 必填参数 华南地区填gz 华东填sh 华北填tj
             getAppSign: function (callback) {//获取签名 必填参数
                 $.get(url,{},function(data){
-                    console.log(data);
                     var sign = data.sign;
                     callback(encodeURIComponent(sign));
                 },'json');
             },
         });
 
-        var successCallBack = function (result) {
+        //获取音频的总时间
+        function getTime(type) {
+            setTimeout(function () {
+                if(type == 1){
+                    var duration = $("#full_audio_audio")[0].duration;
+                }else{
+                    var duration = $("#auditions_audio_audio")[0].duration;
+                }
+                if(isNaN(duration)){
+                    getTime(type);
+                }else{
+                    if(type == 1){
+                        var time = formatSeconds($("#full_audio")[0].duration);
+                        $("#audio_length").val(time);
+                    }else{
+                        var time = formatSeconds($("#auditions_audio")[0].duration);
+                        $("#auditions_length").val(time);
+                    }
+                }
+            }, 10);
+        }
+
+        var auditionsSuccessCallBack = function (result) {
             var a = JSON.stringify(result);
             console.log(result);
             //$("#result").val(JSON.stringify(result));
-            layer.msg('上传成功');
+            layer.msg('试播视频上传成功');
             //加入到隐藏input
             var data = result.data ?  result.data.access_url : "";
-            $('#video_src').val(data);
+            $('#auditions_path').val(data);
             //加入到隐藏video标签
-            $('#for_video_length').attr('src',data);
+            $("#auditions_path_span").append("<audio id='auditions_audio' src="+data+"></audio>");
+            getTime(2);
         };
-        // var myVid=document.getElementById("for_video_length");
-        // myVid.ondurationchange=function(){
-        //     $('#video_length').val( $('#for_video_length')[0].duration);
-        // }
+
+        var fullSuccessCallBack = function (result) {
+            var a = JSON.stringify(result);
+            console.log(result);
+            //$("#result").val(JSON.stringify(result));
+            layer.msg('完整视频上传成功');
+            //加入到隐藏input
+            var data = result.data ?  result.data.access_url : "";
+            $('#full_path').val(data);
+            //加入到隐藏video标签
+            $("#full_path_span").append("<audio id='full_audio' src="+data+"></audio>");
+            getTime(1);
+        };
 
 
 
-        var errorCallBack = function (result) {
+
+
+        var fullErrorCallBack = function (result) {
             result = result || {};
             //$("#result").val(result.responseText || 'error');
-            console.log(result.responseText);
-            $('#progress span').remove();
-            layer.msg('上传失败');
+            console.log(result.message);
+            // $('#full-progress-p').hide();
+            layer.msg('完整视频上传失败');
         };
 
-        var progressCallBack = function(curr){
-            //$("#result").val('uploading... curr progress is '+curr);
-            $('#progress span').css('width',(curr*100)+'%');
-            console.log(curr);
+        var auditionsErrorCallBack = function (result) {
+            result = result || {};
+            //$("#result").val(result.responseText || 'error');
+            console.log(result.message);
+            // $('#auditions-progress-p').hide();
+            layer.msg('试播视频上传失败');
         };
+
+        var fullProgressCallBack = function(curr){
+            $('#full-progress-p span').css('width',(curr*100)+'%');
+        };
+
+        var auditionsProgressCallBack = function(curr){
+            $('#auditions-progress-p span').css('width',(curr*100)+'%');
+        };
+
+        $('#full_video_upload').on('click', function () {
+            $('#full_video_input').off('change').on('change', function (e) {
+                var files = e.target.files[0];
+                var file_name = files.name;
+                var path = '/video/full/'+output+'/'+file_name;
+                //console.log(files);
+                // if(files.type != 'video/mp4'){
+                //     layer.msg('请选择mp4文件');
+                //     return false;
+                // }
+                if(files && files.size > 0){
+                    $('#size').val(files.size);
+                    $('#filename').val(file_name);
+                    //开始上传
+                    cos.sliceUploadFile(fullSuccessCallBack, fullErrorCallBack, fullProgressCallBack,bucket,path,files,0);
+                }else{
+                    layer.msg('请选择上传文件');
+                }
+            })
+            setTimeout(function () {
+                $('#full_video_input').click();
+            }, 0);
+
+            return false;
+        });
 
         $('.video-upload').on('click',function(){
             var file_obj = $(this).parents('.mot_tright').find('input[type="file"]');
             var files = file_obj.prop('files');
             console.log(files);
-            var file_name = files[0].name;
-            console.log(file_name);
-            var timestamp = Date.parse(new Date());
-            //var path = '/video/'+timestamp+'/'+file_name;
-            var path = '/video/'+timestamp+file_name;
-            //console.log(files);
-            //50M 52428800
-            // if(files[0].type != 'video/mp4'){
-            //     layer.msg('请选择mp4文件');
-            //     return false;
-            // }
-            if(files[0].size > 52428800){
-                layer.msg('文件大小不能超过50M');
-                return false;
-            }
-            $('#size').val(files[0].size);
-            $('#filename').val(file_name);
-            console.log('开始上传...');
-            //console.log(path);
 
-            //开始上传
-            cos.sliceUploadFile(successCallBack, errorCallBack, progressCallBack,bucket,path,files[0],0);
-            var progress = $(this).parents('.mot_tright').find('.progress');
-            progress.html('');
-            progress.html('<span class="progress_bar">&nbsp;</span>');
         });
 
     });
