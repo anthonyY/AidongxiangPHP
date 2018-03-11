@@ -27,28 +27,28 @@
 </style>
 <div class="page-header">
     <h1>
-        视频添加
+        音频添加
     </h1>
 </div>
 <!-- div.table-responsive -->
 
 <!-- div.dataTables_borderWrap -->
 <div>
-    <form class="form-horizontal" role="form" action="<?php echo $this->url('admin-video', ['action'=>'videoAdd']) ?>" method="post">
+    <form class="form-horizontal" role="form" action="<?php echo $this->url('admin-audio', ['action'=>'audioAdd']) ?>" method="post">
         <div class="form-group">
-            <label class="col-sm-1 control-label " for="form-field-1"> 视频名称：</label>
+            <label class="col-sm-1 control-label " for="form-field-1"> 音频名称：</label>
 
             <div class="col-sm-9">
-                <input type="text" name="name" required id="form-field-1" placeholder="视频名称" class="col-xs-10 col-sm-5">
+                <input type="text" name="name" required id="form-field-1" placeholder="音频名称" class="col-xs-10 col-sm-5">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-1 control-label " for="form-field-1"> 视频分类：</label>
+            <label class="col-sm-1 control-label " for="form-field-1"> 音频分类：</label>
 
             <div class="col-sm-9">
                 <select name="category_id" class="col-xs-10 col-sm-5">
                     <?php if(!$category_list){?>
-                        <option value="0">请先添加视频分类</option>
+                        <option value="0">请先添加音频分类</option>
                     <?php }else{?>
                     <option value="0">请选择分类</option>
                     <?php foreach ($category_list as $v) {?>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-1 control-label no-padding-right">视频收费：</label>
+            <label class="col-sm-1 control-label no-padding-right">音频收费：</label>
 
             <div class="col-sm-9">
                 <input type="radio" name="pay_type" value="1" class="ace" checked onclick="showPriceDiv()"/>
@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="form-group" style="display: none" id="price">
-            <label class="col-sm-1 control-label no-padding-right">视频价格：</label>
+            <label class="col-sm-1 control-label no-padding-right">音频价格：</label>
 
             <div class="col-sm-9">
                 <div class="layui-input-inline">
@@ -79,7 +79,7 @@
         <!-- 一次上传多张图片插件 -->
         <div class="form-group">
 
-            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 视频封面：</label>
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 音频封面：</label>
             <div class="col-sm-9">
                 <div class="mot_tright" id="img_div">
                     <input id="one_img_upload" type="file"/>
@@ -90,13 +90,13 @@
 
         <div class="form-group">
 
-            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完整视频：</label>
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完整音频：</label>
             <div class="col-sm-9">
                 <div class="mot_tright">
-                    <input type="file" name="full_file" id="full_video_input" style="display: none"/>
+                    <input type="file" name="full_file" id="full_audio_input" style="display: none"/>
                     <input type="hidden" name="size" id="size"/>
                     <input type="hidden" name="filename" id="filename"/>
-                    <a class="btn btn-xs btn-info" id="full_video_upload">上传完整视频</a>
+                    <a class="btn btn-xs btn-info" id="full_audio_upload">上完整音频</a>
                     &nbsp;|--文件地址：<span id="full_path_span"><input type="text" readonly id="full_path" name="full_path"  /></span>
                     |--时长：<span id="audio_length_spans"><input type="text" style="width: 80px;" readonly id="audio_length" name="audio_length"></span>
                     |--进度 <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
@@ -106,11 +106,11 @@
 
         <div class="form-group">
 
-            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 试播视频：</label>
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 试播音频：</label>
             <div class="col-sm-9">
                 <div class="mot_tright">
-                    <input type="file" name="auditions_file" id="auditions_video_input" style="display: none"/>
-                    <a class="btn btn-xs btn-info" id="auditions_video_upload">上传试播视频</a>
+                    <input type="file" name="auditions_file" id="auditions_audio_input" style="display: none"/>
+                    <a class="btn btn-xs btn-info" id="auditions_audio_upload">上传试播音频</a>
                     &nbsp;|--文件地址：<span id="auditions_path_span"><input type="text" readonly id="auditions_path" name="auditions_path"  /></span>
                     |--时长：<span id="auditions_length_span"><input type="text" style="width: 80px;" readonly id="auditions_length" name="auditions_length"></span>
                     |--进度 <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
@@ -119,7 +119,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label " for="form-field-1-1">视频介绍：</label>
+            <label class="col-sm-1 control-label " for="form-field-1-1">音频介绍：</label>
 
             <div class="col-sm-9">
                 <textarea name="description" style="width:80%;height:600px;visibility:hidden;"></textarea>
@@ -218,11 +218,11 @@
             var a = JSON.stringify(result);
             console.log(result);
             //$("#result").val(JSON.stringify(result));
-            layer.msg('试播视频上传成功');
+            layer.msg('试播音频上传成功');
             //加入到隐藏input
             var data = result.data ?  result.data.access_url : "";
             $('#auditions_path').val(data);
-            //加入到隐藏video标签
+            //加入到隐藏audio标签
             $("#auditions_path_span").append("<audio id='auditions_audio' src="+data+"></audio>");
             getTime(2);
         };
@@ -231,11 +231,11 @@
             var a = JSON.stringify(result);
             console.log(result);
             //$("#result").val(JSON.stringify(result));
-            layer.msg('完整视频上传成功');
+            layer.msg('完整音频上传成功');
             //加入到隐藏input
             var data = result.data ?  result.data.access_url : "";
             $('#full_path').val(data);
-            //加入到隐藏video标签
+            //加入到隐藏audio标签
             $("#full_path_span").append("<audio id='full_audio' src="+data+"></audio>");
             getTime(1);
         };
@@ -249,7 +249,7 @@
             //$("#result").val(result.responseText || 'error');
             console.log(result.message);
             // $('#full-progress-p').hide();
-            layer.msg('完整视频上传失败');
+            layer.msg('完整音频上传失败');
         };
 
         var auditionsErrorCallBack = function (result) {
@@ -257,7 +257,7 @@
             //$("#result").val(result.responseText || 'error');
             console.log(result.message);
             // $('#auditions-progress-p').hide();
-            layer.msg('试播视频上传失败');
+            layer.msg('试播音频上传失败');
         };
 
         var fullProgressCallBack = function(curr){
@@ -268,14 +268,14 @@
             $('#auditions-progress-p span').css('width',(curr*100)+'%');
         };
 
-        $('#full_video_upload').on('click', function () {
-            $('#full_video_input').off('change').on('change', function (e) {
+        $('#full_audio_upload').on('click', function () {
+            $('#full_audio_input').off('change').on('change', function (e) {
                 var files = e.target.files[0];
                 var file_name = files.name;
-                var path = '/video/full/'+output+'/'+file_name;
-                //console.log(files);
-                if(files.type != 'video/mp4'){
-                    layer.msg('请选择mp4文件');
+                var path = '/audio/full/'+output+'/'+file_name;
+                console.log(files.type);
+                if(files.type != 'audio/mp3'){
+                    layer.msg('请选择mp3文件');
                     return false;
                 }
                 if(files && files.size > 0){
@@ -288,20 +288,20 @@
                 }
             })
             setTimeout(function () {
-                $('#full_video_input').click();
+                $('#full_audio_input').click();
             }, 0);
 
             return false;
         });
 
-        $('#auditions_video_upload').on('click', function () {
-            $('#auditions_video_input').off('change').on('change', function (e) {
+        $('#auditions_audio_upload').on('click', function () {
+            $('#auditions_audio_input').off('change').on('change', function (e) {
                 var files = e.target.files[0];
                 var file_name = files.name;
-                var path = '/video/auditions/'+output+'/'+file_name;
+                var path = '/audio/auditions/'+output+'/'+file_name;
                 //console.log(files);
-                if(files.type != 'video/mp4'){
-                    layer.msg('请选择mp4文件');
+                if(files.type != 'audio/mp3'){
+                    layer.msg('请选择mp3文件');
                     return false;
                 }
                 if(files && files.size > 0){
@@ -312,7 +312,7 @@
                 }
             })
             setTimeout(function () {
-                $('#auditions_video_input').click();
+                $('#auditions_audio_input').click();
             }, 0);
 
             return false;

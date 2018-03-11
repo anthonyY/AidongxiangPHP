@@ -145,6 +145,34 @@ class CategoryGateway extends BaseGateway {
         }
     }
 
+    //更新音频分类状态
+    public function updateAudioCategoryStatus()
+    {
+        if(!$this->id || !in_array($this->status,[1,2]))
+        {
+            return ['s'=>10000,'d'=>'参数错误'];
+        }
+
+        if($this->status == 2)
+        {
+
+            $audio = new AudioGateway($this->adapter);
+            $video_exist = $audio->getOne(['category_id'=>$this->id]);
+            if($video_exist)
+            {
+                return ['s'=>10000,'d'=>'该分类下还有音频，不能下架'];
+            }
+        }
+        if($this->updateData())
+        {
+            return ['s'=>0,'d'=>'操作成功'];
+        }
+        else
+        {
+            return ['s'=>0,'d'=>'操作失败'];
+        }
+    }
+
     //删除视频分类
     public function videoCategoryDel()
     {
@@ -157,6 +185,29 @@ class CategoryGateway extends BaseGateway {
         if($video_exist)
         {
             return ['s'=>10000,'d'=>'该分类下还有视频，不能删除'];
+        }
+        if($this->updateData())
+        {
+            return ['s'=>0,'d'=>'操作成功'];
+        }
+        else
+        {
+            return ['s'=>0,'d'=>'操作失败'];
+        }
+    }
+
+    //删除音频分类
+    public function audioCategoryDel()
+    {
+        if(!$this->id)
+        {
+            return ['s'=>10000,'d'=>'参数错误'];
+        }
+        $audio = new AudioGateway($this->adapter);
+        $video_exist = $audio->getOne(['category_id'=>$this->id]);
+        if($video_exist)
+        {
+            return ['s'=>10000,'d'=>'该分类下还有音频，不能删除'];
         }
         if($this->updateData())
         {

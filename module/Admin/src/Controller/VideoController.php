@@ -290,8 +290,8 @@ class VideoController extends CommonController
         {
             $this->ajaxReturn(10000, '删除失败');
         }
-        $ads = $this->getCategoryTable();
-        $res = $ads->saveSort($sort_array);
+        $category = $this->getCategoryTable();
+        $res = $category->saveSort($sort_array);
         $this->ajaxReturn($res['s'],$res['d']);
     }
 

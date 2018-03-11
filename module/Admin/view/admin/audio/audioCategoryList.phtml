@@ -1,0 +1,245 @@
+<div class="page-header">
+    <h1>
+        音频分类列表
+    </h1>
+</div>
+
+<div class="page-header">
+    <a data-id="0" data-name="" data-sort="" onclick="editAudioCategory(this)" class="btn btn-xs btn-primary">新增音频分类</a>
+    <form action="<?php echo $this->url('admin-audio', ['action' => 'audioCategoryList']) ?>">
+        <div style="float: right">
+            状态：
+            <select name="status">
+                <option value="0">全部</option>
+                <option value="1" <?php if ($status == 1) echo 'selected'; ?>>正常</option>
+                <option value="2" <?php if ($status == 2) echo 'selected'; ?>>下架</option>
+            </select>
+            <input type="text" name="keyword" value="<?php echo $keyword; ?>" placeholder="请输入分类名称">
+            <button class="btn btn-xs btn-primary" type="submit">搜索</button>
+        </div>
+    </form>
+</div>
+
+<!-- div.dataTables_borderWrap -->
+<div>
+    <table id="" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>分类名称</th>
+                <th>排序权重 &nbsp;<input type="button" class="btn btn-mini btn-info" value="保存" onclick="confirm_handle('确认要保存权重排序吗？', modifySort, '', this)"></th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php if ($list) : ?>
+                <?php foreach ($list as $k =>$v) { ?>
+                    <tr>
+                        <input type="hidden" name="id<?php echo $k ?>" value="<?php echo $v->id ?>">
+                        <input type="hidden" name="status<?php echo $k ?>" value="<?php echo $v->status ?>">
+                        <td><?php echo $v->name?></td>
+                        <td><input type="number" data-id="<?php echo $v->id?>" class="sort" value="<?php echo $v->sort ?>" style="width: 100px;"/></td>
+                        <td>
+                            <span class="label <?php echo $v->status==1?"label-success":"label-danger"?>">
+                                <?php echo $v->status ==1?"正常":"已下架"?>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="btn btn-xs btn-primary" data-id="<?php echo $v->id?>" data-name="<?php echo $v->name?>" data-sort="<?php echo $v->sort?>"  onclick="editAudioCategory(this)">编辑</a>
+                                <?php if($v->status ==1){?>
+                                <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认下架这个分类吗？', changeStatus, '', this)">
+                                    下架
+                                </a>
+                                <?php }else{?>
+                                    <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认上架这个分类吗？', changeStatus, '', this)">
+                                        上架
+                                    </a>
+                                <?php }?>
+                                <a class="btn btn-xs btn-danger" onclick="confirm_handle('确认删除这个分类吗？', del, '', this)">
+                                    删除
+                                </a>
+                            </div>
+                            <div class="hidden-md hidden-lg">
+                                <div class="inline pos-rel">
+                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto" aria-expanded="false">
+                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                        <li>
+                                            <a data-id="<?php echo $v->id?>" data-name="<?php echo $v->name?>" data-sort="<?php echo $v->sort?>"  onclick="editAudioCategory(this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="blue">
+																				编辑
+																			</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <?php if($v->status ==1){?>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认下架这个分类吗？', changeStatus, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="red">
+																				下架
+																			</span>
+                                            </a>
+                                            <?php }else{?>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认上架这个分类吗？', changeStatus, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+                                                                        <span class="red">
+                                                                            上架
+                                                                        </span>
+                                            </a>
+                                            <?php }?>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" onclick="confirm_handle('确认删除这个分类吗？', del, '', this)" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																			<span class="red">
+																				删除
+																			</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    //单个删除
+    function del(obj){
+        var id = $(obj).parents('tr').find('input[name^="id"]').val();
+        var index = showLoad();
+        //发送ajax请求
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url:  "<?php echo $this->url('admin-audio', ['action' => 'audioCategoryDel']) ?>",
+            data: {"id":id} ,
+            success:  function (msg) {
+                layer.close(index);
+                if(msg.s){
+                    showMessage(msg.d, 0);
+                }
+                else if(msg.s == 0){
+                    showMessage(msg.d, 1);
+                    $(obj).parents('tr').remove();
+                }
+            },
+            error : function () {
+                layer.close(index);
+                showMessage('请求异常, 请稍后重试', 0);
+            }
+        });
+    }
+
+    function changeStatus(obj){
+        var id = $(obj).parents('tr').find('input[name^="id"]').val();
+        var status = $(obj).parents('tr').find('input[name^="status"]').val();
+        var index = showLoad();
+        //发送ajax请求
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url:  "<?php echo $this->url('admin-audio', ['action' => 'changeCategoryStatus']) ?>",
+            data: {"id":id,"status":status==1?2:1} ,
+            success:  function (msg) {
+                layer.close(index);
+                if(msg.s){
+                    showMessage(msg.d, 0);
+                }
+                else if(msg.s == 0){
+                    showMessage(msg.d, 1);
+                    location.reload();
+                }
+            },
+            error : function () {
+                layer.close(index);
+                showMessage('请求异常, 请稍后重试', 0);
+            }
+        });
+    }
+
+    //修改所有音频分类排序
+    function modifySort(){
+        var sortObject = {};
+        $.each($('.sort'),function(i,v){
+            var sort_value = v.value;
+            var id = $(this).attr('data-id');
+            sortObject[id] = sort_value;
+        });
+        var index = showLoad();
+        //发送ajax请求
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url:  "<?php echo $this->url('admin-audio', ['action' => 'saveCategorySort']) ?>",
+            data: {sortObject: sortObject},
+            success:  function (data) {
+                layer.close(index);
+                if(data.s){
+                    showMessage(data.d, 0);
+                }else{
+                    showMessage(data.d, 1);
+                    location.reload();
+                }
+            },
+            error : function () {
+                layer.close(index);
+                showMessage('请求异常, 请稍后重试', 0);
+            }
+        });
+    }
+
+    //编辑或添加音频分类
+    function editAudioCategory(obj){
+        var id = $(obj).attr('data-id');
+        var name = $(obj).attr('data-name');
+        var sort = $(obj).attr('data-sort');
+        layer.open({
+            type: 1,
+            title: id>0?'编辑分类':'添加分类',
+            area: ['400px', '300px'],
+            offset: '20%',
+            skin: 'layui-layer-lan',
+            shadeClose: true, //点击遮罩关闭
+            content: '<div style="margin: 50px;"><p>分类名称：<input type="text" id="layer-category-name" value="'+name+'"/></p><br><p>排序权重：<input type="number" id="layer-category-sort" value="'+sort+'"/></p></div>',
+            btn: ['确认', '取消'],
+            yes: function (index, layero) {
+            //按钮【按钮一】的回调，获取内容，更新到数据库
+            name = $('#layer-category-name').val();
+            sort = $('#layer-category-sort').val();
+            if(!name){
+                showMessage("请输入分类名称",0);return;
+            }
+            if(sort<1){
+                showMessage("请输入正确的排序权重",0);return;
+            }
+
+            $.post("<?php echo $this->url('admin-audio', ['action' => 'editCategory']) ?>",
+                {id:id,name:name,sort:sort},
+                function(data){
+                    if(data.s){
+                        showMessage(data.d,0);
+                    }else{
+                        showMessage(data.d,1);
+                        setInterval(function(){
+                            location.reload();
+                        },500)
+                    }
+                },'json'
+            );
+            }
+    ,
+            btn2: function (index, layero) {
+                //按钮【按钮二】的回调
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+</script>
