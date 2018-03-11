@@ -249,4 +249,102 @@ class VideoController extends CommonController
         $view->setTemplate("admin/video/videoDetails");
         return $this->setMenu($view);
     }
+
+    //视频分类列表
+    public function videoCategoryListAction()
+    {
+        $this->checkLogin('admin_video_categoryList');
+        $ViewCategory = $this->getViewCategoryTable();
+        $ViewCategory->type = 1;//视频分类
+        $ViewCategory->orderBy = 'sort desc';
+        $get = [];
+        $status = 0;
+        $keyword = '';
+        if($_GET){
+            $get = $_GET;
+            $ViewCategory->searchKeyWord = $get['keyword']??'';
+            $ViewCategory->status = $get['status']??0;
+            $keyword = $get['keyword']??'';
+            $status = $get['status']??0;
+        }
+        $list = $ViewCategory->getList();
+        $data = [
+            'list' => $list['list'],
+            'keyword' => $keyword,
+            'status' => $status
+        ];
+
+        $view = new ViewModel($data);
+        $view->setTemplate("admin/video/videoCategoryList");
+        return $this->setMenu($view);
+    }
+
+    /**
+     * @throws \Exception
+     * 保存廣告排序
+     */
+    public function saveCategorySortAction()
+    {
+        $sort_array = $_POST['sortObject'];
+        if(!is_array($sort_array) || !$sort_array)
+        {
+            $this->ajaxReturn(10000, '删除失败');
+        }
+        $ads = $this->getCategoryTable();
+        $res = $ads->saveSort($sort_array);
+        $this->ajaxReturn($res['s'],$res['d']);
+    }
+
+    //改变视频分类状态
+    public function changeCategoryStatusAction(){
+        $id = $_POST['id'];
+        $status = $_POST['status'];
+        $category = $this->getCategoryTable();
+        $category->id = $id;
+        $category->status = $status;
+        $res = $category->updateVideoCategoryStatus();
+        if($res['s'] == 0){
+            $this->ajaxReturn(0, $res['d']);
+        }
+        else{
+            $this->ajaxReturn(10000, $res['d']);
+        }
+    }
+
+    //视频分类删除
+    public function videoCategoryDelAction(){
+        $id = $_POST['id'];
+        $category = $this->getCategoryTable();
+        $category->id = $id;
+        $res = $category->videoCategoryDel();
+        $this->ajaxReturn($res['s'], $res['d']);
+    }
+
+    //编辑添加分类
+    public function editCategoryAction(){
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $sort = $_POST['sort'];
+        $category = $this->getCategoryTable();
+        $category->name = $name;
+        $category->sort = $sort;
+        $category->type = 1;
+        if($id)
+        {
+            $category->id = $id;
+            $res = $category->updateData();
+        }
+        else
+        {
+            $res = $category->addData();
+        }
+        if($res === false)
+        {
+            $this->ajaxReturn(10000, '操作失败');
+        }
+        else
+        {
+            $this->ajaxReturn(0, '操作成功');
+        }
+    }
 }
