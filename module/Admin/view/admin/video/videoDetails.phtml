@@ -1,0 +1,356 @@
+<link href="<?php echo $this->basePath() . '/css/uploadifive.css'?>" media="screen" rel="stylesheet" type="text/css">
+<script src="<?php echo $this->basePath() . '/js/jquery.uploadifive.min.js'?>"  type="text/javascript"></script>
+<script src="<?php echo $this->basePath() . '/js/uploadifive.single.js'?>"  type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $this->basePath() . '/js/cos-js-sdk-v4-master/dist/cos-js-sdk-v4.js'?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath() . '/js/cos-js-sdk-v4-master/demo/crypto.js'?>"></script>
+
+<script type="text/javascript">
+    var uploader = '<?php echo $this->url('admin',array('action'=>'getAdminFile')) ;?>';
+</script>
+
+<!--富文本编辑器-->
+<link href="<?php echo $this->basePath() . '/plugins/kindeditor/themes/default/default.css'?>" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $this->basePath() . '/plugins/kindeditor/plugins/code/prettify.css'?>" media="screen" rel="stylesheet" type="text/css">
+
+<script src="<?php echo $this->basePath() . '/plugins/kindeditor/kindeditor-all.js'?>"  type="text/javascript"></script>
+<script src="<?php echo $this->basePath() . '/plugins/kindeditor/lang/zh-CN.js'?>"  type="text/javascript"></script>
+<script src="<?php echo $this->basePath() . '/plugins/kindeditor/plugins/code/prettify.js'?>"  type="text/javascript"></script>
+
+<style>
+    .form-group label{
+        text-align: left !important;
+        width:110px;
+    }
+    .form-horizontal>div{
+        margin-left: 22px !important;
+    }
+</style>
+<div class="page-header">
+    <h1>
+        视频添加
+    </h1>
+</div>
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+<div>
+    <form class="form-horizontal" role="form" action="<?php echo $this->url('admin-video', ['action'=>'videoDetails']) ?>" method="post">
+        <input value="<?php echo $info->id?>" name="id" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-1 control-label " for="form-field-1"> 视频名称：</label>
+
+            <div class="col-sm-9">
+                <input type="text" name="name" required id="form-field-1" placeholder="视频名称" value="<?php echo $info->name?>" class="col-xs-10 col-sm-5">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label " for="form-field-1"> 视频分类：</label>
+
+            <div class="col-sm-9">
+                <select name="category_id" class="col-xs-10 col-sm-5">
+                    <?php if(!$category_list){?>
+                        <option value="0">请先添加视频分类</option>
+                    <?php }else{?>
+                    <option value="0">请选择分类</option>
+                    <?php foreach ($category_list as $v) {?>
+                        <option value="<?php echo $v->id?>" <?php echo $v->id == $info->category_id?"selected":""?>><?php echo $v->name?></option>
+                    <?php }}?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label no-padding-right">视频收费：</label>
+
+            <div class="col-sm-9">
+                <input type="radio" name="pay_type" value="1" class="ace" <?php echo $info->pay_type == 1?"checked":""?> onclick="showPriceDiv()"/>
+                <span class="lbl">免费</span>
+                <input type="radio" name="pay_type" value="2" class="ace" <?php echo $info->pay_type == 2?"checked":""?> onclick="showPriceDiv()"/>
+                <span class="lbl">收费</span>
+            </div>
+        </div>
+        <div class="form-group" style="display: <?php echo $info->pay_type==2?"block":"none"?>" id="price">
+            <label class="col-sm-1 control-label no-padding-right">视频价格：</label>
+
+            <div class="col-sm-9">
+                <div class="layui-input-inline">
+                    <input type="number" name="price" value="<?php echo $info->price?>" class="form-control" style="height: 30px;">
+                </div>
+            </div>
+        </div>
+        <!-- 一次上传多张图片插件 -->
+        <div class="form-group">
+
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 视频封面：</label>
+            <div class="col-sm-9">
+                <div class="mot_tright" id="img_div">
+                    <input id="one_img_upload" type="file"/>
+                    <div id="res_img">
+                        <img style="width: 280px;height:210px;" src="<?php echo UPLOADFILIS_ROOT.$info->image_path.$info->image_filename?>">
+                        <input value="<?php echo $info->image_id?>" name="image_id" type="hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完整视频：</label>
+            <div class="col-sm-9">
+                <div class="mot_tright">
+                    <input type="file" name="full_file" id="full_video_input" style="display: none"/>
+                    <input type="hidden" name="size" id="size" value="<?php echo $info->size?>"/>
+                    <input type="hidden" name="filename" id="filename" value="<?php echo $info->filename?>"/>
+                    <a class="btn btn-xs btn-info" id="full_video_upload">上传完成视频</a>
+                    &nbsp;|--文件地址：<span id="full_path_span"><input type="text" readonly id="full_path" name="full_path"   value="<?php echo $info->full_path?>"/></span>
+                    |--时长：<span id="audio_length_spans"><input type="text" style="width: 80px;" readonly id="audio_length" name="audio_length" value="<?php echo $info->audio_length?>"></span>
+                    |--进度 <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 试播视频：</label>
+            <div class="col-sm-9">
+                <div class="mot_tright">
+                    <input type="file" name="auditions_file" id="auditions_video_input" style="display: none"/>
+                    <a class="btn btn-xs btn-info" id="auditions_video_upload">上传试播视频</a>
+                    &nbsp;|--文件地址：<span id="auditions_path_span"><input type="text" readonly id="auditions_path" name="auditions_path"  value="<?php echo $info->auditions_path?>"/></span>
+                    |--时长：<span id="auditions_length_span"><input type="text" style="width: 80px;" readonly id="auditions_length" name="auditions_length" value="<?php echo $info->auditions_length?>"></span>
+                    |--进度 <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label " for="form-field-1-1">视频介绍：</label>
+
+            <div class="col-sm-9">
+                <textarea name="description" style="width:80%;height:600px;visibility:hidden;"><?php echo $info->description?></textarea>
+            </div>
+        </div>
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-2 col-md-9">
+                <button class="btn btn-info" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    保存
+                </button>
+
+                &nbsp; &nbsp; &nbsp;
+                <a href="javascript:history.back(-1);" class="btn" type="reset">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    取消
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var day = (d.getDate()<10 ? '0' : '') + d.getDate();
+    var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month + day ;
+    jQuery(function($) {
+        //腾讯云 获取签名
+        var url = '<?php echo $this->url('admin-cos', ['action' => 'getSign'])?>';
+        var bucket = '<?php echo $bucket?>';
+        var region = '<?php echo $region?>';
+        var appid = '<?php echo $appid?>';
+        var cos = new CosCloud({
+            appid:appid,
+            bucket: bucket,//bucketName 必填参数
+            region: region,//地域信息 必填参数 华南地区填gz 华东填sh 华北填tj
+            getAppSign: function (callback) {//获取签名 必填参数
+                $.get(url,{},function(data){
+                    var sign = data.sign;
+                    callback(encodeURIComponent(sign));
+                },'json');
+            },
+        });
+
+        //获取音频的总时间
+        function getTime(type) {
+            setTimeout(function () {
+                if(type == 1){
+                    var duration = $("#full_audio")[0].duration;
+                }else{
+                    var duration = $("#auditions_audio")[0].duration;
+                }
+                if(isNaN(duration)){
+                    getTime(type);
+                }else{
+                    if(type == 1){
+                        var time = formatSeconds($("#full_audio")[0].duration);
+                        $("#audio_length").val(time);
+                    }else{
+                        var time = formatSeconds($("#auditions_audio")[0].duration);
+                        $("#auditions_length").val(time);
+                    }
+                }
+            }, 10);
+        }
+
+        //获取时间转换为时分秒
+        function formatSeconds(value) {
+            if(value <= 0){
+                return '';
+            }
+            var theTime = parseInt(value);// 秒
+            var theTime1 = 0;// 分
+            var theTime2 = 0;// 小时
+            if(theTime > 60) {
+                theTime1 = parseInt(theTime/60);
+                theTime = parseInt(theTime%60);
+                if(theTime1 > 60) {
+                    theTime2 = parseInt(theTime1/60);
+                    theTime1 = parseInt(theTime1%60);
+                }
+            }
+            var result = parseInt(theTime)>10?parseInt(theTime):"0"+theTime;
+
+            if(true) {
+                //result = ""+parseInt(theTime)
+                result = parseInt(theTime1)>10?""+parseInt(theTime1)+":"+result:"0"+parseInt(theTime1)+":"+result;
+            }
+            if(true) {
+                result = parseInt(theTime2)>10?""+parseInt(theTime2)+":"+result:"0"+parseInt(theTime2)+":"+result;
+            }
+            return result;
+        }
+
+        var auditionsSuccessCallBack = function (result) {
+            var a = JSON.stringify(result);
+            console.log(result);
+            //$("#result").val(JSON.stringify(result));
+            layer.msg('试播视频上传成功');
+            //加入到隐藏input
+            var data = result.data ?  result.data.access_url : "";
+            $('#auditions_path').val(data);
+            //加入到隐藏video标签
+            $("#auditions_path_span").append("<audio id='auditions_audio' src="+data+"></audio>");
+            getTime(2);
+        };
+
+        var fullSuccessCallBack = function (result) {
+            var a = JSON.stringify(result);
+            console.log(result);
+            //$("#result").val(JSON.stringify(result));
+            layer.msg('完整视频上传成功');
+            //加入到隐藏input
+            var data = result.data ?  result.data.access_url : "";
+            $('#full_path').val(data);
+            //加入到隐藏video标签
+            $("#full_path_span").append("<audio id='full_audio' src="+data+"></audio>");
+            getTime(1);
+        };
+
+
+
+
+
+        var fullErrorCallBack = function (result) {
+            result = result || {};
+            //$("#result").val(result.responseText || 'error');
+            console.log(result.message);
+            // $('#full-progress-p').hide();
+            layer.msg('完整视频上传失败');
+        };
+
+        var auditionsErrorCallBack = function (result) {
+            result = result || {};
+            //$("#result").val(result.responseText || 'error');
+            console.log(result.message);
+            // $('#auditions-progress-p').hide();
+            layer.msg('试播视频上传失败');
+        };
+
+        var fullProgressCallBack = function(curr){
+            $('#full-progress-p span').css('width',(curr*100)+'%');
+        };
+
+        var auditionsProgressCallBack = function(curr){
+            $('#auditions-progress-p span').css('width',(curr*100)+'%');
+        };
+
+        $('#full_video_upload').on('click', function () {
+            $('#full_video_input').off('change').on('change', function (e) {
+                var files = e.target.files[0];
+                var file_name = files.name;
+                var path = '/video/full/'+output+'/'+file_name;
+                //console.log(files);
+                if(files.type != 'video/mp4'){
+                    layer.msg('请选择mp4文件');
+                    return false;
+                }
+                if(files && files.size > 0){
+                    $('#size').val(files.size);
+                    $('#filename').val(file_name);
+                    //开始上传
+                    cos.sliceUploadFile(fullSuccessCallBack, fullErrorCallBack, fullProgressCallBack,bucket,path,files,0);
+                }else{
+                    layer.msg('请选择上传文件');
+                }
+            })
+            setTimeout(function () {
+                $('#full_video_input').click();
+            }, 0);
+
+            return false;
+        });
+
+        $('#auditions_video_upload').on('click', function () {
+            $('#auditions_video_input').off('change').on('change', function (e) {
+                var files = e.target.files[0];
+                var file_name = files.name;
+                var path = '/video/auditions/'+output+'/'+file_name;
+                //console.log(files);
+                if(files.type != 'video/mp4'){
+                    layer.msg('请选择mp4文件');
+                    return false;
+                }
+                if(files && files.size > 0){
+                    //开始上传
+                    cos.sliceUploadFile(auditionsSuccessCallBack, auditionsErrorCallBack, auditionsProgressCallBack,bucket,path,files,0);
+                }else{
+                    layer.msg('请选择上传文件');
+                }
+            })
+            setTimeout(function () {
+                $('#auditions_video_input').click();
+            }, 0);
+
+            return false;
+        });
+
+    });
+</script>
+
+
+<script>
+    var editor;
+    KindEditor.ready(function(K) {
+         editor = K.create('textarea[name="description"]', {
+             afterBlur: function () { this.sync(); }
+        });
+    });
+
+    function showPriceDiv(){
+        $.each($('input[name="pay_type"]'),function(){
+            var checked = $(this).prop("checked");
+            if(checked){
+                var pay_type = $(this).val();
+                if(pay_type == 2){
+                    $('#price').show();
+                }else{
+                    $('#price').hide();
+                }
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $('form').submit(function (e) {
+        ajaxForm(e);
+    });
+</script>

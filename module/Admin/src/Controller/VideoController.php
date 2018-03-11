@@ -60,6 +60,7 @@ class VideoController extends CommonController
         }
     }
 
+    //改变视频状态
     public function changeStatusAction(){
         $this->checkLogin('admin_video_index');
         $video_id = $_POST['id'];
@@ -82,7 +83,6 @@ class VideoController extends CommonController
         $audio = $this->getAudioTable();
         $post = $request->getPost()->toArray();
         if($request->isPost()){
-//            var_dump($post);
             //验证数据
             if(empty($post['name'])){
                 $this->ajaxReturn(10000, '视频名称不能为空');
@@ -157,6 +157,96 @@ class VideoController extends CommonController
         ];
         $view = new ViewModel($data);
         $view->setTemplate("admin/video/videoAdd");
+        return $this->setMenu($view);
+    }
+
+    //视频详情
+    public function videoDetailsAction(){
+        $this->checkLogin('admin_video_index');
+        $request = $this->getRequest();
+        $id = $this->params('id');
+        $viewAudio = $this->getViewAudioTable();
+        $viewAudio->id = $id;
+        $post = $request->getPost()->toArray();
+        $info = $viewAudio->getDetails();
+        if($request->isPost()){
+            $audio = $this->getAudioTable();
+            $audio->id = $post['id'];
+            //验证数据
+            if(empty($post['name'])){
+                $this->ajaxReturn(10000, '视频名称不能为空');
+            }
+            if(empty($post['category_id'])){
+                $this->ajaxReturn(10000, '视频分类不能为空');
+            }
+            if($post['pay_type']  == 2 && empty($post['price'])){
+                $this->ajaxReturn(10000, '收费视频，请填写视频价格');
+            }
+            if(empty($post['image_id'])){
+                $this->ajaxReturn(10000, '视频封面不能为空');
+            }
+            if(empty($post['size'])){
+                $this->ajaxReturn(10000, '视频大小错误');
+            }
+            if(empty($post['filename'])){
+                $this->ajaxReturn(10000, '视频原文件名称不能为空');
+            }
+            if(empty($post['full_path'])){
+                $this->ajaxReturn(10000, '视频完整路径不能为空');
+            }
+            if(empty($post['audio_length'])){
+                $this->ajaxReturn(10000, '视频时长错误');
+            }
+            if(empty($post['auditions_path'])){
+                $this->ajaxReturn(10000, '试播视频路径不能为空');
+            }
+            if(empty($post['auditions_length'])){
+                $this->ajaxReturn(10000, '试播视频时长错误');
+            }
+            if(empty($post['description'])){
+                $this->ajaxReturn(10000, '视频简介不能为空');
+            }
+
+            //添加数据
+            $audio->name = $post['name'];
+            $audio->categoryId = $post['category_id'];
+            if($post['pay_type'] == 2)
+            {
+                $audio->payType = 2;
+                $audio->price = $post['price'];
+            }
+            $audio->imageId = $post['image_id'];
+            $audio->size = $post['size'];
+            $audio->filename = $post['filename'];
+            $audio->fullPath = $post['full_path'];
+            $audio->audioLength = $post['audio_length'];
+            $audio->auditionsPath = $post['auditions_path'];
+            $audio->auditionsLength = $post['auditions_length'];
+            $audio->description = $post['description'];
+
+            //保存
+            if(!$audio->updateData()){
+                $this->ajaxReturn(10000, '编辑失败');
+            }
+            else{
+                //跳转到导航列表页
+                $this->ajaxReturn(0, '编辑成功', $this->url()->fromRoute('admin-video', ['action'=>'index']));
+            }
+        }
+
+        $category = $this->getCategoryTable();
+        $category->type = 1;
+        $category->needPage = 2;
+        $category_list = $category->getList();
+        $data = [
+            'category_list'=>$category_list['list'],
+            'appid' => COS_APP_ID,
+            'bucket' => COS_BUCKET,
+            'region' => COS_REGION,
+            'info' => $info
+        ];
+        $view = new ViewModel($data);
+        $view->setTemplate("admin/video/videoDetails");
         return $this->setMenu($view);
     }
 }

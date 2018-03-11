@@ -99,7 +99,7 @@ class AudioGateway extends BaseGateway {
     /**
     *字段数组
     */
-    protected $columns_array = ["id","type","name","payType","price","memberPrice","description","imageId","auditionsPath","fullPath","audioLength","auditionsLength","status","commentNum","playNum","praiseNum","delete","categoryId","timestamp"];
+    protected $columns_array = ["id","type","name","payType","price","memberPrice","description","imageId","auditionsPath","fullPath","audioLength","auditionsLength","status","commentNum","playNum","praiseNum","delete","categoryId","filename","size","timestamp"];
 
     public $table = DB_PREFIX . 'audio';
 
