@@ -69,4 +69,25 @@ class MicroblogController extends CommonController
             $this->ajaxReturn(10000, '操作失败');
         }
     }
+
+    //微博详情
+    public function microblogDetailsAction()
+    {
+        $this->checkLogin('admin_microblog_index');
+        $id = $this->params("id");
+        $Microblog = $this->getViewMicroblogTable();
+        $Microblog->id = $id;
+        $info = $Microblog->getDetails();
+        $view_album = $this->getViewAlbumTable();
+        $view_album->type = 1;
+        $view_album->fromId = $id;
+        $image_list = $view_album->getList();
+        $data = [
+            'info' => $info,
+            'image_list' => $image_list['list']
+        ];
+        $view = new ViewModel($data);
+        $view->setTemplate("admin/microblog/microblogDetails");
+        return $this->setMenu($view);
+    }
 }
