@@ -42,6 +42,7 @@ use Admin\Model\ViewNavigationGateway;
 use Admin\Model\ViewMobileAppealGateway;
 use Admin\Model\ViewAudioGateway;
 use Admin\Model\ViewCategoryGateway;
+use Admin\Model\ViewMicroblogGateway;
         
 class Table extends AbstractActionController
 {
@@ -55,6 +56,7 @@ class Table extends AbstractActionController
     protected $ViewMobileAppealTable;
     protected $ViewAudioTable;
     protected $ViewCategoryTable;
+    protected $ViewMicroblogTable;
 
     public function __construct()
     {
@@ -352,4 +354,13 @@ class Table extends AbstractActionController
         }
         return $this->ViewCategoryTable;
     }
+    protected function getViewMicroblogTable()
+    {
+        if (! $this->ViewMicroblogTable)
+        {
+            $this->ViewMicroblogTable = new ViewMicroblogGateway($this->adapter);
+        }
+        return $this->ViewMicroblogTable;
+    }
+
 }
