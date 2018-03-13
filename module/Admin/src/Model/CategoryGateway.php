@@ -173,6 +173,34 @@ class CategoryGateway extends BaseGateway {
         }
     }
 
+    //更新资讯分类状态
+    public function updateArticleCategoryStatus()
+    {
+        if(!$this->id || !in_array($this->status,[1,2]))
+        {
+            return ['s'=>10000,'d'=>'参数错误'];
+        }
+
+        if($this->status == 2)
+        {
+
+            $article = new ArticleGateway($this->adapter);
+            $article_exist = $article->getOne(['category_id'=>$this->id]);
+            if($article_exist)
+            {
+                return ['s'=>10000,'d'=>'该分类下还有资讯，不能下架'];
+            }
+        }
+        if($this->updateData())
+        {
+            return ['s'=>0,'d'=>'操作成功'];
+        }
+        else
+        {
+            return ['s'=>0,'d'=>'操作失败'];
+        }
+    }
+
     //删除视频分类
     public function videoCategoryDel()
     {
@@ -208,6 +236,29 @@ class CategoryGateway extends BaseGateway {
         if($video_exist)
         {
             return ['s'=>10000,'d'=>'该分类下还有音频，不能删除'];
+        }
+        if($this->updateData())
+        {
+            return ['s'=>0,'d'=>'操作成功'];
+        }
+        else
+        {
+            return ['s'=>0,'d'=>'操作失败'];
+        }
+    }
+
+    //删除资讯分类
+    public function articleCategoryDel()
+    {
+        if(!$this->id)
+        {
+            return ['s'=>10000,'d'=>'参数错误'];
+        }
+        $article = new ArticleGateway($this->adapter);
+        $article_exist = $article->getOne(['category_id'=>$this->id]);
+        if($article_exist)
+        {
+            return ['s'=>10000,'d'=>'该分类下还有资讯，不能删除'];
         }
         if($this->updateData())
         {

@@ -44,6 +44,7 @@ use Admin\Model\ViewAudioGateway;
 use Admin\Model\ViewCategoryGateway;
 use Admin\Model\ViewMicroblogGateway;
 use Admin\Model\ViewAlbumGateway;
+use Admin\Model\ViewArticleGateway;
         
 class Table extends AbstractActionController
 {
@@ -59,6 +60,7 @@ class Table extends AbstractActionController
     protected $ViewCategoryTable;
     protected $ViewMicroblogTable;
     protected $ViewAlbumTable;
+    protected $ViewArticleTable;
 
     public function __construct()
     {
@@ -371,5 +373,13 @@ class Table extends AbstractActionController
             $this->ViewAlbumTable = new ViewAlbumGateway($this->adapter);
         }
         return $this->ViewAlbumTable;
+    }
+    protected function getViewArticleTable()
+    {
+        if (! $this->ViewArticleTable)
+        {
+            $this->ViewArticleTable = new ViewArticleGateway($this->adapter);
+        }
+        return $this->ViewArticleTable;
     }
 }
