@@ -119,7 +119,7 @@ class ViewFinancialGateway extends BaseGateway {
         }
         if($this->endTime)
         {
-            $where->lessThan('timestamp',$this->startTime." 23:59:59");
+            $where->lessThan('timestamp',$this->endTime." 23:59:59");
         }
         return $this->getAll($where,$search_key);
     }
