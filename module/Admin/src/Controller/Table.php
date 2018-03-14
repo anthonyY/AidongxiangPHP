@@ -45,6 +45,7 @@ use Admin\Model\ViewCategoryGateway;
 use Admin\Model\ViewMicroblogGateway;
 use Admin\Model\ViewAlbumGateway;
 use Admin\Model\ViewArticleGateway;
+use Admin\Model\ViewCommentGateway;
         
 class Table extends AbstractActionController
 {
@@ -61,6 +62,7 @@ class Table extends AbstractActionController
     protected $ViewMicroblogTable;
     protected $ViewAlbumTable;
     protected $ViewArticleTable;
+    protected $ViewCommentTable;
 
     public function __construct()
     {
@@ -381,5 +383,13 @@ class Table extends AbstractActionController
             $this->ViewArticleTable = new ViewArticleGateway($this->adapter);
         }
         return $this->ViewArticleTable;
+    }
+    protected function getViewCommentTable()
+    {
+        if (! $this->ViewCommentTable)
+        {
+            $this->ViewCommentTable = new ViewCommentGateway($this->adapter);
+        }
+        return $this->ViewCommentTable;
     }
 }
