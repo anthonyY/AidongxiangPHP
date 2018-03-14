@@ -46,6 +46,7 @@ use Admin\Model\ViewMicroblogGateway;
 use Admin\Model\ViewAlbumGateway;
 use Admin\Model\ViewArticleGateway;
 use Admin\Model\ViewCommentGateway;
+use Admin\Model\ViewFinancialGateway;
         
 class Table extends AbstractActionController
 {
@@ -63,6 +64,7 @@ class Table extends AbstractActionController
     protected $ViewAlbumTable;
     protected $ViewArticleTable;
     protected $ViewCommentTable;
+    protected $ViewFinancialTable;
 
     public function __construct()
     {
@@ -391,5 +393,13 @@ class Table extends AbstractActionController
             $this->ViewCommentTable = new ViewCommentGateway($this->adapter);
         }
         return $this->ViewCommentTable;
+    }
+    protected function getViewFinancialTable()
+    {
+        if (! $this->ViewFinancialTable)
+        {
+            $this->ViewFinancialTable = new ViewFinancialGateway($this->adapter);
+        }
+        return $this->ViewFinancialTable;
     }
 }
