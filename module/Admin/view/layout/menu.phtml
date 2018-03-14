@@ -6,7 +6,7 @@ $menu = array(
     array(
         'name' => '首页',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_index', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-home',
         'sub' => array(
             array(
                 'route' => $this->url('admin', array('action' => 'index')),
@@ -32,7 +32,7 @@ $menu = array(
     array(
         'name' => '运营管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-cogs',
         'sub' => array(
             array(
                 'route' => $this->url('admin-business', array('action' => 'adsList')),
@@ -57,7 +57,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '视频管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_video', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-desktop',
         'sub' => array(
             array(
                 'route' => $this->url('admin-video', array('action' => 'index')),
@@ -75,7 +75,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '音频管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_audio', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-microphone',
         'sub' => array(
             array(
                 'route' => $this->url('admin-audio', array('action' => 'index')),
@@ -93,7 +93,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '微博管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_microblog', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-pencil-square-o',
         'sub' => array(
             array(
                 'route' => $this->url('admin-microblog', array('action' => 'index')),
@@ -106,7 +106,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '资讯管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_article', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-list-alt',
         'sub' => array(
             array(
                 'route' => $this->url('admin-article', array('action' => 'index')),
@@ -124,7 +124,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '评论管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_comment', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'fa fa-list',
         'sub' => array(
             array(
                 'route' => $this->url('admin-comment', array('action' => 'index')),
@@ -137,7 +137,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
     array(
         'name' => '财务管理',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_finance', explode('|', $_SESSION['action_list'])) ? true : false,
-        'icon' => 'fa fa-users',
+        'icon' => 'glyphicon glyphicon-bed',
         'sub' => array(
             array(
                 'route' => $this->url('admin-finance', array('action' => 'index')),
@@ -149,7 +149,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
 
     array(
         'name' => '平台管理',
-        'icon' => 'glyphicon glyphicon-bed',
+        'icon' => 'fa fa-tachometer',
         'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_setting', explode('|', $_SESSION['action_list'])) ? true : false,
         'sub' => array(
             array(
