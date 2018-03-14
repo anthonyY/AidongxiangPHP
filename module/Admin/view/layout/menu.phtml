@@ -185,78 +185,43 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
 $url = $_SERVER['REQUEST_URI'];
 $navigate_arr = [
     '/index' => ['/index' => '数据统计'],
+
     '/user' => ['/user' => '用户列表', '/user/adetails' => '用户详情'],
-    '/user/alevel' => ['/user/alevel' => '用户等级','/user/alevelAdd'=>'新增用户等级', '/user/alevelEdit' => '编辑用户等级'],
-    '/store' => ['/store' => '门店列表', '/store/aadd' => '新增门店', '/store/aedit' => '编辑门店', '/store/aaccount' => '门店账户', '/store/aaddAccount' => '新增门店账户'],
-    '/store/alevel' => ['/store/alevel' => '门店等级', '/store/alevelAdd' => '新增门店等级', '/store/alevelEdit' => '编辑门店等级'],
-    '/store/atype' => ['/store/atype' => '门店类型', '/store/atypeAdd' => '新增门店类型', '/store/atypeEdit' => '编辑门店类型'],
-    '/store/alabel' => ['/store/alabel' => '门店标签', '/store/alabelAdd' => '新增门店标签', '/store/alabelEdit' => '编辑门店标签'],
-    '/product' => ['/product' => '商品列表', '/product/aproductEdit' => '编辑商品'],
-    '/product/apackage' => ['/product/apackage' => '商品套餐管理', '/product/apackageEdit' => '编辑商品套餐'],
-    '/product/acategory' => ['/product/acategory' => '商品分类', '/product/achangeCategory' => '转移商品', '/product/acategoryEdit' => '编辑商品分类', '/product/acategoryAdd' => '新增商品分类'],
-    '/product/alabel' => ['/product/alabel' => '商品标签', '/product/alabelAdd' => '新增商品标签', '/product/alabelEdit' => '编辑商品标签'],
-    '/service' => ['/service' => '服务列表', '/service/aserviceEdit' => '编辑服务'],
-    '/service/apackage' => ['/service/apackage' => '服务套餐管理', '/service/apackageEdit' => '编辑服务套餐'],
-    '/service/acategory' => ['/service/acategory' => '服务分类', '/service/acategoryAdd' => '新增服务分类', '/service/acategoryEdit' => '编辑服务分类', '/service/achangeCategory' => '转移服务'],
-    '/service/alabel' => ['/service/alabel' => '服务标签', '/service/alabelAdd' => '新增服务标签', '/service/alabelEdit' => '编辑服务标签'],
-    '/service/atype' => ['/service/atype' => '服务类型', '/service/atypeAdd' => '新增服务类型', '/service/atypeEdit' => '编辑服务类型', '/service/aattribute' => '属性列表', '/service/aattributeAdd' => '新增服务属性', '/service/aattributeEdit' => '编辑服务属性'],
-    '/order/aproduct' => ['/order/aproduct' => '商品订单', '/order/aproductDetails' => '商品订单详情'],
-    '/order/aservice' => ['/order/aservice' => '服务订单', '/order/aserviceDetails' => '服务订单详情'],
-    '/order/aproductSaleManagement' => ['/order/aproductSaleManagement' => '商品售后', '/order/aproductSaleDetails' => '商品售后订单详情'],
-    '/order/aserviceSaleManagement' => ['/order/aserviceSaleManagement' => '服务售后', '/order/aserviceSaleDetails' => '服务售后订单详情'],
-    '/comment' => ['/comment' => '评论列表', '/comment/adetails' => '评论详情'],
-    '/comment/astoreIndex' => ['/comment/astoreIndex' => '商家申诉', '/comment/astoreDetail' => '申诉审核'],
-    '/coupon' => ['/coupon' => '优惠券列表','/coupon/aaddCoupon'=>'新增优惠券','/coupon/aeditCoupon'=>'编辑优惠券'],
-    '/distribution' => ['/distribution' => '新用户分享'],
-    '/distribution/auserConsume'=>['/distribution/auserConsume'=>'分销设置'],
-    '/distribution/aorderShare'=>['/distribution/aorderShare'=>'订单分享设置'],
-    '/distribution/aevaluateShare'=>['/distribution/aevaluateShare'=>'评价分享设置'],
-    '/distribution/adistributionCount'=>['/distribution/adistributionCount'=>'分销统计'],
-    '/coupon/aconsumption' => ['/coupon/aconsumption' => '优惠券消耗'],
-    '/coupon/acouponCount'=>['/coupon/acouponCount'=>'优惠券统计'],
-    '/message/apush' => ['/message/apush' => '推送列表', '/message/aaddPush' => '新增推送', '/message/apushDetail' => '推送详情'],
-    '/check/aactivity' => ['/check/aactivity' => '活动审核'],
-    '/check/aproductCategory' => ['/check/aproductCategory' => '商品分类申请'],
-    '/check/aserviceCategory' => ['/check/aserviceCategory' => '服务分类审核'],
-    '/check/aleague' => ['/check/aleague' => '门店加盟申请','/check/aleagueCheck' => '门店加盟申请详情'],
-    '/check/aprotection' => ['/check/aprotection' => '权益保障申请'],
-    '/message/afeedback' => ['/message/afeedback' => '意见反馈列表', '/message/afeedbackReply' => '意见反馈详情'],
-    '/delivery' => ['/delivery' => '配送员列表', '/delivery/adeliveryManAdd' => '新增配送员', '/delivery/adeliveryManDetails' => '配送员详情'],
-    '/appreciation/amessagePushCheck' => ['/appreciation/amessagePushCheck' => '消息推送申请', '/appreciation/amessagePushCheckDetails' => '消息推送审核'],
-    '/appreciation/aadsCheck' => ['/appreciation/aadsCheck' => '轮播广告申请', '/appreciation/aadsCheckDetails' => '轮播广告审核'],
-    '/appreciation/astoreCheck' => ['/appreciation/astoreCheck' => '门店推广申请', '/appreciation/astoreCheckDetails' => '门店推广审核'],
-    '/appreciation/agoodsCheck' => ['/appreciation/agoodsCheck' => '商品推广申请', '/appreciation/agoodsCheckDetails' => '商品推广审核'],
-    '/appreciation/aserviceCheck' => ['/appreciation/aserviceCheck' => '服务推广申请', '/appreciation/aserviceCheckDetails' => '服务推广审核'],
-    '/appreciation/agroupCheck' => ['/appreciation/agroupCheck' => '拼团申请', '/appreciation/agroupCheckDetails' => '拼团审核'],
-    '/business' => ['/business' => '首页导航管理', '/business/navigationAdd' => '新增导航', '/business/navigationDetails' => '编辑导航'],
-    '/business/aadvertMaterial' => ['/business/aadvertMaterial' => '广告物料', '/business/amaterialAdd' => '新增广告物料', '/business/amaterialDetails' => '编辑广告物料'],
-    '/business/aadvertList' => ['/business/aadvertList' => '广告列表', '/business/aadvertAdd' => '新增广告', '/business/aadvertEdit' => '编辑广告'],
-    '/business/acommunityProv' => ['/business/acommunityProv' => '社区管理-省', '/business/acommunityCity' => '社区管理-市', '/business/acommunityList' => '社区管理-社区'],
-    '/business/ascareBuying' => ['/business/ascareBuying' => '限时抢购', '/business/ascareBuyingAdd' => '新增抢购', '/business/ascareBuyingDetails' => '抢购详情'],
-    '/business/aactivity' => ['/business/aactivity' => '活动管理', '/business/aactivityAdd' => '新增活动', '/business/aactivityEdit' => '编辑活动'],
-    '/business/astoreSpread' => ['/business/astoreSpread' => '门店推广管理', '/business/astoreSpreadAdd' => '新增门店推广', '/business/astoreSpreadEdit' => '编辑门店推广'],
-    '/business/agoodsSpread' => ['/business/agoodsSpread' => '商品推广管理', '/business/agoodsSpreadAdd' => '新增商品推广', '/business/agoodsSpreadEdit' => '编辑商品推广'],
-    '/business/aserviceSpread' => ['/business/aserviceSpread' => '服务推广管理', '/business/aserviceSpreadAdd' => '新增服务推广', '/business/aserviceSpreadEdit' => '编辑服务推广'],
-    '/business/asetSeo' => ['/business/asetSeo' => 'SEO设置'],
-    '/business/ashoppingCard' => ['/business/ashoppingCard' => '购物卡管理', '/business/ashoppingCardAdd' => '新增购物卡','/business/ashoppingCardDetails' => '购物卡详情','/business/ashoppingCardNumberDetails' => '购物卡详情'],
-    '/business/atour' => ['/business/atour' => '拼团管理', '/business/atourAdd' => '新增拼团', '/business/atourDetails' => '查看拼团'],
-    '/business/amarketingStrategyAdd' => ['/business/amarketingStrategyAdd' => '新增营销策略'],
-    '/business/ainformation' => ['/business/ainformation' => '资讯列表', '/business/ainformationAdd' => '新增资讯', '/business/ainformationDetails' => '资讯详情'],
-    '/business/afeaturedFirst' => ['/business/afeaturedFirst' => 'PC首页推荐'],
-    '/finance/aplatform' => ['/finance/aplatform' => '平台财务'],
-    '/finance/astatement' => ['/finance/astatement' => '平台流水'],
-    '/finance/astore' => ['/finance/astore' => '门店财务'],
-    '/finance/auser' => ['/finance/auser' => '用户财务'],
-    '/finance/auserWithdrawCash' => ['/finance/auserWithdrawCash' => '用户提现'],
-    '/finance/astoreWithdrawCash' => ['/finance/astoreWithdrawCash' => '门店提现'],
-    '/log/aplatform' => ['/log/aplatform' => '平台操作日志'],
-    '/log/auserLogin' => ['/log/auserLogin' => '会员登录日志'],
-    '/log/astoreLogin' => ['/log/astoreLogin' => '门店登录日志'],
-    '/setting' => ['/setting' => '职务管理', '/setting/aaddRole' => '新增职务', '/setting/aviewRole' => '编辑职务'],
-    '/setting/aadminList' => ['/setting/aadminList' => '管理员管理', '/setting/aadminList/aaddAdmin' => '新增管理员', '/setting/aadminList/aviewAdmin' => '编辑管理员'],
+
+    '/business' => ['/business' => '广告管理', '/business/aadsEdit' => '编辑广告', '/business/aadsAdd' => '添加广告'],
+
+    '/business/anavigation' => ['/business/anavigation'=>'导航列表','/business/anavigationDetails' => '编辑导航', '/business/anavigationAdd' => '新增导航'],
+
+    '/business/amobileAppealList' => ['/business/amobileAppealList' => '手机申诉管理'],
+
+    '/video' => ['/video' => '视频列表', '/video/avideoAdd' => '视频添加', '/video/avideoDetails' => '视频详情'],
+
+    '/video/avideoCategoryList' => ['/video/avideoCategoryList' => '视频分类管理'],
+
+    '/audio' => ['/audio' => '音频列表', '/audio/aaudioAdd' => '音频添加', '/audio/aaudioDetails' => '音频详情'],
+
+    '/audio/aaudioCategoryList' => ['/audio/aaudioCategoryList' => '音频分类管理'],
+
+    '/microblog' => ['/microblog' => '微博管理', '/microblog/amicroblogDetails' => '音频详情'],
+
+    '/article' => ['/article' => '资讯管理', '/article/aarticleAdd' => '添加资讯','/article/adetails' => '资讯详情'],
+
+    '/article/aarticleCategoryList' => ['/article/aarticleCategoryList' => '资讯分类管理'],
+
+    '/comment' => ['/comment' => '评论管理'],
+
+    '/finance' => ['/comment' => '财务管理'],
+
+    '/setting' => ['/setting' => '管理员管理', '/setting/aaddAdmin' => '新增管理员','/setting/aviewAdmin' => '编辑管理员'],
+
+    '/setting/aadminCategory' => ['/setting/aadminCategory' => '职务管理', '/setting/aaddRole' => '新增职务','/setting/aviewRole' => '编辑职务'],
+
     '/setting/asensitiveWord' => ['/setting/asensitiveWord' => '敏感词管理'],
+
     '/setting/aagreement'=>['/setting/aagreement'=>'协议管理'],
-    '/setting/aprivacyAgreement'=>['/setting/aprivacyAgreement'=>'隐私协议']
+
+    '/setting/aprivacyAgreement'=>['/setting/aprivacyAgreement']
+
 ];
 function array_remove(&$arr, $offset)
 {
