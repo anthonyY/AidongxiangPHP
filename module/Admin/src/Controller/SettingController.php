@@ -299,9 +299,9 @@ class SettingController extends CommonController
             $res = $setup->updateData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'agreement']);
-                $this->ajaxReturn(1,'修改成功！',$url);
+                $this->ajaxReturn(0,'修改成功！',$url);
             }else{
-                $this->ajaxReturn(0,'修改失败！');
+                $this->ajaxReturn(10000,'修改失败！');
             }
         }
         $info = $setup->getDetails();
@@ -327,9 +327,9 @@ class SettingController extends CommonController
             $res = $setup->updateData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'privacyAgreement']);
-                $this->ajaxReturn(1,'修改成功！',$url);
+                $this->ajaxReturn(0,'修改成功！',$url);
             }else{
-                $this->ajaxReturn(0,'修改失败！');
+                $this->ajaxReturn(10000,'修改失败！');
             }
         }
         $info = $setup->getDetails();
@@ -365,5 +365,104 @@ class SettingController extends CommonController
             echo json_encode('all');
         }
         exit;
+    }
+
+    /**
+     * 举报类型列表
+     */
+    public function reportCategoryListAction()
+    {
+        $this->checkLogin('admin_setting_reportCategoryList');
+        $ViewCategory = $this->getViewCategoryTable();
+        $ViewCategory->type = 4;//音频分类
+        $ViewCategory->orderBy = 'sort desc';
+        $get = [];
+        $keyword = '';
+        if($_GET){
+            $get = $_GET;
+            $ViewCategory->searchKeyWord = $get['keyword']??'';
+            $keyword = $get['keyword']??'';
+        }
+        $list = $ViewCategory->getList();
+        $data = [
+            'list' => $list['list'],
+            'keyword' => $keyword,
+        ];
+
+        $view = new ViewModel($data);
+        $view->setTemplate("admin/setting/reportCategoryList");
+        return $this->setMenu($view);
+    }
+
+    /**
+     * @throws \Exception
+     * 保存廣告排序
+     */
+    public function saveCategorySortAction()
+    {
+        $sort_array = $_POST['sortObject'];
+        if(!is_array($sort_array) || !$sort_array)
+        {
+            $this->ajaxReturn(10000, '删除失败');
+        }
+        $category = $this->getCategoryTable();
+        $res = $category->saveSort($sort_array);
+        $this->ajaxReturn($res['s'],$res['d']);
+    }
+
+    //改变举报分类状态
+    /*public function changeCategoryStatusAction(){
+        $id = $_POST['id'];
+        $status = $_POST['status'];
+        $category = $this->getCategoryTable();
+        $category->id = $id;
+        $category->status = $status;
+        $res = $category->updateAudioCategoryStatus();
+        if($res['s'] == 0){
+            $this->ajaxReturn(0, $res['d']);
+        }
+        else{
+            $this->ajaxReturn(10000, $res['d']);
+        }
+    }*/
+
+    //举报分类删除
+    public function reportCategoryDelAction(){
+        $id = $_POST['id'];
+        $category = $this->getCategoryTable();
+        $category->id = $id;
+        if(!$category->deleteData())
+        {
+            $this->ajaxReturn(10000, '删除失败');
+        }
+        $this->ajaxReturn(0, '删除成功');
+    }
+
+    //编辑添加分类
+    public function editCategoryAction(){
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $sort = $_POST['sort'];
+        $category = $this->getCategoryTable();
+        $category->name = $name;
+        $category->sort = $sort;
+        $category->type = 4;
+        if($id)
+        {
+            $category->id = $id;
+            $res = $category->updateData();
+        }
+        else
+        {
+            $res = $category->addData();
+        }
+        if($res === false)
+        {
+            $this->ajaxReturn(10000, '操作失败');
+        }
+        else
+        {
+            $this->ajaxReturn(0, '操作成功');
+        }
     }
 }
