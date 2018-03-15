@@ -1,5 +1,5 @@
 <?php
-namespace Core\System\AiiPush;
+namespace AiiLibray\AiiUtility\AiiPush;
 
 /**
  * 基于友盟开发的推送类

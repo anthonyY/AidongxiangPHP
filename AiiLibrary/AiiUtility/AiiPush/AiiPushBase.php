@@ -1,5 +1,5 @@
 <?php
-namespace Core\System\AiiPush;
+namespace AiiLibray\AiiUtility\AiiPush;
 
 /**
  * 推送接口

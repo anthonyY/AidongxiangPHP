@@ -1,5 +1,5 @@
 <?php
-namespace Core\System\AiiPush;
+namespace AiiLibray\AiiUtility\AiiPush;
 
 require_once __DIR__ . '/sms/Client.php';
 

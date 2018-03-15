@@ -1,5 +1,5 @@
 <?php
-namespace Core\System\AiiPush;
+namespace AiiLibray\AiiUtility\AiiPush;
 
 /**
  * 基于信鸽开发的iOS类

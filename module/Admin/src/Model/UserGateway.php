@@ -121,4 +121,17 @@ class UserGateway extends BaseGateway {
         }
         return $this->updateData();
     }
+
+    /**
+     * 验证手机号码是否存在
+     */
+    public function checkMobile()
+    {
+        $where = array('mobile'=>$this->mobile);
+        if($this->delete === 0)
+        {
+            $where['delete'] = 0;
+        }
+        return $this->getOne($where);
+    }
 }

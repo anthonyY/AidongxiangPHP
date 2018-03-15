@@ -1,5 +1,5 @@
 <?php
-namespace Core\System\AiiPush;
+namespace AiiLibray\AiiUtility\AiiPush;
 
 /**
  * 推送类，
@@ -27,7 +27,7 @@ class AiiPush
      */
     function __construct()
     {
-        require_once __DIR__ . '/config/config.php';
+        require_once __DIR__ . '/configs/configs.php';
         $this->_ios_push = new XingeIos();
         $this->_android_push = new XingeAndroid();
         $this->_sms_push = new SmsPushMw();

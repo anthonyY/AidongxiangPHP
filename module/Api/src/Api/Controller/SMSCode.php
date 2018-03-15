@@ -1,9 +1,9 @@
 <?php
 namespace Api\Controller;
 
+use AiiLibray\AiiUtility\AiiPush\AiiMyFile;
 use Api\Controller\Request\SMSCodeRequest;
-use Core\System\AiiPush\AiiPush;
-use Core\System\AiiPush\AiiMyFile;
+use AiiLibray\AiiUtility\AiiPush\AiiPush;
 use Zend\Db\Sql\Where;
 
 /**
@@ -57,9 +57,9 @@ class SMSCode extends User
     }
 
     /**
+     * @return Common\Response|string
+     * @throws \Exception
      * 返回一个数组或者Result类
-     *
-     * @return \Api\Controller\BaseResult
      */
     public function index()
     {
@@ -68,7 +68,7 @@ class SMSCode extends User
         $action = $request->action;
         $verification_code = $request->verificationCode;
         $ip = $this->getIP();//获取IP
-        if(!in_array($action, array(1, 2)) || !in_array($request->type, array(1, 2, 3, 4, 5,8,9,11))){
+        if(!in_array($action, array(1, 2)) || !in_array($request->type, array(1, 2))){
             return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
         if(!$this->getSessionId())
@@ -89,7 +89,7 @@ class SMSCode extends User
                  if($captcha != $verification_code){
                      return STATUS_FAILED_TO_SEND;
                  }
-                 unset($_SESSION['captcha']);//验证成功删除验证码*/
+                 unset($_SESSION['captcha']);//验证成功删除验证码
 
             if($request->action == 1)
             {//如果是PC端需验证图形验证码
@@ -111,7 +111,7 @@ class SMSCode extends User
                          return $response;
                      }
                  }
-             }
+             }*/
 
             $login_table = $this->getLoginTable();
             $login_table->sessionId = $this->getSessionId();
@@ -148,7 +148,6 @@ class SMSCode extends User
         }
 
         if(self::MOBILE_VALIDATE_ACTION_GET == $action){
-
             /*
              * 根据type 检查相关内容
              */
@@ -173,7 +172,7 @@ class SMSCode extends User
                 }
             }
             // 短信内容
-            $res = $this->smsPush($request->type, $request->mobile, $code); // 发送
+            $res = $this->smsPush("{$code}为您的登录验证码，请于10分钟内填写。如非本人操作，请忽略本短信。", $request->mobile); // 发送
             if(!$res){
                 return STATUS_UNKNOWN;
             }
@@ -229,20 +228,7 @@ class SMSCode extends User
                 // 短信接口还没开通，所有验证码都可以通过
                 $check = true;
             }
-            /*
-             * $used用这个判断，每个验证码只能用一次
-             */
-            $response->userId = 0;
-            if($check && $request->type == 11)
-            {
-                $user_table = $this->getUserTable();
-                $user_table->mobile = $request->mobile;
-                $user_info = $user_table->checkMobile();
-                if($user_info)
-                {
-                    $response->userId = $user_info->id;
-                }
-            }
+
             $response->status = ($check ? STATUS_SUCCESS : STATUS_CAPTCHA_ERROR);
         }else{
             $response->status = STATUS_PARAMETERS_INCOMPLETE;
@@ -281,11 +267,11 @@ class SMSCode extends User
     }
 
     /**
+     * @param $type
+     * @param $mobile
+     * @return array|\ArrayObject|bool|int|null
+     * @throws \Exception
      * 根据类型和手机号码，验证用户信息
-     *
-     * @param Number $type
-     * @param String $mobile
-     * @return Ambigous <\Api\Controller\Ambigous, multitype:, boolean, ArrayObject, NULL, \ArrayObject, unknown>
      */
     private function getUserInfo($type, $mobile)
     {
@@ -418,7 +404,7 @@ class SMSCode extends User
      * @param integer $code
      * @return multitype:boolean
      */
-    public function smsPush($type, $mobile, $code)
+    /*public function smsPush($type, $mobile, $code)
     {
         $sms_push = new mallSendMsg();
         if($type != 1){
@@ -438,6 +424,51 @@ class SMSCode extends User
             $this->response($response);
         }
         return $code;
+    }*/
+
+    /**
+     * @param $content
+     * @param $mobile
+     * @return bool
+     */
+    public function smsPush($content, $mobile)
+    {
+        $push = new AiiPush();
+        $return = false;
+        if (SMSCODE_SWITCH)
+        {
+            if ($mobile)
+            {
+                $result = $push->pushSingleDevice($mobile, 16, $content);
+                $return = (isset($result['success']) && $result['success']) ? true : false;
+            }
+        }
+        else
+        {
+            $return = true;
+        }
+        if (PUSH_LOG_SWITCH)
+        {
+            // 开启了推送与短信的日志记录
+            if (isset($result))
+            {
+                if ($result)
+                {
+                    $temp = '短信，短信发送成功， mobile：' . $mobile . '，content：' . $content;
+                }
+                else
+                {
+                    $temp = '短信，短信发送失败不能进行验证， mobile：' . $mobile . '，content：' . $content;
+                }
+            }
+            else
+            {
+                $temp = '短信，没有开启短信发送，mobile：' . $mobile . '，content：' . $content;
+            }
+            $myfile = new AiiMyFile();
+            $myfile->setFileToPublicLog()->putAtStart($temp);
+        }
+        return $return;
     }
 
     /**
