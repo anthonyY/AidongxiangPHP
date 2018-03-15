@@ -27,8 +27,9 @@ class Session extends CommonController
     }
 
     /**
+     * @return Common\Response
+     * @throws \Exception
      * 返回一个数组或者Result类
-     * @return \Api\Controller\Common\Response
      */
     public function index()
     {
