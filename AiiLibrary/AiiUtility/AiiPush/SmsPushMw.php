@@ -1,5 +1,5 @@
 <?php
-namespace AiiLibray\AiiUtility\AiiPush;
+namespace AiiLibrary\AiiUtility\AiiPush;
 
 /**
  * 新短信发送平台

@@ -1,5 +1,5 @@
 <?php
-namespace AiiLibray\Oauth;
+namespace AiiLibrary\Oauth;
 include_once "system/core.php";
 class Connect {
 

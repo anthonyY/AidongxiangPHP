@@ -1,5 +1,5 @@
 <?php
-namespace AiiLibray\WxPayApi;
+namespace AiiLibrary\WxPayApi;
 require "lib/WxPay.Api.php";
 require_once 'lib/WxPay.Notify.php';
 require_once 'example/log.php';

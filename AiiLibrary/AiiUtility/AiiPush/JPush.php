@@ -1,5 +1,5 @@
 <?php
-namespace AiiLibray\AiiUtility\AiiPush;
+namespace AiiLibrary\AiiUtility\AiiPush;
 
 /**
  * 基于JPush开发的安卓推送类

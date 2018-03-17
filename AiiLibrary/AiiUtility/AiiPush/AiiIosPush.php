@@ -1,5 +1,5 @@
 <?php
-namespace AiiLibray\AiiUtility\AiiPush;
+namespace AiiLibrary\AiiUtility\AiiPush;
 
 /**
  * IOS原生推送

@@ -1,9 +1,9 @@
 <?php
 namespace Api\Controller;
 
-use AiiLibray\AiiUtility\AiiPush\AiiMyFile;
+use AiiLibrary\AiiUtility\AiiPush\AiiMyFile;
 use Api\Controller\Request\SMSCodeRequest;
-use AiiLibray\AiiUtility\AiiPush\AiiPush;
+use AiiLibrary\AiiUtility\AiiPush\AiiPush;
 use Zend\Db\Sql\Where;
 
 /**
@@ -187,7 +187,6 @@ class SMSCode extends User
                 $sms_code_table->userId = $user_info['id'];
             }
             $id = $sms_code_table->addData();
-
             $response->status = ($id ? STATUS_SUCCESS : STATUS_UNKNOWN); // 成功或未知错误
             $response->id = $id;
 
@@ -570,18 +569,17 @@ class SMSCode extends User
     }
     return $ip;
 }  */
+
     /**
+     * @param $id 短信id
+     * @return mixed
      * 更新验证状态
-     *
-     * @author WZ
-     * @param number $id
-     *            短信id
      */
     private function complete($id)
     {
         $sms_table = $this->getSmsCodeTable();
         $sms_table->status = self::MOBILE_VALIDATE_STATUS_USED; // 已验证
         $sms_table->id = $id;
-        return $sms_table->updateStatus();
+        return $sms_table->updateData();
     }
 }
