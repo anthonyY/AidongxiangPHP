@@ -18,17 +18,4 @@ class AdListRequest extends Request
      * @var String
      */
     public $positionId;
-
-    /**
-     * 广告位id
-     *
-     * @var String
-     */
-    public $categoryId;
-
-    /**
-     * 终端类型，1手机网站，2 PC网站, 默认1
-     * @var
-     */
-    public $terminalType;
 }

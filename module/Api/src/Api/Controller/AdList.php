@@ -20,40 +20,35 @@ class AdList extends CommonController
     }
 
     /**
-     * 返回一个数组或者Result类
-     *
-     * @return \Api\Controller\BaseResult
+     * @return Common\Response
      */
     public function index()
     {
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $position_id = $request->positionId ? (int)$request->positionId : 1;
-        $category_id = $request->categoryId ? (int)$request->categoryId : 0;
-        $terminalType = $request->terminalType ? (int)$request->terminalType : 1;
-
+        if(!in_array($position_id,[1,2,3]))
+        {
+            return STATUS_PARAMETERS_CONDITIONAL_ERROR;
+        }
         $this->tableObj = $this->getViewAdsTable();
         $this->initModel();
-        $this->tableObj->positionId = $position_id;
-        $this->tableObj->categoryId = $category_id;
-        $this->tableObj->terminalType = $terminalType;
-
-        $data = $this->tableObj->getList();
+        $this->tableObj->position = $position_id;
+        $data = $this->tableObj->getApiList();
         $list = array();
         foreach($data['list'] as $v)
         {
-            $item = array();
-            $item['id'] = $v->id;
-            $item['name'] = $v->name;
-            $item['link'] = $v->link;
-            $item['startTime'] = $v->start_time;
-            $item['endTime'] = $v->end_time;
-            $item['positionId'] = $v->position_id;
-            $item['imagePath'] = $v->path.$v->filename;
-            if($position_id == 5)
-            {
-                $item['categoryId'] = $v->category_id;
-            }
+            $item = array(
+                'id' => $v->id,
+                'name' => $v->name,
+                'type' => $v->type,
+                'objectId' => $v->audio_id,
+                'link' => $v->type == 4?$v->scontent:'',
+                'startTime' => $v->start_time,
+                'endTime'=> $v->end_time,
+                'imagePath' => $v->path.$v->filename,
+            );
+
             $list[] = $item;
         }
         $response->total =  $data['total'] . '';

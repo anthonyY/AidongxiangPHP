@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * VIEW
 *
@@ -80,12 +82,20 @@ class ViewAdsGateway extends BaseGateway {
      */
     public function getList()
     {
-        $where = array();
+        $where = array('delete'=>DELETE_FALSE);
         if($this->position)
         {
             $where['position'] = $this->position;
         }
         $list = $this->getAll($where);
         return $list;
+    }
+
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('position',$this->position)->lessThan('start_time',date('Y-m-d H:i:s'))->greaterThan('end_time',date('Y-m-d H:i:s'));
+        $this->orderBy = 'sort DESC';
+        return $this->fetchAll($where);
     }
 }
