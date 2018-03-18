@@ -134,4 +134,23 @@ class UserGateway extends BaseGateway {
         }
         return $this->getOne($where);
     }
+
+    /**
+     * 用户登录
+     */
+    public function userLogin()
+    {
+        $where = array("mobile"=>$this->mobile,"password"=>$this->password);
+        return $this->getOne($where);
+    }
+
+    /**
+     * 根据ID更新用户信息
+     * @return bool|int
+     * @throws \Exception
+     */
+    public function updateData()
+    {
+        return parent::updateData();
+    }
 }

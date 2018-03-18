@@ -123,9 +123,10 @@ class User extends CommonController
     }
 
     /**
+     * @param $user_info
+     * @param int $user_type
+     * @throws \Exception
      * 登录成功之后更新login表和device_user表，用户的话还更新user表的last_time
-     *
-     * @param array $user_info
      */
     public function loginUpdate($user_info, $user_type = self::USER_TYPE_NORMAL)
     {
@@ -141,8 +142,9 @@ class User extends CommonController
 
     /**
      * 更新登录表信息
-     *
-     * @param unknown $user_info
+     * @param $user_info
+     * @param int $user_type
+     * @return mixed
      */
     private function updateLoginTable($user_info, $user_type = self::USER_TYPE_NORMAL)
     {
@@ -211,9 +213,9 @@ class User extends CommonController
     }
 
     /**
-     * 更新用户表信息：1最后登录时间
-     *
-     * @param unknown $user_info
+     * @param $user_info
+     * @param int $user_type
+     * @throws \Exception
      */
     private function updateUserTable($user_info, $user_type = self::USER_TYPE_NORMAL)
     {
@@ -221,10 +223,10 @@ class User extends CommonController
             $user_model = $this->getUserTable();
             $user_model->id = $user_info['id'];
             $user_model->lastLoginTime = $this->getTime();
-            if($user_info['image'])
+            /*if($user_info['head_image_id'])
             {
-                $user_model->image = null;
-            }
+                $user_model->headImageId = null;
+            }*/
             $user_model->updateData();
         }
         elseif(self::USER_TYPE_MERCHANT == $user_type)

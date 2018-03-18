@@ -23,8 +23,8 @@ class UserLogin extends User
     }
 
     /**
-     *
-     * @return string|\Api\Controller\Common\Response
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
@@ -35,12 +35,12 @@ class UserLogin extends User
             return STATUS_SESSION_EMPTY;
         }
 
-        if(!$request->name || !$request->password){
+        if(!$request->mobile || !$request->password){
             return STATUS_PASSWORD_EMPTY;
         }
         $user_table = $this->getUserTable();
-        $user_table->password = strtoupper(md5(strtoupper($request->password)));
-        $user_table->mobile = $request->name;
+        $user_table->password = md5($request->password);
+        $user_table->mobile = $request->mobile;
         $user_info =$user_table->userLogin();
 
         if(!$user_info){
@@ -52,27 +52,9 @@ class UserLogin extends User
         }
         else
         {
-            // 更新各个表
-            $mallQueryAccountBalanceScore = new mallQueryAccountBalanceScore();
-            $mallQueryAccountBalanceScore->mobileNo = $user_info->mobile;
-            $mallQueryAccountBalanceScore->userId = $user_info->user_id;
-            $res = $mallQueryAccountBalanceScore->submit();
-            $respond = $mallQueryAccountBalanceScore->getRespCode();
-            if($respond['respCode'] == 0)
-            {
-                $user_table->cash = $res->balance;
-                $user_table->points = $res->score;
-                $user_table->id = $user_info['id'];
-                $user_table->updateData();
-            }
             $this->loginUpdate($user_info, 1);
             $response->status = STATUS_SUCCESS;
-            $response->id = $user_info['uuid'];
-            $_SESSION['user_id'] = $user_info['id'];
-            $_SESSION['user_name'] = $user_info['name'];
-            //记录用户登录日志
-            $logModel = new LogGateway($this->adapter);
-            $logModel->setUserLog($user_info->id, '手机wap网站');
+            $response->id = $user_info['id'];
         }
         return $response;
     }

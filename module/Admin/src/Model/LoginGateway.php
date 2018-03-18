@@ -131,4 +131,24 @@ class LoginGateway extends BaseGateway {
         $where = array('session_id' => $this->sessionId);
         return $this->getOne($where);
     }
+
+    /**
+     * 更新用户登录信息
+     */
+    public function updateLogin()
+    {
+        $set = array('user_id' => $this->userId, 'status' => $this->status, 'expire' =>$this->expire);
+        $where = array('session_id' => $this->sessionId, 'user_type' => $this->userType);
+        return $this->update($set,$where);
+    }
+
+    /**
+     * 更新用户登录信息
+     */
+    public function updateElsewhereLogin()
+    {
+        $set = array('status' =>$this->status);
+        $where = array('user_id' => $this->userId, 'user_type' => $this->userType);
+        return $this->update($set,$where);
+    }
 }
