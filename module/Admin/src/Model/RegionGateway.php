@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 中国省市区地名表
 *
@@ -38,5 +40,18 @@ class RegionGateway extends BaseGateway {
     protected $columns_array = ["id","parentId","name","pinyin","deep"];
 
     public $table = DB_PREFIX . 'region';
+
+    /**
+     * api 获取省市区列表
+     */
+    public function getApiList()
+    {
+        $where = new Where();
+        if($this->parentId)
+        {
+            $where->equalTo('parent_id',$this->parentId);
+        }
+        return $this->fetchAll($where);
+    }
 
 }
