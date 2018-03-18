@@ -154,6 +154,10 @@ define('REAL_DESCRIPTION_1112' , '权限不足');
 define('STATUS_MOBILE_EXIST' , '1113' );
 define('DESCRIPTION_1113' , '（用户）手机号码已存在');
 define('REAL_DESCRIPTION_1113' , '抱歉，手机号码已存在！');
+/** （用户）手机号码已存在 @var 1113 */
+define('STATUS_MOBILE_ERROR' , '1114' );
+define('DESCRIPTION_1114' , '手机号码格式错误');
+define('REAL_DESCRIPTION_1114' , '抱歉，手机号码格式错误！');
 
 
 /** 用户名或密码为空 @var 1115 */

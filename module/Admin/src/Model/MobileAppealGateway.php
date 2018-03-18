@@ -68,4 +68,19 @@ class MobileAppealGateway extends BaseGateway {
         return ['s'=>0,'d'=>'操作成功'];
     }
 
+    /**
+     * @return array
+     * 申请手机申诉
+     */
+    public function mobileAppealSubmit()
+    {
+        $res = $this->getOne(['delete'=>DELETE_FALSE,'user_id'=>$this->userId,'status'=>1]);
+        if($res)
+        {
+            return ['s'=>10000,'d'=>'您的手机申诉待平台处理，不可多次提交'];
+        }
+        $res = $this->addData();
+        return $res?['s'=>0,'d'=>'申请成功']:['s'=>10000,'d'=>'申请失败'];
+    }
+
 }
