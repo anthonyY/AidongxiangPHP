@@ -59,8 +59,16 @@ class MobileAppealSubmit extends CommonController
         $user_info = $user->userLogin();
         if(!$user_info)
         {
-            return STATUS_PASSWORD_ERROR;
+            return STATUS_PASSWORD_ERROR;//账户密码错误
         }
+        $user->delete = 0;
+        $user->mobile = $newMobile;
+        $res = $user->checkMobile();
+        if($res)
+        {
+            return STATUS_USER_EXIST;//新手机用户已存在
+        }
+
         $mobileAppeal = $this->getMobileAppealTable();
         $mobileAppeal->newMobile = $newMobile;
         $mobileAppeal->registerTime = $registerTime;
