@@ -20,6 +20,10 @@ class UploadImage extends CommonController
         $response = $this->getAiiResponse();
 
         $request->action = $request->action ? $request->action : 1;
+        if(!in_array($request->action,[1]))
+        {
+            return STATUS_PARAMETERS_CONDITIONAL_ERROR;
+        }
         $data = array();
         if (isset($_FILES) && $_FILES)
         {

@@ -1060,16 +1060,10 @@ class CommonController extends Table
         }
     }
 
-
-
-
     /**
+     * @param $file_key
+     * @return multitype|array
      * 上传文件总入口
-     *
-     * @param $_FILES $file
-     * @param string $file_key post过来的key
-     * @return Ambigous <\Api\Controller\multitype:multitype:multitype:multitype:unknown, multitype:multitype:multitype:multitype:unknown    multitype:string unknown  >
-     * @version 2014-12-6 WZ
      */
     public function uploadImageForController($file_key)
     {
@@ -1219,8 +1213,7 @@ class CommonController extends Table
                 $files[] = array(
                     array(
                         'id' => $id,
-                        'path' => $value['path'],
-                        'filename' => $value['filename']
+                        'path' => $value['path'].$value['filename'],
                     )
                 );
             }
@@ -1231,8 +1224,7 @@ class CommonController extends Table
                 $files[] = array(
                      array(
                         'id' => $value['id'],
-                        'path' => $value['path'],
-                        'filename' => $value['filename'],
+                        'path' => $value['path'].$value['filename'],
                     )
                 );
             }
