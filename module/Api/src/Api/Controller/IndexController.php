@@ -211,6 +211,9 @@ class IndexController extends CommonController
             case 'LabelList':
                 $obj = new LabelList();
                 break;
+            case 'MobileAppealSubmit':
+                $obj = new MobileAppealSubmit();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
