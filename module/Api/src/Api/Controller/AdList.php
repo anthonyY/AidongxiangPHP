@@ -43,7 +43,7 @@ class AdList extends CommonController
                 'name' => $v->name,
                 'type' => $v->type,
                 'objectId' => $v->audio_id,
-                'link' => $v->type == 4?$v->scontent:'',
+                'link' => $v->type == 4?$v->content:'',
                 'startTime' => $v->start_time,
                 'endTime'=> $v->end_time,
                 'imagePath' => $v->path.$v->filename,

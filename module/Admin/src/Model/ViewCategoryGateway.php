@@ -76,4 +76,11 @@ class ViewCategoryGateway extends BaseGateway {
         return $this->fetchAll($where,'',['name']);
     }
 
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',$this->type)->equalTo('status',$this->status);
+        return $this->fetchAll($where,'',['id','name','path','filename']);
+    }
+
 }
