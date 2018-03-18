@@ -16,7 +16,7 @@ class UserPartnerLoginRequest extends Request
      *
      * @var 用户名
      */
-    public $nickname = 'name';
+    public $nickname;
 
     /**
      * 密码
@@ -30,7 +30,7 @@ class UserPartnerLoginRequest extends Request
      *
      * @var String
      */
-    public $imageUrl = 'imagePath';
+    public $imageUrl;
 
     /**
      * @var 1男；2女；没有返回0；
@@ -45,6 +45,6 @@ class UserPartnerLoginRequest extends Request
     /**
      * @var 微信第三方登录唯一标识；
      */
-    public $unionId = 'unionId';
+    public $unionId;
 
 }

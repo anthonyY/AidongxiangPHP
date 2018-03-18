@@ -48,7 +48,7 @@ class UserRegister extends User
         }
 
 
-//        $this->checkSmsComplete(1, $request->smscodeId, $request->mobile); // 注册，检查是否有效，无效返回1010，请求超时
+        $this->checkSmsComplete(1, $request->smscodeId, $request->mobile); // 注册，检查是否有效，无效返回1010，请求超时
         $this->tableObj->mobile = $request->mobile;
         $this->tableObj->nickName = $request->nickName;
         if($request->headImageId)

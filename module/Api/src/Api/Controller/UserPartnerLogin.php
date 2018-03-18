@@ -2,6 +2,7 @@
 namespace Api\Controller;
 
 use Api\Controller\Request\UserPartnerLoginRequest;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Platform\Model\LogGateway;
 
 /**
@@ -20,8 +21,8 @@ class UserPartnerLogin extends User
     }
 
     /**
-     *
-     * @return string|\Api\Controller\Common\Response
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
@@ -41,18 +42,10 @@ class UserPartnerLogin extends User
         $user_partner = $user_partner_table->getDetails();
         if (! $user_partner)
         {
-            if($user_partner_table->imageUrl)
-            {
-                $user_partner_table->imageId = $this->getWximage($user_partner_table->imageUrl);
-            }
             $res = $user_partner_table->addData();
             if($res)
             {
-                $_SESSION['headImage']= $user_partner_table->imageId;//将图片写入session
-                $response->description = '操作成功';
-                $response->status = 0;
-                $response->imgId = $user_partner_table->imageId;
-                return $response;
+                return STATUS_SUCCESS;
             }
             else
             {
@@ -60,7 +53,7 @@ class UserPartnerLogin extends User
             }
 
         }
-        elseif ($user_partner)
+        else
         {
             if($user_partner->user_id)
             {
@@ -70,14 +63,11 @@ class UserPartnerLogin extends User
                 $user_info = $user_table->getDetails();
                 if(!$user_info)
                 {
-                    return STATUS_USERNAME_EXIST;
+                    return STATUS_USER_NOT_EXIST;
                 }
-                $this->loginUpdate($user_info);
+                $this->loginUpdate($user_info,1);
+                $response->status = STATUS_SUCCESS;
                 $response->id = $user_partner->user_id;
-                $_SESSION['user_id'] = $user_info['id'];
-                //记录用户登录日志
-                $logModel = new LogGateway($this->adapter);
-                $logModel->setUserLog($user_info->id, '手机wap网站');
                 return $response;
 
             }
@@ -86,7 +76,6 @@ class UserPartnerLogin extends User
                 return STATUS_SUCCESS;
             }
         }
-        return STATUS_SUCCESS;
     }
 
     /**
