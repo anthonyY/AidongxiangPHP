@@ -41,9 +41,5 @@ class UserLogout extends User
         $login_table->userId= 0;
         $login_table->sessionId= $this->getSessionId();
         $login_table->updateLogout();
-        if(isset($_SESSION['user_id']))
-        {
-            unset($_SESSION['user_id']);
-        }
     }
 }

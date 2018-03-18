@@ -151,4 +151,14 @@ class LoginGateway extends BaseGateway {
         $where = array('user_id' => $this->userId, 'user_type' => $this->userType);
         return $this->update($set,$where);
     }
+
+    /**
+     * 退出登录
+     */
+    public function updateLogout()
+    {
+        $set = array('status' => $this->status, 'user_id' => $this->userId);
+        $where = array('session_id' => $this->sessionId);
+        return $this->update($set,$where);
+    }
 }
