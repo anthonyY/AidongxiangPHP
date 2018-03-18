@@ -14,18 +14,11 @@ class UserRequest extends Request
 {
 
     /**
-     * 用户名
+     * 用户昵称
      *
      * @var String
      */
-    public $name;
-
-    /**
-     * 支付密码
-     *
-     * @var String
-     */
-    public $payPassword;
+    public $nickName;
 
     /**
      * 密码
@@ -80,12 +73,7 @@ class UserRequest extends Request
     /**
      * 用户头像id
      */
-    public $image;
-
-    /**
-     * 推荐人ID V2.0
-     */
-    public $referrerId;
+    public $headImageId;
 
     /**
      * 微信unionId V2.0

@@ -18,26 +18,25 @@ class UserRegister extends User
     }
 
     /**
-     * 返回一个数组或者Result类
-     * @return \Api\Controller\BaseResult
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $action = $request->action ? $request->action : 1;//1普通注册 2第三方注册
-        $type = $action;
-        if(!$request->mobile || !preg_match("/^1[345789]{1}\d{9}$/", $request->mobile) || !$request->name || !$request->smscodeId || !in_array($action,array(1,2))){
+        if(!$request->mobile || !preg_match("/^1[345789]{1}\d{9}$/", $request->mobile) || !$request->nickName || !$request->smscodeId || !in_array($action,array(1,2))){
             return STATUS_PARAMETERS_INCOMPLETE;
         }
         $this->tableObj = $this->getUserTable();
         if($action == 2)
-        {//第三方注册绑定参数判断
+        {
+            //第三方注册绑定参数判断
             if((!$request->unionId && !$request->openId) || !$request->partner || !in_array($request->partner,array(1,2)))
             {
                 return STATUS_PARAMETERS_CONDITIONAL_ERROR;
             }
-            $type = 11;//转为第三方登录验证判断
         }
         else
         {
@@ -45,80 +44,54 @@ class UserRegister extends User
             {
                 return STATUS_PARAMETERS_CONDITIONAL_ERROR;
             }
-            $this->tableObj->password = strtoupper(md5(strtoupper($request->password)));
+            $this->tableObj->password = md5($request->password);
         }
 
-        $this->checkSmsComplete($type, $request->smscodeId, $request->mobile); // 注册，检查是否有效，无效返回1010，请求超时
-        if($request->referrerId)
-        {
-            $user_table = $this->getUserTable();
-            $user_table->id =$request->referrerId;
-            $user = $user_table->getDetails();
-            if($user)
-            {//用户存在，才把推荐人赋值
-                $this->tableObj->referrerId = $user->id;
-            }
-        }
+
+//        $this->checkSmsComplete(1, $request->smscodeId, $request->mobile); // 注册，检查是否有效，无效返回1010，请求超时
         $this->tableObj->mobile = $request->mobile;
-        $this->tableObj->name = $request->name;
-        if($request->image)
+        $this->tableObj->nickName = $request->nickName;
+        if($request->headImageId)
         {
-            $this->tableObj->image = $request->image;
+            $this->tableObj->headImageId = $request->headImageId;
+        }
+        $user_info = $this->tableObj->checkMobile();
+        if($user_info)
+        {
+            return STATUS_USER_EXIST;
         }
 
         if($action ==2)
         {
-            $user = $this->tableObj->checkMobile();
-            if(!$user)
+            $userPartnerTable = $this->getUserPartnerTable();
+            $userPartnerTable->openId = $request->openId;
+            $userPartnerTable->unionId = $request->unionId;
+            $userPartnerTable->partner = $request->partner;
+            $userPartner = $userPartnerTable->getDetails();
+            if(!$userPartner)
             {
-                $this->tableObj->password = strtoupper(md5(strtoupper(123456)));
-                $res = $this->tableObj->register();
+                $response->status = STATUS_UNKNOWN;
+                $response->description = '第三方登录信息不存在';
+                return $response;
             }
-            else
-            {
-                $res['info'] = $user;
-                $res['code'] = STATUS_SUCCESS;
-            }
-        }
-        else
-        {
-            $res = $this->tableObj->register();
-        }
+            $this->tableObj->password = md5(md5(123456));
+            $user_id = $this->tableObj->addData();
 
-        $response->status = $res['code'];
-        if($res['code'] == STATUS_SUCCESS)
-        {
-            if($action ==2)
-            {//第三方登录
-                $user_partner_table = $this->getUserPartnerTable();
-                $user_partner_table->unionId = $request->unionId;
-                $user_partner_table->openId = $request->openId;
-                $user_partner_table->partner = $request->partner;
-                $user_partner = $user_partner_table->getDetails();
-                if($user_partner)
-                {
-                    if($res['info']['id'])
-                    {
-                        $user_partner_table = $this->getUserPartnerTable();
-                        $user_partner_table->userId = $res['info']['id'];
-                        $user_partner_table->id = $user_partner->id;
-                        $user_partner_table->updateData();//把生成的用户ID更新到第三方登录表
-                    }
-                }
-            }
-            // 更新各个表
-            $this->loginUpdate($res['info'], 1);
-            $_SESSION['user_id'] = $res['info']['id'];
-            $_SESSION['user_name'] = $res['info']['name'];
-            $response->id = $res['info']['uuid'];
+            $userPartnerTable->userId = $user_id;
+            $userPartnerTable->id = $userPartner->id;
+            $userPartnerTable->updateData();//把生成的用户ID更新到第三方登录表
+
         }
         else
         {
-            if(isset($res['d']))
-            {
-                $response->description = $res['d'];
-            }
+            $user_id = $this->tableObj->addData();
         }
+        $this->tableObj->id = $user_id;
+        $user_info = $this->tableObj->getDetails();
+
+        // 更新各个表
+        $this->loginUpdate($user_info, 1);
+        $response->id = $user_id;
         return $response;
     }
 }
