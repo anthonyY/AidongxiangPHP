@@ -41,12 +41,22 @@ class UserUpdatePassword extends User
         {
             return STATUS_PASSWORD_ERROR_FOR_UPDATE;
         }
-        if(md5($passwordNew) == md5($password))
+        if(md5($passwordNew) !== md5($password))
         {
             $response->status = 10000;
             $response->description = '新密码不能跟原密码一致';
             return $response;
         }
+
+        if(LOGIN_STATUS_LOGIN == $this->getUserStatus()){
+            $this->clearDeviceUser($this->getUserId(), $this->getUserType());
+        }
+        // 再把登录表的状态改变成登出状态。
+        $login_table =  $this->getLoginTable();
+        $login_table->status = LOGIN_STATUS_LOGOUT;
+        $login_table->userId= 0;
+        $login_table->sessionId= $this->getSessionId();
+        $login_table->updateLogout();
 
         $this->tableObj->password = md5($passwordNew);
         $res = $this->tableObj->updateData();
