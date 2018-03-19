@@ -123,7 +123,7 @@ class MicroblogGateway extends BaseGateway {
         {
             $where->equalTo('display',$this->display);
         }
-        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        $res = $this->getOne($where,[new Expression('SUM(1) as total')]);
         return $res['total']?$res['total']:0;
     }
 }

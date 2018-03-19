@@ -45,7 +45,7 @@ class UserDetails extends User
         $focusNum = $focusRelationTable->getFocusNum();
 
         $user = array(
-            'id' => $details->uuid,
+            'id' => $details->id,
             'nickName' => $details->nick_name,
             'sex' => $details->sex,
             'imagePath' => $details->head_path . $details->head_filename,
@@ -59,11 +59,14 @@ class UserDetails extends User
             'focusNum' => $focusNum,
         );
 
-        if(!$user->imagePath)
+        if(!$details->head_filename)
         {
             $userPartner = $this->getUserPartnerTable();
             $user_partner_details = $userPartner->getDetailsByUserId($user_id);
-            $user['imagePath'] = $user_partner_details->image_url?$user_partner_details->image_url:'';
+            if($user_partner_details)
+            {
+                $user['imagePath'] = $user_partner_details->image_url?$user_partner_details->image_url:'';
+            }
         }
 
         $response->status = STATUS_SUCCESS;

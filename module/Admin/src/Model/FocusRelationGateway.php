@@ -36,7 +36,7 @@ class FocusRelationGateway extends BaseGateway {
     {
         $where = new Where();
         $where->equalTo('delete',DELETE_FALSE)->equalTo('target_user_id',$this->targetUserId);
-        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        $res = $this->getOne($where,[new Expression('SUM(1) as total')]);
         return $res['total']?$res['total']:0;
     }
 
@@ -44,7 +44,7 @@ class FocusRelationGateway extends BaseGateway {
     {
         $where = new Where();
         $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
-        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        $res = $this->getOne($where,[new Expression('SUM(1) as total')]);
         return $res['total']?$res['total']:0;
     }
 
