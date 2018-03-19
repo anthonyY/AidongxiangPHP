@@ -1,5 +1,8 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Expression;
+use Zend\Db\Sql\Where;
+
 /**
 * 关注关系
 *
@@ -28,5 +31,21 @@ class FocusRelationGateway extends BaseGateway {
     protected $columns_array = ["id","userId","targetUserId","delete","timestamp"];
 
     public $table = DB_PREFIX . 'focus_relation';
+
+    public function getFansNum()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('target_user_id',$this->targetUserId);
+        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        return $res['total']?$res['total']:0;
+    }
+
+    public function getFocusNum()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
+        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        return $res['total']?$res['total']:0;
+    }
 
 }

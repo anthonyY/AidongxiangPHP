@@ -1,5 +1,6 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Where;
 
 /**
@@ -112,5 +113,17 @@ class MicroblogGateway extends BaseGateway {
         $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId)->in('id',$ids);
         $res = $this->update(array('delete' => 1), $where);
         return $res?['s'=>0,'d'=>'删除成功']:['s'=>10000,'d'=>'删除失败'];
+    }
+
+    public function getSumByUser()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
+        if($this->display)
+        {
+            $where->equalTo('display',$this->display);
+        }
+        $res = $this->getOne($where,new Expression('SUM(1) as total'));
+        return $res['total']?$res['total']:0;
     }
 }

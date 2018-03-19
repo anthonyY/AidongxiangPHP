@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 第三方登录／授权表
 *
@@ -95,6 +97,13 @@ class UserPartnerGateway extends BaseGateway {
         }else{
             return false;
         }
+        return $this->getOne($where);
+    }
+
+    public function getDetailsByUserId($user_id)
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$user_id);
         return $this->getOne($where);
     }
 }

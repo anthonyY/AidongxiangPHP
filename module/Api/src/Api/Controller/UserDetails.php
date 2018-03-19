@@ -18,15 +18,15 @@ class UserDetails extends User
     }
 
     /**
-     *
-     * @return \Api\Controller\Common\Response
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $this->checkLogin();
-        $user_id = $this->getUserId();
+        $user_id = $request->id?$request->id:$this->getUserId();
         $view_user_model = $this->getViewUserTable();
         $view_user_model->id = $user_id;
         $details = $view_user_model->getDetails();
@@ -34,45 +34,36 @@ class UserDetails extends User
         {
             return STATUS_NODATA;
         }
-        $user_level = array(
-            'id' => $details->user_level_id,
-            'name' => $details->user_level_name,
-            'discount' => $details->discount,
-        );
-        $View_notification_records = $this->getViewNotificationRecordsTable();
-        $cart_model = $this->getCartTable();
-        $View_notification_records->userId = $user_id;
-        $un_read_num = $View_notification_records->getUnReadNum();
-        $cart_model->userId = $user_id;
-        $cart_num = $cart_model->getCartNum();
+        $microblogTable = $this->getMicroblogTable();
+        $microblogTable->userId = $user_id;
+        $microblogTable->display = 1;
+        $microblog_sum = $microblogTable->getSumByUser();
+        $focusRelationTable = $this->getFocusRelationTable();
+        $focusRelationTable->userId = $user_id;
+        $focusRelationTable->targetUserId = $user_id;
+        $fansNum = $focusRelationTable->getFansNum();
+        $focusNum = $focusRelationTable->getFocusNum();
+
         $user = array(
             'id' => $details->uuid,
-            'name' => $details->name,
-            'mobile' => $details->mobile,
-            'realName' => $details->real_name,
+            'nickName' => $details->nick_name,
             'sex' => $details->sex,
-            'image' => $details->image,
-            'imagePath' => $details->path && $details->filename ? $details->path . $details->filename : '',
-            'community' => $details->region_name,
-            'regionId' => $details->region_id,
-            'regionInfo' => '',
-            'address' => $details->street,
-            'userLevel' => $user_level,
-            'cash' => $details->cash,
-            'points' => $details->points,
+            'imagePath' => $details->head_path . $details->head_filename,
             'description' => $details->description,
-            'unReadNum' => $un_read_num,
-            'cartNum' => $cart_num,
-            'issetPayPwd' => $details->pay_password ? 1 : 2,
-            'totalConsumption' => $details->total_consumption,
+            'backImagePath' => $details->back_path . $details->back_filename,
+            'regionId' => $details->region_id,
+            'regionInfo' => $details->region_info,
+            'mobile' => $details->mobile,
+            'microblogNum' => $microblog_sum,
+            'fansNum' => $fansNum,
+            'focusNum' => $focusNum,
         );
-        if($details->region_id)
+
+        if(!$user->imagePath)
         {
-            $region = $this->getPlatformCommonController()->getRegionInfoArray($details->region_id);
-            if($region['region_info'])
-            {
-                $user['regionInfo'] = $this->getPlatformCommonController()->getProvinceCityCountryName($region['region_info']);
-            }
+            $userPartner = $this->getUserPartnerTable();
+            $user_partner_details = $userPartner->getDetailsByUserId($user_id);
+            $user['imagePath'] = $user_partner_details->image_url?$user_partner_details->image_url:'';
         }
 
         $response->status = STATUS_SUCCESS;
