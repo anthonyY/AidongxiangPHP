@@ -286,29 +286,6 @@ class SMSCode extends User
                     $this->response(STATUS_MOBILE_EXIST);
                 }
                 break;
-            case self::MOBILE_VALIDATE_TYPE_LOGIN_RESET:
-                // 用户忘记密码
-                $user_table->mobile = $mobile;
-                $user_table->delete = 0;
-                $user_info = $user_table->checkMobile();
-                if(!$user_info){
-                    // 用户不存在
-                    $this->response(STATUS_USER_NOT_EXIST);
-                }
-                break;
-            case self::MOBILE_VALIDATE_TYPE_PAY_CHECK:
-                // 用户设置支付密码
-                $this->checkLogin();
-                $user_table->id = $this->getUserId();
-                $user_info = $user_table->getDetails();
-                if(!$user_info){
-                    // 用户不存在
-                    $this->response(STATUS_USER_NOT_EXIST);
-                }
-                break;
-            case self::MOBILE_VALIDATE_TYPE_ORDER_RESET:
-                //走后台，不走此处
-                break;
             case self::MOBILE_VALIDATE_TYPE_BIND:
                 $this->checkLogin();
                 $user_table->id = $this->getUserId();
@@ -316,27 +293,6 @@ class SMSCode extends User
                 if(!$user_info->mobile){
                     return STATUS_UNKNOWN;
                 }
-                break;
-            case self::MOBILE_VALIDATE_TYPE_BIND_BANK://添加银行卡
-                $this->checkLogin();
-                $user_table->id = $this->getUserId();
-                $user_info = $user_table->getDetails();
-                if(!$user_info){
-                    // 用户不存在
-                    $this->response(STATUS_USER_NOT_EXIST);
-                }
-                break;
-            case self::MOBILE_VALIDATE_TYPE_WITHDRAW://提现
-                $this->checkLogin();
-                $user_table->id = $this->getUserId();
-                $user_info = $user_table->getDetails();
-                if(!$user_info){
-                    // 用户不存在
-                    $this->response(STATUS_USER_NOT_EXIST);
-                }
-                break;
-            case self::THIRD_MOBILE_VALIDATE_TYPE_WITHDRAW://提现
-                return 0;
                 break;
             default:
                 $this->response(STATUS_PARAMETERS_INCOMPLETE);

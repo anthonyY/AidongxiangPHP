@@ -29,37 +29,9 @@ class User extends CommonController
 
     /**
      *
-     * @var 忘记密码/重置密码
-     */
-    const MOBILE_VALIDATE_TYPE_LOGIN_RESET = 2;
-
-    /**
-     * @var 设置支付密码
-     */
-    const MOBILE_VALIDATE_TYPE_PAY_CHECK = 3;
-
-    /**
-     *
-     * @var 订单已经开始配送
-     */
-    const MOBILE_VALIDATE_TYPE_ORDER_RESET = 4;
-
-    /**
-     *
      * @var 修改手机
      */
-    const MOBILE_VALIDATE_TYPE_BIND = 5;
-
-    /**
-     * 8.用户绑定银行卡V2.0
-     * */
-    const MOBILE_VALIDATE_TYPE_BIND_BANK = 8;
-
-
-    /**
-     * 9.用户提现V2.0
-     * */
-    const MOBILE_VALIDATE_TYPE_WITHDRAW = 9;
+    const MOBILE_VALIDATE_TYPE_BIND = 2;
 
     /**
      * 11第三方注册 V2.0

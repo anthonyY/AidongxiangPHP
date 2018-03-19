@@ -7,7 +7,7 @@ use Api\Controller\Request\UserRequest;
  * 用户绑定手机
  * @author WZ
  */
-class UserBindMobile extends User
+class UserUpdateMobile extends User
 {
     public function __construct()
     {
@@ -23,24 +23,30 @@ class UserBindMobile extends User
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $this->checkLogin();
-        if(!$request->mobile)
+        if(!preg_match("/^1[345789]{1}\d{9}$/", $request->mobile))
         {
             return STATUS_PARAMETERS_INCOMPLETE;
         }
 
-        $type = 1;//注册的类型用作更换手机第二部
+        $type = 2;
         $this->checkSmsComplete($type, $request->smscodeId, $request->mobile); // 注册，检查是否有效，无效返回1010，请求超时
 
         $user_id = $this->getUserId();
         $user_model = $this->getUserTable();
         $user_model->mobile = $request->mobile;
         $user_model->id = $user_id;
-        $result = $user_model->userBindMobile();
-        $response->status = $result['code'];
-        if(isset($result['d']))
+        $user_info = $user_model->getDetails();
+        if(!$user_info)
         {
-            $response->description = $result['d'];
+            return STATUS_USER_NOT_EXIST;
         }
-        return $response;
+        if($user_info->mobile == $request->mobile)
+        {
+            $response->status = 10000;
+            $response->description = '新手机号码不能与旧手机一致';
+            return $response;
+        }
+        $result = $user_model->updateData();
+        return $result?STATUS_SUCCESS:STATUS_UNKNOWN;
     }
 }

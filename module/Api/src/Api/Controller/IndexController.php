@@ -83,7 +83,7 @@ class IndexController extends CommonController
                 $obj = new UserRegister();
                 break;
             case 'UserBindMobile':
-                $obj = new UserBindMobile();
+                $obj = new UserUpdateMobile();
                 break;
             case 'UserUpdatePassword':
                 $obj = new UserUpdatePassword();
