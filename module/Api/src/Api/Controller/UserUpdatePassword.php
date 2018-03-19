@@ -41,7 +41,7 @@ class UserUpdatePassword extends User
         {
             return STATUS_PASSWORD_ERROR_FOR_UPDATE;
         }
-        if(md5($passwordNew) !== md5($password))
+        if(md5($passwordNew) == md5($password))
         {
             $response->status = 10000;
             $response->description = '新密码不能跟原密码一致';
