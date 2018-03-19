@@ -47,7 +47,7 @@ class UserUpdate extends User
 
         if($user->regionId)
         {
-            $region = $this->getAdminCommonController()->getRegionInfoArray($user->communityId);
+            $region = $this->getAdminCommonController()->getRegionInfoArray($user->regionId);
             if($region['region_info'])
             {
                 $user_table->regionInfo = $region['region_info'];
