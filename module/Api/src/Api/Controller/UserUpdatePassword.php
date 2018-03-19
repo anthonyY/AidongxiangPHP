@@ -23,17 +23,13 @@ class UserUpdatePassword extends User
         $this->checkLogin(); // 检查登录状态
 
         $user_id = $this->getUserId();
-        $password = trim($request->password);
-        $passwordNew = trim($request->passwordNew);
-        $repeatPasswordNew = trim($request->repeatPasswordNew);
-        if(!$password || !$passwordNew || !$repeatPasswordNew)
+        $password = $request->password;
+        $passwordNew = $request->passwordNew;
+        if(!$password || !$passwordNew)
         {
             return STATUS_PARAMETERS_INCOMPLETE;
         }
-        if($passwordNew !== $repeatPasswordNew)
-        {
-            return STATUS_PASSWORD_DISAGREE;
-        }
+
         $this->tableObj = $this->getUserTable();
         $this->tableObj->id = $user_id;
         $details = $this->tableObj->getDetails();
@@ -41,29 +37,19 @@ class UserUpdatePassword extends User
         {
             return STATUS_NODATA;
         }
-        if($details->password != strtoupper(md5(strtoupper($password))))
+        if($details->password != md5($password))
         {
             return STATUS_PASSWORD_ERROR_FOR_UPDATE;
         }
-
-        $mallUpdateAccountPassword = new mallUpdateAccountPassword();
-        $mallUpdateAccountPassword->mobileNo = $details->mobile;
-        $mallUpdateAccountPassword->userId = $details->user_id;
-        $mallUpdateAccountPassword->oldPassword = $details->password;
-        $mallUpdateAccountPassword->newPassword = strtoupper(md5(strtoupper($passwordNew)));
-        $mallUpdateAccountPassword->submit();
-        $respond = $mallUpdateAccountPassword->getRespCode();
-        if($respond && $respond['respCode']  == 0)
+        if(md5($passwordNew) == md5($password))
         {
-            $this->tableObj->password = strtoupper(md5(strtoupper($passwordNew)));
-            $this->tableObj->updateData();
-            return STATUS_SUCCESS;
-        }
-        else
-        {
-            $response->status = STATUS_UNKNOWN;
-            $response->description = $respond['respMsg'];
+            $response->status = 10000;
+            $response->description = '新密码不能跟原密码一致';
             return $response;
         }
+
+        $this->tableObj->password = md5($passwordNew);
+        $res = $this->tableObj->updateData();
+        return $res?STATUS_SUCCESS:STATUS_UNKNOWN;
     }
 }
