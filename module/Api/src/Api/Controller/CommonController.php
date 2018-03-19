@@ -1918,12 +1918,12 @@ class CommonController extends Table
     }
 
     /**
-     * @return PlatformController
-     * 获取platform模块的公共类
+     * @return AdminController
+     * 获取admin模块的公共类
      */
-    public function getPlatformCommonController()
+    public function getAdminCommonController()
     {
-        return new PlatformController();
+        return new AdminController();
     }
 
 

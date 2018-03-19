@@ -13,7 +13,7 @@ class UserItem extends Item
      * 用户昵称
      * @var String
      */
-    public $name;
+    public $nickName;
 
     /**
      * 用户姓名
@@ -43,17 +43,13 @@ class UserItem extends Item
      * 头像id
      * @var String
      */
-    public $image;
+    public $headImageId;
+
 
     /**
-     * @var社区ID
+     * 区域id
      */
-    public $communityId;
-
-    /**
-     * 详细地址
-     */
-    public $address;
+    public $regionId;
 
     /**
      * @var个人签名

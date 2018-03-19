@@ -94,6 +94,9 @@ class IndexController extends CommonController
             case 'UserDetails':
                 $obj = new UserDetails();
                 break;
+            case 'UserUpdateImage':
+                $obj = new UserUpdateImage();
+                break;
             case 'UserUpdate':
                 $obj = new UserUpdate();
                 break;
