@@ -82,7 +82,7 @@ class IndexController extends CommonController
             case 'UserRegister':
                 $obj = new UserRegister();
                 break;
-            case 'UserBindMobile':
+            case 'UserUpdateMobile':
                 $obj = new UserUpdateMobile();
                 break;
             case 'UserUpdatePassword':
@@ -106,107 +106,15 @@ class IndexController extends CommonController
             case 'NewsList':
                 $obj = new NewsList();
                 break;
-            case 'AddressList':
-                $obj = new AddressList();
-                break;
-            case 'AddressSubmit':
-                $obj = new AddressSubmit();
-                break;
-            case 'MerchantList':
-                $obj = new MerchantList();
-                break;
-            case 'MerchantDetails':
-                $obj = new MerchantDetails();
-                break;
-            case 'GoodsList':
-                $obj = new GoodsList();
-                break;
-            case 'GoodsDetails':
-                $obj = new GoodsDetails();
-                break;
-            case 'OrderList':
-                $obj = new OrderList();
-                break;
-            case 'OrderDetails':
-                $obj = new OrderDetails();
-                break;
-            case 'OrderSubmit':
-                $obj = new OrderSubmit();
-                break;
-            case 'OrderStatusUpdate':
-                $obj = new OrderStatusUpdate();
-                break;
-            case 'OrderCommentSubmit':
-                $obj = new OrderCommentSubmit();
-                break;
             case 'PaySubmit':
                 $obj = new PaySubmit();
                 break;
-            case 'CustomerServiceDetails':
-                $obj = new CustomerServiceDetails();
-                break;
-            case 'CustomerServiceSubmit':
-                $obj = new CustomerServiceSubmit();
-                break;
-            case "CartSubmit":
-                $obj = new CartSubmit();
-                break;
-            case "CartDetails":
-                $obj = new CartDetails();
-                break;
-            case "ServiceTypeAttributeAction":
-                 $obj = new ServiceTypeAttributeAction();
-                break;
-            case "GetAttrPriceDetails":
-                $obj = new GetAttrPriceDetails();
-                break;
-            case "AddressDetails":
-                $obj = new AddressDetails();
-                break;
-            case "CouponList":
-                $obj = new CouponList();
-                break;
-            case "ExpressWithGoodsCollectionSubmit":
-                $obj = new ExpressWithGoodsCollectionSubmit();
-                break;
-            case "ShoppingCardList":
-                $obj = new ShoppingCardList();
-                break;
-            case "ShoppingCardSubmit":
-                $obj = new ShoppingCardSubmit();
-                break;
-            case "CouponSubmit":
-                $obj = new CouponSubmit();
                 break;
             case "ArticleList":
                 $obj = new ArticleList();
                 break;
             case "UserPartnerLogin":
                 $obj = new UserPartnerLogin();
-                break;
-            case "BankBranchSubmit":
-                $obj = new BankBranchSubmit();
-                break;
-            case "MerchantJoinedDetails":
-                $obj = new MerchantJoinedDetails();
-                break;
-            case "MerchantJoinedSubmit":
-                $obj = new MerchantJoinedSubmit();
-                break;
-            case "WithdrawSubmit":
-                $obj = new WithdrawSubmit();
-                break;
-            case "GroupBuyingList":
-                $obj = new GroupBuyingList();
-                break;
-            case "PartRecommend":
-                $obj = new PartRecommend();
-                break;
-            case "BankList":
-                $obj = new BankList();
-                break;
-            case "CustomerServiceList":
-                $obj = new CustomerServiceList();
                 break;
             case 'LabelList':
                 $obj = new LabelList();

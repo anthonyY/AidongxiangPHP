@@ -16,7 +16,8 @@ class UserUpdateMobile extends User
     }
 
     /**
-     * @return string
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
@@ -45,6 +46,11 @@ class UserUpdateMobile extends User
             $response->status = 10000;
             $response->description = '新手机号码不能与旧手机一致';
             return $response;
+        }
+        $res = $user_model->checkOtherMobile($request->mobile,$user_id);
+        if($res)
+        {
+            return STATUS_MOBILE_EXIST;
         }
         $result = $user_model->updateData();
         return $result?STATUS_SUCCESS:STATUS_UNKNOWN;
