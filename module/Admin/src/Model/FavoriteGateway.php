@@ -52,7 +52,7 @@ class FavoriteGateway extends BaseGateway {
     public function favoritesSwitch($open)
     {
         $audio = new AudioGateway($this->adapter);
-        $details = $audio->getOne(['id'=>$this->audioId,'delete'=>DELETE_FALSE],['id']);
+        $details = $audio->getOne(['id'=>$this->audioId,'type'=>$this->type,'delete'=>DELETE_FALSE],['id']);
         if(!$details)
         {
             return STATUS_NODATA;
@@ -60,7 +60,7 @@ class FavoriteGateway extends BaseGateway {
 
         $where = array('type'=>$this->type,'user_id'=>$this->userId,'audio_id'=>$this->audioId);
         $res = $this->getOne($where,array('id'));
-        if($this->open == 1)//收藏
+        if($open== 1)//收藏
         {
             if($res)
             {
