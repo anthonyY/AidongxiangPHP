@@ -22,18 +22,16 @@ class FavoritesSwitch extends CommonController
         $response = $this->getAiiResponse();
         $this->checkLogin();
 
-        if(!$request->id || !in_array($request->action,array(1,2,3)) || !in_array($request->open,[1,2])){
+        if(!$request->id || !in_array($request->action,array(1,2)) || !in_array($request->open,[1,2])){
             return STATUS_PARAMETERS_INCOMPLETE;
         }
 
-        $favorites_model = $this->getFavoritesTable();
+        $favorites_model = $this->getFavoriteTable();
         $favorites_model->userId = $this->getUserId();
         $favorites_model->type = $request->action;
-        $favorites_model->ids = is_array($request->id) ? $request->id : [$request->id];
-        $favorites_model->open = $request->open;
-        $favorites_model->action = $request->action;
-        $favorites_model->favoritesSwitch();
-        return STATUS_SUCCESS;
+        $favorites_model->audioId = $request->id;
+        $status = $favorites_model->favoritesSwitch($request->open);
+        return $status;
     }
 }
 

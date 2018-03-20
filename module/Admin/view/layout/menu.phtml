@@ -79,7 +79,7 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
         'sub' => array(
             array(
                 'route' => $this->url('admin-audio', array('action' => 'index')),
-                'name' => '视频列表', 'other' => '',
+                'name' => '音频列表', 'other' => '',
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_audio_index', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(

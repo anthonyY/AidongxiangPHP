@@ -44,4 +44,41 @@ class FavoriteGateway extends BaseGateway {
         return $res?['s'=>0,'d'=>'删除成功']:['s'=>10000,'d'=>'删除失败'];
     }
 
+    /**
+     * @param $open 1收藏；2取消收藏；
+     * @return bool
+     * 协议：收藏/取消收藏
+     */
+    public function favoritesSwitch($open)
+    {
+        $audio = new AudioGateway($this->adapter);
+        $details = $audio->getOne(['id'=>$this->audioId,'delete'=>DELETE_FALSE],['id']);
+        if(!$details)
+        {
+            return STATUS_NODATA;
+        }
+
+        $where = array('type'=>$this->type,'user_id'=>$this->userId,'audio_id'=>$this->audioId);
+        $res = $this->getOne($where,array('id'));
+        if($this->open == 1)//收藏
+        {
+            if($res)
+            {
+                $this->update(array('delete'=>0),array('id'=>$res->id));
+            }
+            else
+            {
+                $this->addData();
+            }
+        }
+        else//取消收藏
+        {
+            if($res)
+            {
+                $this->update(array('delete'=>1),array('id'=>$res->id));
+            }
+        }
+        return STATUS_SUCCESS;
+    }
+
 }
