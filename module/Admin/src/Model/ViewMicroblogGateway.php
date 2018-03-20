@@ -147,4 +147,55 @@ class ViewMicroblogGateway extends BaseGateway {
         return $this->getAll($where,$search_key);
     }
 
+    /**
+     * @param $action 1关注微博，2热门微博，3个人微博
+     * @return array|bool
+     */
+    public function getApiList($action)
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('display',1);
+        switch ($action)
+        {
+            case 1:
+                $be_user_ids = $this->getFocusUserIds($this->userId);
+                $where->in('user_id',$be_user_ids);
+                break;
+            case 2:
+                $this->orderBy = ['comment_num'=>'DESC','repeat_num'=>'DESC','praise_num'=>'DESC'];
+                break;
+            case 3:
+                $where->equalTo('user_id',$this->userId);
+                break;
+            default:
+                return false;
+                break;
+        }
+        return $this->getAll($where);
+    }
+
+    /**
+     * @param $user_id
+     * @return array
+     * 查询用户关注的用户id
+     */
+    private function getFocusUserIds($user_id)
+    {
+        $return = [];
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$user_id);
+        $model = new FocusRelationGateway($this->adapter);
+        $res = $model->fetchAll($where,['target_user_id']);
+        if($res['total'])
+        {
+            foreach ($res['list'] as $v) {
+                if($v->target_user_id && !in_array($v->target_user_id,$return))
+                {
+                    $return[] = $v->target_user_id;
+                }
+            }
+        }
+        return $return;
+    }
+
 }
