@@ -137,9 +137,74 @@ class CommentGateway extends BaseGateway {
 
     public function deleteByIds($ids)
     {
-        $where = new Where();
-        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId)->in('id',$ids);
-        $res = $this->update(array('delete' => 1), $where);
-        return $res?['s'=>0,'d'=>'删除成功']:['s'=>10000,'d'=>'删除失败'];
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        foreach ($ids as $id) {
+            $this->id = $id;
+            $info = $this->getOne(['delete'=>DELETE_FALSE,'id'=>$id,'user_id'=>$this->userId]);
+            if(!$info)
+            {
+                return ['s'=>10000,'d'=>'数据不存在'];
+            }
+            $this->deleteData();
+            if($info->from_id && $info->display == 1)
+            {
+                switch ($info->type)
+                {
+                    case 1:
+                    case 2:
+                        $audio = new AudioGateway($this->adapter);
+                        $details = $audio->getOne(['id'=>$info->from_id],['id','comment_num']);
+                        if($details)
+                        {
+                            $audio->update(['comment_num'=>($details->comment_num-1)<0?0:($details->comment_num-1)],['id'=>$details->id]);
+                        }
+                        break;
+                    case 3:
+                        $microblog = new MicroblogGateway($this->adapter);
+                        $details = $microblog->getOne(['id'=>$info->from_id],['id','comment_num']);
+                        if($details)
+                        {
+                            $microblog->update(['comment_num'=>($details->comment_num-1)<0?0:($details->comment_num-1)],['id'=>$details->id]);
+                        }
+                        break;
+                }
+            }
+        }
+        $this->adapter->getDriver()->getConnection()->commit();
+        return ['s'=>0,'d'=>'删除成功'];
+    }
+
+    /**
+     * 1音频评论，2视频评论，3微博评论
+     * 评论提交
+     */
+    public function CommentSubmit()
+    {
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        switch ($this->type)//1音频评论，2视频评论，3微博评论
+        {
+            case 1:
+            case 2:
+                $model = new AudioGateway($this->adapter);
+                $detail = $model->getOne(['id'=>$this->fromId,'type'=>$this->type==1?2:1],['id','comment_num']);
+                break;
+            case 3:
+                $model = new MicroblogGateway($this->adapter);
+                $detail = $model->getOne(['id'=>$this->fromId],['id','comment_num']);
+                break;
+            default:
+                return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR];
+                break;
+        }
+        if(!$detail)
+        {
+            return ['s'=>STATUS_NODATA];
+        }
+
+        $id = $this->addData();
+        $update = ['comment_num'=>$detail->comment_num+1];
+        $model->update($update,['id'=>$detail->id]);
+        $this->adapter->getDriver()->getConnection()->commit();
+        return ['s'=>STATUS_SUCCESS];
     }
 }
