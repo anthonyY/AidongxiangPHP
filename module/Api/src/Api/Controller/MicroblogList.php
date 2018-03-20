@@ -21,7 +21,8 @@ class MicroblogList extends CommonController
     }
 
     /**
-     * @return Common\Response
+     * @return Common\Response|string
+     * @throws \Exception
      */
     public function index()
     {
@@ -93,7 +94,7 @@ class MicroblogList extends CommonController
             $list[] = $item;
         }
         $response->total =  $data['total'] . '';
-        $response->ads = $list;
+        $response->microblogs = $list;
         return $response;
     }
 
