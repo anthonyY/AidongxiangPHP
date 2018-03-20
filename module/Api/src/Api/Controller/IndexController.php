@@ -125,6 +125,9 @@ class IndexController extends CommonController
             case 'MobileAppealSubmit':
                 $obj = new MobileAppealSubmit();
                 break;
+            case 'CommentSubmit':
+                $obj = new CommentSubmit();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';

@@ -2,7 +2,6 @@
 namespace Api\Controller;
 
 use Api\Controller\Request\CommentRequest;
-use Api\Controller\Request\MessageRequest;
 
 /**
  * 评论
@@ -28,7 +27,7 @@ class CommentSubmit extends CommonController
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $this->checkLogin();
-        $content = addslashes(strip_tags($request->message->content));
+        $content = addslashes(strip_tags($request->content));
         $action = $request->action;//1音频评论，2视频评论，3微博评论
         $id = $request->id;//音频ID|微博ID
         if(!$content || !$id || !in_array($action,[1,2,3]))
