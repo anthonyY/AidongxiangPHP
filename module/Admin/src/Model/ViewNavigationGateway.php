@@ -69,4 +69,15 @@ class ViewNavigationGateway extends BaseGateway {
         return $this->getAll($where);
     }
 
+    public function getApiList()
+    {
+        $this->orderBy = 'sort DESC';
+        $where['delete'] = 0;
+        if($this->type){
+            $where['type'] = $this->type;
+        }
+
+        return $this->fetchAll($where);
+    }
+
 }
