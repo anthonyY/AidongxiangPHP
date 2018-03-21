@@ -159,7 +159,7 @@ class ViewMicroblogGateway extends BaseGateway {
         {
             case 1:
                 $be_user_ids = $this->getFocusUserIds($this->userId);
-                $where->in('user_id',$be_user_ids);
+                $where->in('user_id',$be_user_ids?$be_user_ids:[0]);
                 break;
             case 2:
                 $this->orderBy = ['comment_num'=>'DESC','repeat_num'=>'DESC','praise_num'=>'DESC'];

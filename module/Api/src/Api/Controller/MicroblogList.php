@@ -140,7 +140,7 @@ class MicroblogList extends CommonController
      */
     public function OrderBy($order_by = 1)
     {
-        $result = "sort";
+        $result = "id";
         return $result;
     }
 }
