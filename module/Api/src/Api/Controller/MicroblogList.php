@@ -74,23 +74,58 @@ class MicroblogList extends CommonController
                     'imagePath' => ''
                 ],
             );
-            //用户头像
-            if($v->head_image_id)
+
+            //用户头像和小视频
+            if($v->head_image_id || $v->video_id)
             {
                 $image = $this->getImageTable();
-                $image->id = $v->head_image_id;
-                $head = $image->getDetails();
-                if($head)
+                if($v->head_image_id)//用户头像
                 {
-                    $item['user']['imagePath'] = $head->path.$head->filename;
+                    $image->id = $v->head_image_id;
+                    $head = $image->getDetails();
+                    if($head)
+                    {
+                        $item['user']['imagePath'] = $head->path.$head->filename;
+                    }
+                    else
+                    {
+                        $user_partner = $this->getUserPartnerTable();
+                        $user_partner_info = $user_partner->getDetailsByUserId($v->user_id);
+                        if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
+                    }
                 }
-                else
+                if($v->video_id)//小视频
                 {
-                    $user_partner = $this->getUserPartnerTable();
-                    $user_partner_info = $user_partner->getDetailsByUserId($v->user_id);
-                    if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
+                    $image->id = $v->head_image_id;
+                    $little_video = $image->getDetails();
+                    if($little_video)$item['videoPath'] = $little_video->path.$little_video->filename;
                 }
             }
+            //图片集
+            $viewAlbum = $this->getViewAlbumTable();
+            $viewAlbum->type = 1;
+            $viewAlbum->fromId = $v->id;
+            $album_list = $viewAlbum->getList();
+            $images = [];
+            if($album_list['total'] > 0)
+            {
+                foreach ($album_list['list'] as $m) {
+                    $images[] = $m->path.$m->filename;
+                }
+            }
+            $item['images'] = $images;
+
+            //关注关系
+            $relation = 1;
+            if($this->getUserId())
+            {
+                $FocusRelation = $this->getFocusRelationTable();
+                $FocusRelation->userId = $this->getUserId();
+                $FocusRelation->targetUserId = $v->user_id;
+                $relation = $FocusRelation->userFocusRelation();
+            }
+            $item['isFocus'] = $relation;
+
             $list[] = $item;
         }
         $response->total =  $data['total'] . '';

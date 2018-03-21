@@ -48,4 +48,27 @@ class FocusRelationGateway extends BaseGateway {
         return $res['total']?$res['total']:0;
     }
 
+    /**
+     * 关注关系，1未关注 2已关注，3被关注，4互粉
+     */
+    public function userFocusRelation()
+    {
+        $relation = 1;
+        $res1 = $this->getOne(['delete'=>DELETE_FALSE,'user_id'=>$this->userId,'target_user_id'=>$this->targetUserId],['id']);
+        $res2 = $this->getOne(['delete'=>DELETE_FALSE,'user_id'=>$this->targetUserId,'target_user_id'=>$this->userId],['id']);
+        if($res1 && !$res2)
+        {
+            $relation = 2;
+        }
+        elseif($res2 && !$res1)
+        {
+            $relation = 3;
+        }
+        elseif($res2 && $res1)
+        {
+            $relation = 4;
+        }
+        return $relation;
+    }
+
 }
