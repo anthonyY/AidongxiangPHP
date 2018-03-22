@@ -155,4 +155,15 @@ class ViewAudioGateway extends BaseGateway {
         }
         return $this->getAll($where,['name']);
     }
+
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',$this->type)->equalTo('status',1);
+        if($this->categoryId)
+        {
+            $where->equalTo('category_id',$this->categoryId);
+        }
+        return $this->getAll($where,['name']);
+    }
 }

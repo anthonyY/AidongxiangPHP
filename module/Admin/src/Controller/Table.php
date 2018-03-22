@@ -47,6 +47,8 @@ use Admin\Model\ViewAlbumGateway;
 use Admin\Model\ViewArticleGateway;
 use Admin\Model\ViewCommentGateway;
 use Admin\Model\ViewFinancialGateway;
+use Admin\Model\ViewFavoriteGateway;
+use Admin\Model\ViewWatchRecordGateway;
         
 class Table extends AbstractActionController
 {
@@ -65,6 +67,8 @@ class Table extends AbstractActionController
     protected $ViewArticleTable;
     protected $ViewCommentTable;
     protected $ViewFinancialTable;
+    protected $ViewFavoriteTable;
+    protected $ViewWatchRecordTable;
 
     public function __construct()
     {
@@ -401,5 +405,21 @@ class Table extends AbstractActionController
             $this->ViewFinancialTable = new ViewFinancialGateway($this->adapter);
         }
         return $this->ViewFinancialTable;
+    }
+    protected function getViewFavoriteTable()
+    {
+        if (! $this->ViewFavoriteTable)
+        {
+            $this->ViewFavoriteTable = new ViewFavoriteGateway($this->adapter);
+        }
+        return $this->ViewFinancialTable;
+    }
+    protected function getViewWatchRecordTable()
+    {
+        if (! $this->ViewWatchRecordTable)
+        {
+            $this->ViewWatchRecordTable = new ViewWatchRecordGateway($this->adapter);
+        }
+        return $this->ViewWatchRecordTable;
     }
 }

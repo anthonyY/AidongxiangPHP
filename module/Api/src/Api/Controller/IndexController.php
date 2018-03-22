@@ -131,6 +131,9 @@ class IndexController extends CommonController
             case 'MicroblogList':
                 $obj = new MicroblogList();
                 break;
+            case 'AudioList':
+                $obj = new AudioList();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
