@@ -40,12 +40,13 @@ class AudioDetails extends CommonController
             $res = $buyLogTable->checkUserBuy();
             if($res)$isBuy = 2;
         }
+
         $audio = array(
             'id' => $details->id,
             'audioType' => $details->type,
             'name' => $details->name,
             'price' => $details->price,
-            'payType' => $details->payType,
+            'payType' => $details->pay_type,
             'praiseNum' => $details->praise_num,
             'playNum' => $details->play_num,
             'commentNum' => $details->comment_num,

@@ -21,7 +21,7 @@ class IndexController extends CommonController
         $jsonArray = json_decode($json, true);
         if(!$jsonArray){
             $jsonArray = json_decode(base64_decode($json), true);
-        }s
+        }
         if(!$jsonArray){
             $this->response(STATUS_INCORRECT_FORMAT);
         }
