@@ -135,6 +135,9 @@ class IndexController extends CommonController
             case 'AudioDetails':
                 $obj = new AudioDetails();
                 break;
+            case 'CommentList':
+                $obj = new CommentList();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
