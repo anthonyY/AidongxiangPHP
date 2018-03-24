@@ -63,7 +63,7 @@ class PraiseGateway extends BaseGateway {
             return ['s'=>STATUS_NODATA];
         }
 
-        $where = array('type'=>$type,'user_id'=>$user_id,'audio_id'=>$id);
+        $where = array('type'=>$type,'user_id'=>$user_id,'from_id'=>$id);
         $res = $this->getOne($where,array('id'));
         if($open== 1)//点赞
         {

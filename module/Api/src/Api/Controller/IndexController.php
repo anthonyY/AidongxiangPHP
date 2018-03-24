@@ -141,6 +141,9 @@ class IndexController extends CommonController
             case 'FansList':
                 $obj = new FansList();
                 break;
+            case 'PraiseSwitch':
+                $obj = new PraiseSwitch();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
