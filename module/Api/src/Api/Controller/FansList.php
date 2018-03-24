@@ -61,8 +61,8 @@ class FansList extends CommonController
                     'description' => $v->user_description,
                     'isFocus' => 1,
                 );
-                $focusRelationTable->userId = $v->target_user_id;
-                $focusRelationTable->targetUserId = $user_id;
+                $focusRelationTable->userId = $user_id;
+                $focusRelationTable->targetUserId = $v->user_id;
                 $res = $focusRelationTable->userFocusRelation();
                 if($res==4)$item['isFocus']=2;
                 $list[] = $item;

@@ -17,4 +17,6 @@ class FavoritesSwitchRequest extends Request
      * @var 1|2
      */
     public $open;
+
+    public $userId;
 }
