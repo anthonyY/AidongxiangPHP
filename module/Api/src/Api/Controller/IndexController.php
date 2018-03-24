@@ -144,6 +144,12 @@ class IndexController extends CommonController
             case 'PraiseSwitch':
                 $obj = new PraiseSwitch();
                 break;
+            case 'ScreenSwitch':
+                $obj = new ScreenSwitch();
+                break;
+            case 'ReportSubmit':
+                $obj = new ReportSubmit();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
