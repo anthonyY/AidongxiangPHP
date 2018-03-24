@@ -138,6 +138,9 @@ class IndexController extends CommonController
             case 'CommentList':
                 $obj = new CommentList();
                 break;
+            case 'FansList':
+                $obj = new FansList();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';

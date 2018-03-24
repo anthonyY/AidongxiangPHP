@@ -49,6 +49,7 @@ use Admin\Model\ViewCommentGateway;
 use Admin\Model\ViewFinancialGateway;
 use Admin\Model\ViewFavoriteGateway;
 use Admin\Model\ViewWatchRecordGateway;
+use Admin\Model\ViewFocusRelationGateway;
         
 class Table extends AbstractActionController
 {
@@ -69,6 +70,7 @@ class Table extends AbstractActionController
     protected $ViewFinancialTable;
     protected $ViewFavoriteTable;
     protected $ViewWatchRecordTable;
+    protected $ViewFocusRelationTable;
 
     public function __construct()
     {
@@ -421,5 +423,13 @@ class Table extends AbstractActionController
             $this->ViewWatchRecordTable = new ViewWatchRecordGateway($this->adapter);
         }
         return $this->ViewWatchRecordTable;
+    }
+    protected function getViewFocusRelationTable()
+    {
+        if (! $this->ViewFocusRelationTable)
+        {
+            $this->ViewFocusRelationTable = new ViewFocusRelationGateway($this->adapter);
+        }
+        return $this->ViewFocusRelationTable;
     }
 }
