@@ -412,7 +412,7 @@ class Table extends AbstractActionController
         {
             $this->ViewFavoriteTable = new ViewFavoriteGateway($this->adapter);
         }
-        return $this->ViewFinancialTable;
+        return $this->ViewFavoriteTable;
     }
     protected function getViewWatchRecordTable()
     {

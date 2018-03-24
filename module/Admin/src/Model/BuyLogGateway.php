@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 购买记录
 *
@@ -38,5 +40,16 @@ class BuyLogGateway extends BaseGateway {
     protected $columns_array = ["id","cash","status","audioId","userId","delete","timestamp"];
 
     public $table = DB_PREFIX . 'buy_log';
+
+    /**
+     * @return array|\ArrayObject|bool|null
+     * 查询用户是否已购买某音频
+     */
+    public function checkUserBuy()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('status',2)->equalTo('user_id',$this->userId)->equalTo('audio_id',$this->audioId);
+        return $this->getOne($where,['id']);
+    }
 
 }

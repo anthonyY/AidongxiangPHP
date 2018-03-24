@@ -20,12 +20,15 @@ class AudioList extends CommonController
     {
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
-
         $action = $request->action;
         $table_where = $this->getTableWhere();
         $audio_type = $table_where->audioType;//1视频 2音频
         if(!in_array($action,[1,2,3]) || !in_array($audio_type,[1,2])){//a:1全部；2视频收藏 3观看记录
             return STATUS_PARAMETERS_INCOMPLETE;
+        }
+        if(in_array($action,[2,3]))
+        {
+            $this->checkLogin();
         }
 
         $category_id = $table_where->categoryId;
@@ -44,12 +47,23 @@ class AudioList extends CommonController
             $data = $this->tableObj->getApiList();
             if($data['list'])
             {
+                $buyLogTable = $this->getBuyLogTable();
+                $buyLogTable->userId = $this->getUserId();
+                $buyLogTable->status = 2;
                 foreach ($data['list'] as $val) {
+                    $hadBuy = false;
+                    if($buyLogTable->userId > 0)
+                    {
+                        $buyLogTable->audioId = $val->id;
+                        $res = $buyLogTable->checkUserBuy();
+                        if($res)$hadBuy = true;
+                    }
                     $item = array(
                         'id' => $val->id,
+                        'audioId' => $val->id,
                         'name' => $val->name,
                         'imagePath' => $val->image_filename ? $val->image_path . $val->image_filename : '',
-                        'path' => $val->pay_type==2?$val->auditions_path:$val->full_path,
+                        'path' => $val->pay_type==2?($hadBuy?$val->full_path:$val->auditions_path):$val->full_path,
                         'playNum' => $val->play_num,
                         'audioLength' => $val->pay_type==2?$val->auditions_length:$val->audio_length,
                         'timestamp' => $val->timestamp,
@@ -58,6 +72,46 @@ class AudioList extends CommonController
                 }
                 $total = $data['total'];
             }
+        }
+        elseif($action == 2)//2视频收藏
+        {
+            $this->tableObj = $this->getViewFavoriteTable();
+            $this->initModel();
+            $this->tableObj->userId = $this->getUserId();
+            $this->tableObj->type = $audio_type;
+            $this->tableObj->audioType = $audio_type;
+            $data = $this->tableObj->getApiList();
+            if($data['list'])
+            {
+                $buyLogTable = $this->getBuyLogTable();
+                $buyLogTable->userId = $this->getUserId();
+                $buyLogTable->status = 2;
+                foreach ($data['list'] as $val) {
+                    $hadBuy = false;
+                    if($buyLogTable->userId > 0)
+                    {
+                        $buyLogTable->audioId = $val->audio_id;
+                        $res = $buyLogTable->checkUserBuy();
+                        if($res)$hadBuy = true;
+                    }
+                    $item = array(
+                        'id' => $val->id,
+                        'audioId' => $val->audio_id,
+                        'name' => $val->audio_name,
+                        'imagePath' => $val->image_filename ? $val->image_path . $val->image_filename : '',
+                        'path' => $val->pay_type==2?($hadBuy?$val->full_path:$val->auditions_path):$val->full_path,
+                        'playNum' => $val->play_num,
+                        'audioLength' => $val->pay_type==2?$val->auditions_length:$val->audio_length,
+                        'timestamp' => $val->timestamp,
+                    );
+                    $list[] = $item;
+                }
+                $total = $data['total'];
+            }
+        }
+        elseif($action == 3)//3观看记录
+        {
+
         }
 
         $response->status = STATUS_SUCCESS;

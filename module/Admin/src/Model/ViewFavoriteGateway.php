@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * VIEW
 *
@@ -168,5 +170,14 @@ class ViewFavoriteGateway extends BaseGateway {
     protected $columns_array = ["id","userId","audioId","type","delete","timestamp","audioType","audioName","audioFilename","payType","price","memberPrice","description","audioImageId","auditionsPath","fullPath","audioLength","auditionsLength","size","audioStatus","commentNum","playNum","praiseNum","categoryId","audioDelete","audioTimestamp","imageFilename","imagePath","categoryName","nickName","realName","mobile","headImageId"];
 
     public $table = 'view_favorite';
+
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
+        if($this->type)$where->equalTo('type',$this->type);
+        if($this->audioType)$where->equalTo('audio_type',$this->audioType);
+        return $this->getAll();
+    }
 
 }
