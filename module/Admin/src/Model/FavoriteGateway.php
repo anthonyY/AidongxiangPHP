@@ -81,4 +81,15 @@ class FavoriteGateway extends BaseGateway {
         return STATUS_SUCCESS;
     }
 
+    /**
+     * @return array|\ArrayObject|bool|null
+     * 查询用户是否已收藏某音频
+     */
+    public function checkUserFavorite()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId)->equalTo('audio_id',$this->audioId);
+        return $this->getOne($where,['id']);
+    }
+
 }

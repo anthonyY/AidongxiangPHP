@@ -13,8 +13,6 @@ class IndexController extends CommonController
 
     public function indexAction()
     {
-//        header('Access-Control-Allow-Origin:*');
-        //$startTime = microtime();
         header("Access-Control-Allow-Origin:*"); //*号表示所有域名都可以访问
         $json = isset($_REQUEST['json']) ? $_REQUEST['json'] : false;
         if(!$json){
@@ -23,7 +21,7 @@ class IndexController extends CommonController
         $jsonArray = json_decode($json, true);
         if(!$jsonArray){
             $jsonArray = json_decode(base64_decode($json), true);
-        }
+        }s
         if(!$jsonArray){
             $this->response(STATUS_INCORRECT_FORMAT);
         }
@@ -134,6 +132,9 @@ class IndexController extends CommonController
             case 'AudioList':
                 $obj = new AudioList();
                 break;
+            case 'AudioDetails':
+                $obj = new AudioDetails();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
@@ -147,25 +148,6 @@ class IndexController extends CommonController
         }
         $obj->response();
         exit();
-    }
-
-
-    /**
-     * 客天下java端请求总入口
-     */
-    public function mallApiAction()
-    {
-        $mall_base = new mallBase();
-        return $mall_base->getJavaResponse();
-    }
-
-    /**
-     * 客天下java端请求总入口
-     */
-    public function roomApiAction()
-    {
-        $room_base = new roomBase();
-        return $room_base->getJavaResponse();
     }
 
 
@@ -299,17 +281,6 @@ class IndexController extends CommonController
         $ViewUserGroupBuyingTable->autoCancelGroupBuyingOrder();
 //        $this->autoCompleteAction();
         die;
-    }
-
-    /**
-     * 购物卡测试
-     */
-    public function testShoppingCardAction()
-    {
-        $shopping_cart = $this->getShoppingCardTable();
-        $res = $shopping_cart->shoppingCardUsage(array(18022), array(1 => array(1 => 100)), 1);
-        var_dump($res);
-
     }
 
     /**
