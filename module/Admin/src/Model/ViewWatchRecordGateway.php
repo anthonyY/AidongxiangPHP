@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * VIEW
 *
@@ -168,5 +170,13 @@ class ViewWatchRecordGateway extends BaseGateway {
     protected $columns_array = ["id","userId","audioId","time","delete","timestamp","audioType","audioName","filename","payType","price","memberPrice","description","audioImageId","auditionsPath","fullPath","audioLength","auditionsLength","size","audioStatus","commentNum","playNum","praiseNum","categoryId","audioDelete","audioTimestamp","imageFilename","imagePath","categoryName","nickName","realName","mobile","headImageId"];
 
     public $table = 'view_watch_record';
+
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
+        if($this->audioType)$where->equalTo('audio_type',$this->audioType);
+        return $this->getAll();
+    }
 
 }

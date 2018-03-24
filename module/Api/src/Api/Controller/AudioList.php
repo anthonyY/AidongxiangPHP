@@ -111,7 +111,38 @@ class AudioList extends CommonController
         }
         elseif($action == 3)//3观看记录
         {
-
+            $this->tableObj = $this->getViewWatchRecordTable();
+            $this->initModel();
+            $this->tableObj->userId = $this->getUserId();
+            $this->tableObj->audioType = $audio_type;
+            $data = $this->tableObj->getApiList();
+            if($data['list'])
+            {
+                $buyLogTable = $this->getBuyLogTable();
+                $buyLogTable->userId = $this->getUserId();
+                $buyLogTable->status = 2;
+                foreach ($data['list'] as $val) {
+                    $hadBuy = false;
+                    if($buyLogTable->userId > 0)
+                    {
+                        $buyLogTable->audioId = $val->audio_id;
+                        $res = $buyLogTable->checkUserBuy();
+                        if($res)$hadBuy = true;
+                    }
+                    $item = array(
+                        'id' => $val->id,
+                        'audioId' => $val->audio_id,
+                        'name' => $val->audio_name,
+                        'imagePath' => $val->image_filename ? $val->image_path . $val->image_filename : '',
+                        'path' => $val->pay_type==2?($hadBuy?$val->full_path:$val->auditions_path):$val->full_path,
+                        'playNum' => $val->play_num,
+                        'audioLength' => $val->pay_type==2?$val->auditions_length:$val->audio_length,
+                        'timestamp' => $val->timestamp,
+                    );
+                    $list[] = $item;
+                }
+                $total = $data['total'];
+            }
         }
 
         $response->status = STATUS_SUCCESS;
