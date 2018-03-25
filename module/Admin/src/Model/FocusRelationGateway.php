@@ -71,4 +71,48 @@ class FocusRelationGateway extends BaseGateway {
         return $relation;
     }
 
+    /**
+     * @param $user_id
+     * @param $be_user_id
+     * @param $open
+     * @return array
+     * 关注或取消关注
+     */
+    public function focusSwitch($user_id,$be_user_id,$open)
+    {
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        $UserTable = new UserGateway($this->adapter);
+        $details = $UserTable->getOne(['id'=>$be_user_id,'delete'=>DELETE_FALSE],['id','status']);
+        if(!$details)
+        {
+            return ['s'=>STATUS_USER_NOT_EXIST];
+        }
+
+        $where = array('user_id'=>$user_id,'target_user_id'=>$be_user_id);
+        $res = $this->getOne($where,array('id'));
+        if($open== 1)//关注
+        {
+            if($res)
+            {
+                $this->update(array('delete'=>0),array('id'=>$res->id));
+            }
+            else
+            {
+                $data = [
+                    'user_id' => $user_id,
+                    'target_user_id' => $be_user_id,
+                ];
+                $this->insert($data);
+            }
+        }
+        else//取消关注
+        {
+            if($res)
+            {
+                $this->update(array('delete'=>1),array('id'=>$res->id));
+            }
+        }
+        $this->adapter->getDriver()->getConnection()->commit();
+        return ['s'=>STATUS_SUCCESS];
+    }
 }
