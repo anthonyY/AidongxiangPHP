@@ -117,4 +117,15 @@ class ViewArticleGateway extends BaseGateway {
         return $this->getAll($where,['title']);
     }
 
+    public function getApiList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE);
+        if($this->categoryId)
+        {
+            $where->equalTo('category_id',$this->categoryId);
+        }
+        return $this->getAll($where,['title']);
+    }
+
 }
