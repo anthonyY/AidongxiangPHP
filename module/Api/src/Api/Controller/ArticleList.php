@@ -42,7 +42,7 @@ class ArticleList extends CommonController
                     'title' => $val->title,
                     'imagePath' => $val->path . $val->filename,
                     'timestamp' => $val->timestamp,
-                    'categoryName' => $val->categoryName,
+                    'categoryName' => $val->category_name,
                     'abstract' => $val->abstract,
                 ];
                 $list[] = $item;
