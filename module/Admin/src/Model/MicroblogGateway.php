@@ -145,7 +145,7 @@ class MicroblogGateway extends BaseGateway {
         $longitude = $microblog->longitude;
         $latitude = $microblog->latitude;
         $parentId = $microblog->parentId;
-        if(!$content && !$videoId && !$imageIds || !$parentId)
+        if(!$content && !$videoId && !$imageIds && !$parentId)
         {
             return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR];
         }
@@ -188,14 +188,13 @@ class MicroblogGateway extends BaseGateway {
             $set = [
                 'type' => 1,
                 'from_id' => $id,
-                ''
             ];
             foreach ($imageIds as $imageId) {
                 $set['image_id'] = $imageId;
                 $album->insert($set);
             }
         }
-
         $this->adapter->getDriver()->getConnection()->commit();
+        return ['s'=>STATUS_SUCCESS];
     }
 }
