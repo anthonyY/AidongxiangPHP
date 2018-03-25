@@ -156,6 +156,9 @@ class IndexController extends CommonController
             case 'ArticleDetails':
                 $obj = new ArticleDetails();
                 break;
+            case 'MicroblogSubmit':
+                $obj = new MicroblogSubmit();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
