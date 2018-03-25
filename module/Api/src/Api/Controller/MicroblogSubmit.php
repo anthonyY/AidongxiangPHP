@@ -27,23 +27,19 @@ class MicroblogSubmit extends CommonController
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
         $this->checkLogin();
-        $content = addslashes(strip_tags($request->message->content));
-        if(!$content)
+        $microblog = $request->microblog;
+        if(!$microblog)
         {
-            return false;
+            return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
-        $leave_message_table = $this->getLeaveMessageTable();
-        if($this->getUserType() == 1)
+        $microblogTable = $this->getMicroblogTable();
+        $user_id = $this->getUserId();
+        $res = $microblogTable->MicroblogSubmit($microblog,$user_id);
+        $response->status = $res['s'];
+        if(isset($res['d']))
         {
-            $leave_message_table->userType = 1;
+            $response->description = $res['d'];
         }
-
-        $leave_message_table->content = $content;
-        $leave_message_table->userId = $this->getUserId();
-
-        $id =$leave_message_table->addData();
-        $response->status = ($id ? STATUS_SUCCESS : STATUS_UNKNOWN); // 成功或未知错误
-        $response->id = $id;
         return $response;
     }
 }

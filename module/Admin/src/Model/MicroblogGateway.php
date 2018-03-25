@@ -1,5 +1,6 @@
 <?php
 namespace Admin\Model;
+use Api\Controller\Item\MicroblogItem;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Where;
 
@@ -125,5 +126,41 @@ class MicroblogGateway extends BaseGateway {
         }
         $res = $this->getOne($where,[new Expression('SUM(1) as total')]);
         return $res['total']?$res['total']:0;
+    }
+
+    /**
+     * @param MicroblogItem $microblog
+     * @param $user_id
+     * @return array
+     */
+    public function MicroblogSubmit(MicroblogItem $microblog,$user_id)
+    {
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        $content = $microblog->content;
+        $imageIds = $microblog->imageIds;
+        $videoId = $microblog->videoId;
+        $address = $microblog->address;
+        $regionId = $microblog->regionId;
+        $longitude = $microblog->longitude;
+        $latitude = $microblog->latitude;
+        $parentId = $microblog->parentId;
+        if(!$content && !$videoId && !$imageIds || !$parentId)
+        {
+            return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR];
+        }
+        if($imageIds && $videoId)
+        {
+            return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR,'d'=>'图像内容要求不符'];
+        }
+        if($imageIds && !is_array($imageIds))
+        {
+            return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR];
+        }
+        if($parentId)
+        {
+            $parent = $this->getOne(['id'=>$parentId],['id','repeat_num']);
+            if(!$parent)return ['s'=>STATUS_NODATA,'d'=>'转发数据不存在'];
+        }
+        $this->adapter->getDriver()->getConnection()->commit();
     }
 }

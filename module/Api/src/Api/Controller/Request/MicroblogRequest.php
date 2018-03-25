@@ -21,6 +21,6 @@ class MicroblogRequest extends Request
     function __construct()
     {
         parent::__construct();
-        $this->message = new MicroblogItem();
+        $this->microblog = new MicroblogItem();
     }
 }
