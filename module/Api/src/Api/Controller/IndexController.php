@@ -153,6 +153,9 @@ class IndexController extends CommonController
             case 'FocusSwitch':
                 $obj = new FocusSwitch();
                 break;
+            case 'ArticleDetails':
+                $obj = new ArticleDetails();
+                break;
             default:
                 $this->namespace = isset($jsonArray['n']) ? $jsonArray['n'] : '';
                 $this->session_id = isset($jsonArray['s']) ? $jsonArray['s'] : '';
