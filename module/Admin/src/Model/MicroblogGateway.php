@@ -1,5 +1,6 @@
 <?php
 namespace Admin\Model;
+use Admin\Controller\CommonController;
 use Api\Controller\Item\MicroblogItem;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Where;
@@ -160,7 +161,41 @@ class MicroblogGateway extends BaseGateway {
         {
             $parent = $this->getOne(['id'=>$parentId],['id','repeat_num']);
             if(!$parent)return ['s'=>STATUS_NODATA,'d'=>'转发数据不存在'];
+            $this->update(['repeat_num'=>$parent->repeat_num+1],['id'=>$parentId]);
         }
+        $data = [
+            'user_id' => $user_id,
+        ];
+        if($content)$data['content'] = $content;
+        if($videoId)$data['video_id'] = $videoId;
+        if($regionId)
+        {
+            $data['region_id'] = $regionId;
+            $adminCommonController = new CommonController();
+            $region_info = $adminCommonController->getRegionInfoArray($regionId);
+            if($region_info['region_info']){
+                $data['region_info'] = $region_info['region_info'];
+                $data['address'] = $adminCommonController->getProvinceCityCountryName($region_info['region_info']).$address;
+            }
+        }
+        if($address)$data['street'] = $address;
+        if($longitude)$data['longitude'] = $longitude;
+        if($latitude)$data['latitude'] = $latitude;
+        $id = $this->insert($data);
+        if($imageIds)
+        {
+            $album = new AlbumGateway($this->adapter);
+            $set = [
+                'type' => 1,
+                'from_id' => $id,
+                ''
+            ];
+            foreach ($imageIds as $imageId) {
+                $set['image_id'] = $imageId;
+                $album->insert($set);
+            }
+        }
+
         $this->adapter->getDriver()->getConnection()->commit();
     }
 }
