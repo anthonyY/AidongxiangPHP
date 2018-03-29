@@ -28,6 +28,10 @@ class CommentList extends CommonController
 
         $total = 0;
         $list = [];
+
+        $praiseTable = $this->getPraiseTable();
+        $praiseTable->userId = $this->getUserId();
+        $praiseTable->type = 2;
         if($data['list'])
         {
             foreach ($data['list'] as $val) {
@@ -36,12 +40,17 @@ class CommentList extends CommonController
                     'content' => $val->content,
                     'timestamp' => $val->timestamp,
                     'praiseNum' => $val->praise_num,
+                    'isPraise' => 1,
                     'user' => [
                         'id' => $val->user_id,
                         'name' => $val->nick_name,
                         'imagePath' => $val->image_path.$val->image_filename
                     ],
                 );
+
+                $praiseTable->fromId = $val->id;
+                $praise_res = $praiseTable->checkUserPraise();
+                if($praise_res)$item['isPraise'] = 2;
                 $list[] = $item;
             }
             $total = $data['total'];

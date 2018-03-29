@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 点赞
 *
@@ -92,6 +94,20 @@ class PraiseGateway extends BaseGateway {
         }
         $this->adapter->getDriver()->getConnection()->commit();
         return ['s'=>STATUS_SUCCESS];
+    }
+
+    /**
+     * @return bool
+     * 查询用户是否对音频或评论或微博点赞
+     */
+    public function checkUserPraise()
+    {
+        $praise = false;
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',$this->type)->equalTo('user_id',$this->userId)->equalTo('from_id',$this->fromId);
+        $res = $this->getOne($where,['id']);
+        if($res)$praise=true;
+        return $praise;
     }
 
 }

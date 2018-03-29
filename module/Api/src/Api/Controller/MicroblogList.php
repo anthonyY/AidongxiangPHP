@@ -57,6 +57,9 @@ class MicroblogList extends CommonController
         }
         $list = array();
         $image = $this->getImageTable();
+        $praiseTable = $this->getPraiseTable();
+        $praiseTable->userId = $this->getUserId();
+        $praiseTable->type = 3;
         if($action != 5)
         {
             $this->tableObj = $this->getViewMicroblogTable();
@@ -78,6 +81,7 @@ class MicroblogList extends CommonController
                     'praiseNum' => $v->praise_num,
                     'commentNum' => $v->comment_num,
                     'repeatNum'=> $v->repeat_num,
+                    'isPraise' => 1,
                     'user' => [
                         'id' => $v->user_id,
                         'nickName' => $v->nick_name,
@@ -135,6 +139,10 @@ class MicroblogList extends CommonController
                 }
                 $item['isFocus'] = $relation;
 
+                $praiseTable->fromId = $v->id;
+                $praise_res = $praiseTable->checkUserPraise();
+                if($praise_res)$item['isPraise'] = 2;
+
                 $list[] = $item;
             }
         }
@@ -154,6 +162,7 @@ class MicroblogList extends CommonController
                         'id' => $v->id,
                         'fromId' => $v->from_id,
                         'content' => $info->content,
+                        'isPraise' => 1,
                         'user' => [
                             'id' => $info->user_id,
                             'nickName' => $info->nick_name,
@@ -176,6 +185,10 @@ class MicroblogList extends CommonController
                             if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
                         }
                     }
+
+                    $praiseTable->fromId = $v->from_id;
+                    $praise_res = $praiseTable->checkUserPraise();
+                    if($praise_res)$item['isPraise'] = 2;
                 }
             }
         }
