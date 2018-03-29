@@ -110,4 +110,17 @@ class PraiseGateway extends BaseGateway {
         return $praise;
     }
 
+    /**
+     * @return array
+     * 查询点赞的用户列表
+     */
+    public function getPraiseUserList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE);
+        if($this->type)$where->equalTo('type',$this->type);
+        if($this->fromId)$where->equalTo('from_id',$this->fromId);
+        return $this->getAll($where);
+    }
+
 }

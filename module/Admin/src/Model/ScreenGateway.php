@@ -97,4 +97,11 @@ class ScreenGateway extends BaseGateway {
         $where->equalTo('delete',DELETE_FALSE)->equalTo('type',2)->equalTo('user_id',$this->userId);
         return $this->getAll($where);
     }
+
+    public function getScreenUserList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',3)->equalTo('user_id',$this->userId);
+        return $this->getAll($where);
+    }
 }
