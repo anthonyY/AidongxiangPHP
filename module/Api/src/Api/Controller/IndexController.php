@@ -138,7 +138,7 @@ class IndexController extends CommonController
             case 'CommentList':
                 $obj = new CommentList();
                 break;
-            case 'FansList':
+            case 'UserList':
                 $obj = new UserList();
                 break;
             case 'PraiseSwitch':
