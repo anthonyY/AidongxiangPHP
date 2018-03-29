@@ -148,7 +148,7 @@ class ViewMicroblogGateway extends BaseGateway {
     }
 
     /**
-     * @param $action 1关注微博，2热门微博，3个人微博
+     * @param $action 1关注微博，2热门微博，3个人微博，4微博转发列表
      * @return array|bool
      */
     public function getApiList($action)
@@ -167,6 +167,8 @@ class ViewMicroblogGateway extends BaseGateway {
             case 3:
                 $where->equalTo('user_id',$this->userId);
                 break;
+            case 4:
+                $where->equalTo('parent_id',$this->parentId);
             default:
                 return false;
                 break;

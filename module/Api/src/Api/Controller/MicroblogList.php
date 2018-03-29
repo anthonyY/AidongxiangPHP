@@ -28,16 +28,22 @@ class MicroblogList extends CommonController
     {
         $request = $this->getAiiRequest();
         $response = $this->getAiiResponse();
-        $action = $request->action;//1关注微博，2热门微博，3个人微博
-        if(!in_array($action,[1,2,3]))
+        $action = $request->action;//1关注微博，2热门微博，3个人微博，4微博转发列表，5屏蔽的微博列表v2
+        if(!in_array($action,[1,2,3,4,5]))
         {
             return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
         $user_id = 0;
-        if($action == 1)
+        $parent_id = 0;
+        if(in_array($action,[1,5]))
         {
             $this->checkLogin();
             $user_id = $this->getUserId();
+        }
+        if($action == 4)
+        {
+            if(!$request->id)return STATUS_PARAMETERS_CONDITIONAL_ERROR;
+            $parent_id = $request->id;
         }
         if($action == 3)
         {
@@ -49,85 +55,131 @@ class MicroblogList extends CommonController
                 $user_id = $this->getUserId();
             }
         }
-        $this->tableObj = $this->getViewMicroblogTable();
-        $this->initModel();
-        $this->tableObj->userId = $user_id;
-        $data = $this->tableObj->getApiList($action);
-        if(!$data)
-        {
-            return STATUS_PARAMETERS_CONDITIONAL_ERROR;
-        }
         $list = array();
-        foreach($data['list'] as $v)
+        $image = $this->getImageTable();
+        if($action != 5)
         {
-            $item = array(
-                'id' => $v->id,
-                'content' => $v->content,
-                'timestamp' => $v->timestamp,
-                'address' => $v->address,
-                'praiseNum' => $v->praise_num,
-                'commentNum' => $v->comment_num,
-                'repeatNum'=> $v->repeat_num,
-                'user' => [
-                    'id' => $v->user_id,
-                    'nickName' => $v->nick_name,
-                    'imagePath' => ''
-                ],
-            );
-
-            //用户头像和小视频
-            if($v->head_image_id || $v->video_id)
+            $this->tableObj = $this->getViewMicroblogTable();
+            $this->initModel();
+            $this->tableObj->userId = $user_id;
+            $this->tableObj->parentId = $parent_id;
+            $data = $this->tableObj->getApiList($action);
+            if(!$data)
             {
-                $image = $this->getImageTable();
-                if($v->head_image_id)//用户头像
+                return STATUS_PARAMETERS_CONDITIONAL_ERROR;
+            }
+            foreach($data['list'] as $v)
+            {
+                $item = array(
+                    'id' => $v->id,
+                    'content' => $v->content,
+                    'timestamp' => $v->timestamp,
+                    'address' => $v->address,
+                    'praiseNum' => $v->praise_num,
+                    'commentNum' => $v->comment_num,
+                    'repeatNum'=> $v->repeat_num,
+                    'user' => [
+                        'id' => $v->user_id,
+                        'nickName' => $v->nick_name,
+                        'imagePath' => ''
+                    ],
+                );
+                //用户头像和小视频
+                if($v->head_image_id || $v->video_id)
                 {
-                    $image->id = $v->head_image_id;
-                    $head = $image->getDetails();
-                    if($head)
+
+                    if($v->head_image_id)//用户头像
                     {
-                        $item['user']['imagePath'] = $head->path.$head->filename;
+                        $image->id = $v->head_image_id;
+                        $head = $image->getDetails();
+                        if($head)
+                        {
+                            $item['user']['imagePath'] = $head->path.$head->filename;
+                        }
+                        else
+                        {
+                            $user_partner = $this->getUserPartnerTable();
+                            $user_partner_info = $user_partner->getDetailsByUserId($v->user_id);
+                            if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
+                        }
                     }
-                    else
+                    if($v->video_id)//小视频
                     {
-                        $user_partner = $this->getUserPartnerTable();
-                        $user_partner_info = $user_partner->getDetailsByUserId($v->user_id);
-                        if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
+                        $image->id = $v->head_image_id;
+                        $little_video = $image->getDetails();
+                        if($little_video)$item['videoPath'] = $little_video->path.$little_video->filename;
                     }
                 }
-                if($v->video_id)//小视频
+                //图片集
+                $viewAlbum = $this->getViewAlbumTable();
+                $viewAlbum->type = 1;
+                $viewAlbum->fromId = $v->id;
+                $album_list = $viewAlbum->getList();
+                $images = [];
+                if($album_list['total'] > 0)
                 {
-                    $image->id = $v->head_image_id;
-                    $little_video = $image->getDetails();
-                    if($little_video)$item['videoPath'] = $little_video->path.$little_video->filename;
+                    foreach ($album_list['list'] as $m) {
+                        $images[] = $m->path.$m->filename;
+                    }
                 }
-            }
-            //图片集
-            $viewAlbum = $this->getViewAlbumTable();
-            $viewAlbum->type = 1;
-            $viewAlbum->fromId = $v->id;
-            $album_list = $viewAlbum->getList();
-            $images = [];
-            if($album_list['total'] > 0)
-            {
-                foreach ($album_list['list'] as $m) {
-                    $images[] = $m->path.$m->filename;
+                $item['images'] = $images;
+
+                //关注关系
+                $relation = 1;
+                if($this->getUserId())
+                {
+                    $FocusRelation = $this->getFocusRelationTable();
+                    $FocusRelation->userId = $this->getUserId();
+                    $FocusRelation->targetUserId = $v->user_id;
+                    $relation = $FocusRelation->userFocusRelation();
                 }
-            }
-            $item['images'] = $images;
+                $item['isFocus'] = $relation;
 
-            //关注关系
-            $relation = 1;
-            if($this->getUserId())
-            {
-                $FocusRelation = $this->getFocusRelationTable();
-                $FocusRelation->userId = $this->getUserId();
-                $FocusRelation->targetUserId = $v->user_id;
-                $relation = $FocusRelation->userFocusRelation();
+                $list[] = $item;
             }
-            $item['isFocus'] = $relation;
-
-            $list[] = $item;
         }
+        else //屏蔽的微博列表v2
+        {
+            $this->tableObj = $this->getScreenTable();
+            $this->initModel();
+            $this->tableObj->userId = $user_id;
+            $data = $this->tableObj->getMicroblogList();
+            if($data['list'])
+            {
+                $view_microblog_table = $this->getViewMicroblogTable();
+                foreach ($data['list'] as $v) {
+                    $view_microblog_table->id = $v->from_id;
+                    $info = $view_microblog_table->getDetails();
+                    $item = [
+                        'id' => $v->id,
+                        'fromId' => $v->from_id,
+                        'content' => $info->content,
+                        'user' => [
+                            'id' => $info->user_id,
+                            'nickName' => $info->nick_name,
+                            'imagePath' => ''
+                        ],
+                    ];
+                    //用户头像
+                    if($info->head_image_id)
+                    {
+                        $image->id = $info->head_image_id;
+                        $head = $image->getDetails();
+                        if($head)
+                        {
+                            $item['user']['imagePath'] = $head->path.$head->filename;
+                        }
+                        else
+                        {
+                            $user_partner = $this->getUserPartnerTable();
+                            $user_partner_info = $user_partner->getDetailsByUserId($info->user_id);
+                            if($user_partner_info)$item['user']['imagePath'] = $user_partner_info->image_url;
+                        }
+                    }
+                }
+            }
+        }
+
         $response->total =  $data['total'] . '';
         $response->microblogs = $list;
         return $response;

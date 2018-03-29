@@ -1,5 +1,7 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Where;
+
 /**
 * 屏蔽
 *
@@ -87,5 +89,12 @@ class ScreenGateway extends BaseGateway {
         }
         $this->adapter->getDriver()->getConnection()->commit();
         return ['s'=>STATUS_SUCCESS];
+    }
+
+    public function getMicroblogList()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',2)->equalTo('user_id',$this->userId);
+        return $this->getAll($where);
     }
 }
