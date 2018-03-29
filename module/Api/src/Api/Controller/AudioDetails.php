@@ -51,6 +51,7 @@ class AudioDetails extends CommonController
             'playNum' => $details->play_num,
             'commentNum' => $details->comment_num,
             'isFavorite' => $isFavorite,
+            'isPraise' => 1,
             'status' => $details->status,
             'imagePath' => $details->image_filename?$details->image_path.$details->image_filename:'',
             'isBuy' => $isBuy,
@@ -58,6 +59,13 @@ class AudioDetails extends CommonController
             'audioPath' => $details->pay_type==2?($isBuy==2?$details->full_path:$details->auditions_path):$details->full_path,
             'audioLength' => $details->pay_type==2?($isBuy==2?$details->audio_length:$details->auditions_length):$details->audio_length,
         );
+
+        $praiseTable = $this->getPraiseTable();
+        $praiseTable->userId = $this->getUserId();
+        $praiseTable->type = 1;
+        $praiseTable->fromId = $id;
+        $praise_res = $praiseTable->checkUserPraise();
+        if($praise_res)$audio['isPraise'] = 2;
 
         $response->status = STATUS_SUCCESS;
         $response->audio = $audio;
