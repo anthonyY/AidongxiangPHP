@@ -169,6 +169,7 @@ class ViewMicroblogGateway extends BaseGateway {
                 break;
             case 4:
                 $where->equalTo('parent_id',$this->parentId);
+                break;
             default:
                 return false;
                 break;
