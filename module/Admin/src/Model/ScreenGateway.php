@@ -34,7 +34,7 @@ class ScreenGateway extends BaseGateway {
     */
     protected $columns_array = ["id","userId","fromId","type","delete","timestamp"];
 
-    public $table = 'screen';
+    public $table = DB_PREFIX . 'screen';
 
     /**
      * @param $user_id
