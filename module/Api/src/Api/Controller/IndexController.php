@@ -110,7 +110,6 @@ class IndexController extends CommonController
             case 'PaySubmit':
                 $obj = new PaySubmit();
                 break;
-                break;
             case "ArticleList":
                 $obj = new ArticleList();
                 break;
