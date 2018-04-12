@@ -117,7 +117,7 @@ class SMSCode extends User
             $login_table->sessionId = $this->getSessionId();
             $device = $login_table->getDetails();
             if($device){
-                if(!in_array($device->device_type, array(1, 2, 16)))
+                if(!in_array($device->device_type, array(1, 2, 16,32)))
                 {
 
                     return STATUS_SEND_SMSCODE_FAIL;
