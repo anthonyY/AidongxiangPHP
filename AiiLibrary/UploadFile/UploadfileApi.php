@@ -425,6 +425,9 @@ class UploadfileApi
             case 8273:
                 $fileType = 'avi';
                 break;
+            case 102116:
+                $fileType = 'mp4';
+                break;
             case 8075:
             case 208207:
                 $fileType = 'xls';  
