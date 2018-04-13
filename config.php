@@ -34,10 +34,10 @@ define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
 /**
  * 腾讯云对象存储配置
  */
-define("COS_APP_ID", '1254293814');     //数据链接IP
-define("COS_BUCKET", 'yarstick');
-define("COS_SECRET_ID", 'AKIDmSxOdl3WgOuLxQfqqfIj3C978zfOkJVV');
-define("COS_SECRET_KEY", '1QitvmSxJXaS9h882tZ4OeinmbEgx2wf');
+define("COS_APP_ID", '1251707083');     //数据链接IP
+define("COS_BUCKET", 'aidongxiang');
+define("COS_SECRET_ID", 'AKIDAFD7rQTCMN5gmjs5r2A7M7oKfpnjQVGq');
+define("COS_SECRET_KEY", 'Xs11uc7RZWLIKAqLeBbpqeGl42ua4Mfw');
 define("COS_REGION", 'gz'); // bucket所属地域：华北 'tj' 华东 'sh' 华南 'gz'
 define("COS_TIMEOUT", 600);
 
