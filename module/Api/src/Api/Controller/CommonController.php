@@ -975,7 +975,7 @@ class CommonController extends Table
     {
         switch($order_by){
             case 1:
-                $result = 'timestamp';
+                $result = 'id';
                 break;
             default:
                 $result = 'id';

@@ -162,7 +162,7 @@ class ViewMicroblogGateway extends BaseGateway {
                 $where->in('user_id',$be_user_ids?$be_user_ids:[0]);
                 break;
             case 2:
-                $this->orderBy = ['comment_num'=>'DESC','repeat_num'=>'DESC','praise_num'=>'DESC'];
+                $this->orderBy = ['comment_num'=>'DESC','repeat_num'=>'DESC','praise_num'=>'DESC','id'=>'DESC'];
                 break;
             case 3:
                 $where->equalTo('user_id',$this->userId);
