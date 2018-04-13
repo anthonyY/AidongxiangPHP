@@ -1208,6 +1208,7 @@ class CommonController extends Table
             {
                 $image_table->filename = $value['filename'];
                 $image_table->path = $value['path'];
+                $image_table->md5 = isset($value['md5'])?$value['md5']:'';
                 $id = $image_table->addData($value);
                 $ids[] = $id;
                 $files[] = array(
