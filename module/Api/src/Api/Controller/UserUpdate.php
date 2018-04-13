@@ -42,7 +42,10 @@ class UserUpdate extends User
         $user_table->nickName = $user->nickName;
         $user_table->sex = $user->sex;
         $user_table->regionId = $user->regionId;
-        $user_table->headImageId = $user->headImageId;
+        if($user->headImageId)
+        {
+            $user_table->headImageId = $user->headImageId;
+        }
         $user_table->description = $user->description;
 
         if($user->regionId)
