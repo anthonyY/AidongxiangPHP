@@ -80,7 +80,7 @@ class PraiseGateway extends BaseGateway {
                     'from_id' => $id,
                     'user_id' => $user_id,
                 ];
-                $this->insert($data);
+                $this->insertData($data);
             }
             $model->update(['praise_num'=>$details->praise_num+1],['id'=>$id]);
         }

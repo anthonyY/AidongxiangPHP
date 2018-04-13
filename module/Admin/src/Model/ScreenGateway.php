@@ -77,7 +77,7 @@ class ScreenGateway extends BaseGateway {
                     'from_id' => $id,
                     'user_id' => $user_id,
                 ];
-                $this->insert($data);
+                $this->insertData($data);
             }
         }
         else//取消屏蔽

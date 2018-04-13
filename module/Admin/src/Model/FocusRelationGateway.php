@@ -102,7 +102,7 @@ class FocusRelationGateway extends BaseGateway {
                     'user_id' => $user_id,
                     'target_user_id' => $be_user_id,
                 ];
-                $this->insert($data);
+                $this->insertData($data);
             }
         }
         else//取消关注

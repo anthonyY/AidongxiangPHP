@@ -181,7 +181,7 @@ class MicroblogGateway extends BaseGateway {
         if($address)$data['street'] = $address;
         if($longitude)$data['longitude'] = $longitude;
         if($latitude)$data['latitude'] = $latitude;
-        $id = $this->insert($data);
+        $id = $this->insertData($data);
         if($imageIds)
         {
             $album = new AlbumGateway($this->adapter);
@@ -191,7 +191,7 @@ class MicroblogGateway extends BaseGateway {
             ];
             foreach ($imageIds as $imageId) {
                 $set['image_id'] = $imageId;
-                $album->insert($set);
+                $album->insertData($set);
             }
         }
         $this->adapter->getDriver()->getConnection()->commit();
