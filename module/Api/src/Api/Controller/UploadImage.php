@@ -35,7 +35,7 @@ class UploadImage extends CommonController
             elseif (2 == $request->action)
             {
                 // 上传视频
-                $data = $this->Uploadfile(LOCAL_SAVEPATH, false, 3);
+                $data = $this->Uploadfile(LOCAL_SAVEPATH, false, 3,50*1024);
                 $files = $this->saveFileInfo($data);
             }
             elseif (3 == $request->action) {
