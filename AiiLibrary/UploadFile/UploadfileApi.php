@@ -41,7 +41,7 @@ class UploadfileApi
     // 允许上传的文件大小,单位 Kb ,默认为1M
     public $fileSize = 1024;
     // 允许上传的文件类型
-    public $fileType = array(1 => array('gif', 'png', 'jpg', 'jpeg', 'bmp'), 2 => array('swf', 'flv'), 3 => array('rm', 'rmvb', 'avi', 'wmv', 'mpg', 'asf', 'mp3', 'wma', 'wmv', 'mid'), 4 => array('txt', 'doc', 'xls', 'ppt', 'docx', 'xlsx', 'pptx', 'pdf', 'xml', 'rar', 'zip', 'gzip', 'cab', 'iso', 'sql', 'csv', 'ini', 'conf', 'bin'), 6 => array('exe', 'com', 'scr', 'bat'));
+    public $fileType = array(1 => array('gif', 'png', 'jpg', 'jpeg', 'bmp'), 2 => array('swf', 'flv'), 3 => array('rm', 'rmvb', 'avi', 'wmv', 'mpg', 'asf', 'mp3','mp4', 'wma', 'wmv', 'mid'), 4 => array('txt', 'doc', 'xls', 'ppt', 'docx', 'xlsx', 'pptx', 'pdf', 'xml', 'rar', 'zip', 'gzip', 'cab', 'iso', 'sql', 'csv', 'ini', 'conf', 'bin'), 6 => array('exe', 'com', 'scr', 'bat'));
     // 是否输出错误信息并终止程序
     public $exit = true;
     // 是否原名保存
