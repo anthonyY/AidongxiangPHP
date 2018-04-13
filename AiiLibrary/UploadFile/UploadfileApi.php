@@ -335,7 +335,7 @@ class UploadfileApi
         {
             $binary_file = $this->getUrlImage($f['tmp_name']);
         }
-        $bin = substr($binary_file,0,2);
+        $bin = substr(trim($binary_file),0,2);
         $strInfo = unpack("C2chars", $bin);
         $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
 
