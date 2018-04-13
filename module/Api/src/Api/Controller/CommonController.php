@@ -1211,10 +1211,8 @@ class CommonController extends Table
                 $id = $image_table->addData($value);
                 $ids[] = $id;
                 $files[] = array(
-                    array(
-                        'id' => $id,
-                        'path' => $value['path'].$value['filename'],
-                    )
+                    'id' => $id,
+                    'path' => $value['path'].$value['filename'],
                 );
             }
             else
@@ -1222,10 +1220,8 @@ class CommonController extends Table
                 $image_table->updateKey($value['id'], 1, 'count', 1);
                 $ids[] = $value['id'];
                 $files[] = array(
-                     array(
-                        'id' => $value['id'],
-                        'path' => $value['path'].$value['filename'],
-                    )
+                    'id' => $value['id'],
+                    'path' => $value['path'].$value['filename'],
                 );
             }
         }
