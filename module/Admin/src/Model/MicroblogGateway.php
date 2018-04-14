@@ -165,6 +165,7 @@ class MicroblogGateway extends BaseGateway {
         }
         $data = [
             'user_id' => $user_id,
+            'timestamp' => $this->getTime()
         ];
         if($content)$data['content'] = $content;
         if($videoId)$data['video_id'] = $videoId;
@@ -188,6 +189,7 @@ class MicroblogGateway extends BaseGateway {
             $set = [
                 'type' => 1,
                 'from_id' => $id,
+                'timestamp' => $this->getTime()
             ];
             foreach ($imageIds as $imageId) {
                 $set['image_id'] = $imageId;

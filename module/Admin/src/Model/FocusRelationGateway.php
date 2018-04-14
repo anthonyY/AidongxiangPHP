@@ -101,6 +101,7 @@ class FocusRelationGateway extends BaseGateway {
                 $data = [
                     'user_id' => $user_id,
                     'target_user_id' => $be_user_id,
+                    'timestamp' => $this->getTime()
                 ];
                 $this->insertData($data);
             }

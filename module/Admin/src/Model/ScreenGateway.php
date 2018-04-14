@@ -76,6 +76,7 @@ class ScreenGateway extends BaseGateway {
                     'type' => $type,
                     'from_id' => $id,
                     'user_id' => $user_id,
+                    'timestamp' => $this->getTime()
                 ];
                 $this->insertData($data);
             }
