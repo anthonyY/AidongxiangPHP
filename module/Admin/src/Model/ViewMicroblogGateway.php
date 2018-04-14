@@ -159,6 +159,7 @@ class ViewMicroblogGateway extends BaseGateway {
         {
             case 1:
                 $be_user_ids = $this->getFocusUserIds($this->userId);
+                $be_user_ids[] = $this->userId;//包含自己的微博
                 $where->in('user_id',$be_user_ids?$be_user_ids:[0]);
                 break;
             case 2:
