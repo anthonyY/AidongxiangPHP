@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <title>
+        <?php
+            switch ($type)
+            {
+                case 1:
+                    echo "资讯详情";
+                    break;
+                case 2:
+                    echo "注册协议";
+                    break;
+                case 3:
+                    echo "隐私协议";
+                    break;
+                case 4:
+                    echo "广告内容";
+                    break;
+            }
+        ?>
+    </title>
+    <style>
+        /*FAQ*/
+        .comment-body {
+            border-bottom: 1px solid #ccc;
+        }
+        .comment {
+            background-color: #fff;
+            padding-left:15px;
+        }
+
+        .comment .call {
+            display: inline-block;
+            width:80px;
+            color:#f6587d;
+            overflow : hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            word-break:break-all;
+        }
+        .comment .border-b {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0 5px;
+        }
+        .comment .border-b p {
+            line-height: 25px;
+            color:#333;
+        }
+        .comment .border-b .fwb {
+            font-weight: bold;
+        }
+        .comment .border-b .call-one {
+            font-size: 15px;
+        }
+        .comment .border-b .call-two {
+            font-size: 14px;
+        }
+        .comment .last {
+            border:none;
+        }
+        .weui_search_text {
+            z-index: 0!important;
+        }
+        /*关于我们*/
+        .help {
+            margin:0 15px;
+        }
+
+        .help .code-bg {
+            text-align: center;
+            padding-top: 50px;
+        }
+        .help .logo-bg {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .help  .logo-bg .logo-txt {
+            width: 60px;
+            height: 35px;
+            line-height: 35px;
+            color:#a0e75a;
+            font-size: 20px;
+            border-radius: 5px;
+            border: 1px solid #a0e75a;
+            text-align: center;
+            display: inline-block;
+        }
+        .help .about-txt {
+            margin-top: 20px;
+            color:#333;
+            font-size: 14px;
+        }
+        .help .about-txt p {
+            line-height: 28px;
+        }
+        .seach-btn {
+            padding:10px 15px;
+            background-color: #ccc;
+        }
+        /*agreement*/
+        .about-txt h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+        .about-txt h2 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body style="background-color: #efefef;">
+    <article class="help">
+        <div class="logo-bg">
+            <span class="logo-txt">logo</span>
+        </div>
+        <div class="about-txt">
+            <?php
+            switch ($type)
+            {
+                case 1:
+                    echo isset($info->content)?$info->content:'';
+                    break;
+                case 2:
+                case 3:
+                    echo isset($info->text)?$info->text:'';
+                    break;
+                case 4:
+                    echo isset($info->content)?$info->content:'';
+                    echo "广告内容";
+                    break;
+            }
+            ?>
+        </div>
+    </article>
+</body>
+
+</html>

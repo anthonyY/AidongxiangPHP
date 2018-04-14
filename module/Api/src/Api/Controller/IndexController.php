@@ -349,4 +349,45 @@ class IndexController extends CommonController
         echo '/uploadfiles/tmp/' . $captcha->getId() . $captcha->getSuffix(); // 图片路径
         die();
     }
+
+    /**
+     *type 类型：1资讯；2注册协议 ,3隐私协议 ,4广告图文
+     *id 资讯id,广告id
+     */
+    public function articleDetailsAction()
+    {
+        $type = $this->params('type',1);
+        $id = $this->params('id',0);
+        $info = '';
+        if(in_array($type,[1,2,3,4]))
+        {
+            switch ($type)
+            {
+                case 1:
+                    if($id)
+                    {
+                        $this->tableObj = $this->getViewArticleTable();
+                        $this->tableObj->id = $id;
+                        $info = $this->tableObj->getDetails();
+                    }
+                    break;
+                case 2:
+                case 3:
+                    $this->tableObj = $this->getSetupTable();
+                    $this->tableObj->id = $type-1;
+                    $info = $this->tableObj->getDetails();
+                    break;
+                case 4:
+                    if($id)
+                    {
+                        $this->tableObj = $this->getViewAdsTable();
+                        $this->tableObj->id = $id;
+                        $info = $this->tableObj->getDetails();
+                    }
+                    break;
+            }
+        }
+        $view = new ViewModel(array('info'=>$info,'type'=>$type,'id'=>$id));
+        return $view->setTemplate("index/articleDetails");
+    }
 }
