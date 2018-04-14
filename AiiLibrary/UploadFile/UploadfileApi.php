@@ -290,7 +290,10 @@ class UploadfileApi
             $keyarr = array('name', 'type', 'tmp_name', 'error', 'size', 'data');
             foreach($keyarr as $r)
             {
-                eval("\$f['$r'] = \$this->_files['$key']['$r']$keystr;");
+                if(isset($this->_files[$key][$r]))
+                {
+                    eval("\$f['$r'] = \$this->_files['$key']['$r']$keystr;");
+                }
             }
             $newname = $this->_doUpload($f);
             eval("\$this->_files['$key']['new_name']$keystr = '$newname';");
