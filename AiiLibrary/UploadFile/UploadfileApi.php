@@ -342,7 +342,16 @@ class UploadfileApi
         $strInfo = unpack("C2chars", $bin);
         $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
 
-        $fileType = $this->check_type($typeCode);
+        if($this->_type == 3)
+        {
+            //linzhiwen 2018.04.16
+            $fileType = File::getExten($f['name']); // 获取扩展名
+        }
+        else
+        {
+            $fileType = $this->check_type($typeCode);
+        }
+
 
         if($this->_type != 7 && ! in_array($fileType, $this->fileType[$this->_type]))
         { // 类型不符合要求
