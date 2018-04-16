@@ -148,13 +148,35 @@ class ViewMicroblogGateway extends BaseGateway {
     }
 
     /**
-     * @param $action 1关注微博，2热门微博，3个人微博，4微博转发列表
+     * @param $action 1关注微博，2热门微博，3个人微博，4微博转发列表(去除屏蔽)
+     * @param $user_id
      * @return array|bool
      */
-    public function getApiList($action)
+    public function getApiList($action,$user_id=0)
     {
         $where = new Where();
         $where->equalTo('delete',DELETE_FALSE)->equalTo('display',1);
+        if($user_id && in_array($action,[1,2]))
+        {
+            $screen = new ScreenGateway($this->adapter);
+            $screen->userId = $user_id;
+            $screen->type = 1;
+            $screen_users = $screen->getScreenFromIds();
+            if($screen_users['total'] > 0)
+            {
+                foreach ($screen_users['list'] as $screen_user_id) {
+                    $where->notEqualTo('user_id',$screen_user_id);
+                }
+            }
+            $screen->type = 2;
+            $screen_microblogs = $screen->getScreenFromIds();
+            if($screen_microblogs['total'] > 0)
+            {
+                foreach ($screen_microblogs['list'] as $screen_microblog_id) {
+                    $where->notEqualTo('id',$screen_microblog_id);
+                }
+            }
+        }
         switch ($action)
         {
             case 1:

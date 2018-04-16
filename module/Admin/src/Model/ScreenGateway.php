@@ -102,7 +102,18 @@ class ScreenGateway extends BaseGateway {
     public function getScreenUserList()
     {
         $where = new Where();
-        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',3)->equalTo('user_id',$this->userId);
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',1)->equalTo('user_id',$this->userId);
         return $this->getAll($where);
+    }
+
+    /**
+     * 查询用户屏蔽微博或用户的id集合
+     * @return array
+     */
+    public function getScreenFromIds()
+    {
+        $where = new Where();
+        $where->equalTo('delete',DELETE_FALSE)->equalTo('type',$this->type)->equalTo('user_id',$this->userId);
+        return $this->fetchAll($where,['from_id']);
     }
 }

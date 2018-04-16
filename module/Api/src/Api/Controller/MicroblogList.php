@@ -66,7 +66,7 @@ class MicroblogList extends CommonController
             $this->initModel();
             $this->tableObj->userId = $user_id;
             $this->tableObj->parentId = $parent_id;
-            $data = $this->tableObj->getApiList($action);
+            $data = $this->tableObj->getApiList($action,$user_id);
             if(!$data)
             {
                 return STATUS_PARAMETERS_CONDITIONAL_ERROR;
