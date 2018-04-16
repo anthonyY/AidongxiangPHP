@@ -157,16 +157,17 @@ class MicroblogGateway extends BaseGateway {
         {
             return ['s'=>STATUS_PARAMETERS_CONDITIONAL_ERROR];
         }
-        if($parentId)
-        {
-            $parent = $this->getOne(['id'=>$parentId],['id','repeat_num']);
-            if(!$parent)return ['s'=>STATUS_NODATA,'d'=>'转发数据不存在'];
-            $this->update(['repeat_num'=>$parent->repeat_num+1],['id'=>$parentId]);
-        }
         $data = [
             'user_id' => $user_id,
             'timestamp' => $this->getTime()
         ];
+        if($parentId)
+        {
+            $parent = $this->getOne(['id'=>$parentId],['id','repeat_num']);
+            if(!$parent)return ['s'=>STATUS_NODATA,'d'=>'转发数据不存在'];
+            $data['parent_id'] = $parentId;
+            $this->update(['repeat_num'=>$parent->repeat_num+1],['id'=>$parentId]);
+        }
         if($content)$data['content'] = $content;
         if($videoId)$data['video_id'] = $videoId;
         if($regionId)
