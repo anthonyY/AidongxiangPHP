@@ -68,7 +68,7 @@ class SMSCode extends User
         $action = $request->action;
         $verification_code = $request->verificationCode;
         $ip = $this->getIP();//获取IP
-        if(!in_array($action, array(1, 2)) || !in_array($request->type, array(1, 2))){
+        if(!in_array($action, array(1, 2)) || !in_array($request->type, array(1, 2,3))){
             return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
         if(!$this->getSessionId())
@@ -292,6 +292,15 @@ class SMSCode extends User
                 $user_info = $user_table->getDetails();
                 if(!$user_info->mobile){
                     return STATUS_UNKNOWN;
+                }
+                break;
+            case self::MOBILE_VALIDATE_TYPE_RESET:
+                $user_table->mobile = $mobile;
+                $user_table->delete = null;
+                $user_info = $user_table->checkMobile();
+                if(!$user_info){
+                    // 用户已存在，手机号码不能重复，不能注册，退出
+                    $this->response(STATUS_USER_NOT_EXIST);
                 }
                 break;
             default:

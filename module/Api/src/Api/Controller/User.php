@@ -34,9 +34,9 @@ class User extends CommonController
     const MOBILE_VALIDATE_TYPE_BIND = 2;
 
     /**
-     * 11第三方注册 V2.0
+     * 重置密码
      * */
-    const THIRD_MOBILE_VALIDATE_TYPE_WITHDRAW = 11;
+    const MOBILE_VALIDATE_TYPE_RESET = 3;
 
     /**
      * 临时
