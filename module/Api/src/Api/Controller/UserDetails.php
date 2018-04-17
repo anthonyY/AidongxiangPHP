@@ -57,7 +57,16 @@ class UserDetails extends User
             'microblogNum' => $microblog_sum,
             'fansNum' => $fansNum,
             'focusNum' => $focusNum,
+            'isFocus' => 1,
         );
+
+        if($request->id)
+        {
+            $focusRelationTable->userId = $this->getUserId();
+            $focusRelationTable->targetUserId = $request->id;
+            $relation = $focusRelationTable->userFocusRelation();
+            if($relation==2||$relation==4)$user['isFocus']=2;
+        }
 
         if(!$details->head_filename)
         {
