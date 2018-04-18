@@ -164,16 +164,16 @@ class ViewMicroblogGateway extends BaseGateway {
             $screen_users = $screen->getScreenFromIds();
             if($screen_users['total'] > 0)
             {
-                foreach ($screen_users['list'] as $screen_user_id) {
-                    $where->notEqualTo('user_id',$screen_user_id);
+                foreach ($screen_users['list'] as $screen_user) {
+                    $where->notEqualTo('user_id',$screen_user->from_id);
                 }
             }
             $screen->type = 2;
             $screen_microblogs = $screen->getScreenFromIds();
             if($screen_microblogs['total'] > 0)
             {
-                foreach ($screen_microblogs['list'] as $screen_microblog_id) {
-                    $where->notEqualTo('id',$screen_microblog_id);
+                foreach ($screen_microblogs['list'] as $screen_microblog) {
+                    $where->notEqualTo('id',$screen_microblog->from_id);
                 }
             }
         }
