@@ -109,7 +109,7 @@ class MicroblogList extends CommonController
                     }
                     if($v->video_id)//小视频
                     {
-                        $image->id = $v->head_image_id;
+                        $image->id = $v->video_id;
                         $little_video = $image->getDetails();
                         if($little_video)$item['videoPath'] = $little_video->path.$little_video->filename;
                     }
