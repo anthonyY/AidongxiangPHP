@@ -151,7 +151,7 @@ class SMSCode extends User
             /*
              * 根据type 检查相关内容
              */
-            if(empty($request->mobile) || empty($request->type) || $request->type > self::THIRD_MOBILE_VALIDATE_TYPE_WITHDRAW){
+            if(empty($request->mobile) || empty($request->type) || $request->type > self::MOBILE_VALIDATE_TYPE_RESET){
 
                 return STATUS_PARAMETERS_INCOMPLETE;
             }
