@@ -18,7 +18,7 @@ class Setting extends CommonController
         $response = $this->getAiiResponse();
         $setup_table  = $this->getSetupTable();
         $data = $setup_table->getDataByInId();
-
+        $response->poster = isset($data[3])?$data[3]['value']:'';
         $response->status = STATUS_SUCCESS;
         return $response;
     }

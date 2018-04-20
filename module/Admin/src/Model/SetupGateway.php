@@ -49,4 +49,9 @@ class SetupGateway extends BaseGateway {
         return parent::updateData();
     }
 
+    public function getDataByInId()
+    {
+        return $this->getDataByIn(['id'=>[3]],['id','value','text']);
+    }
+
 }
