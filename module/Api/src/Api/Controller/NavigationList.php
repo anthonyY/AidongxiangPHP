@@ -30,7 +30,9 @@ class NavigationList extends CommonController
                         'id' => $val->id,
                         'icon' => $val->filename ? $val->path . $val->filename : '',
                         'name' => $val->name,
-                        'link' => $val->link
+                        'link' => $val->link,
+                        'fromType' => $val->from_type,
+                        'from_id' => $val->from_id,
                     );
                     $list[] = $item;
              }
