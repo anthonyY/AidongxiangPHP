@@ -38,6 +38,16 @@ class ViewNavigationGateway extends BaseGateway {
     public $sort;
 
     /**
+     * 外键类型：1外部链接，2视频 3音频 4资讯
+     */
+    public $fromType;
+
+    /**
+     * 外键id
+     */
+    public $fromId;
+
+    /**
     *目录，由日期组成（如：20130520/）
     */
     public $path;
@@ -50,7 +60,7 @@ class ViewNavigationGateway extends BaseGateway {
     /**
     *字段数组
     */
-    protected $columns_array = ["id","name","link","icon","type","sort","delete","timestamp","path","filename"];
+    protected $columns_array = ["id","name","link","icon","type","sort","fromType","fromId","delete","timestamp","path","filename"];
 
     public $table = 'view_navigation';
 

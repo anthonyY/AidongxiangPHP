@@ -38,9 +38,19 @@ class NavigationGateway extends BaseGateway {
     public $sort;
 
     /**
+     * 外键类型：1外部链接，2视频 3音频 4资讯
+     */
+    public $fromType;
+
+    /**
+     * 外键id
+     */
+    public $fromId;
+
+    /**
     *字段数组
     */
-    protected $columns_array = ["id","name","link","icon","type","sort","delete","timestamp"];
+    protected $columns_array = ["id","name","link","icon","type","sort","fromType","fromId","delete","timestamp"];
 
     public $table = DB_PREFIX . 'navigation';
 
