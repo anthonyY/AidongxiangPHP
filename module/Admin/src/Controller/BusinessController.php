@@ -506,5 +506,37 @@ class BusinessController extends CommonController
         $res = $mobileAppeal->mobileAppeal($action);
         $this->ajaxReturn($res['s'],$res['d']);
     }
+
+    /**
+     * @return ViewModel
+     * @throws \Exception
+     */
+    public function posterAction()
+    {
+        $this->checkLogin('admin_business_poster');
+        $setup = $this->getSetupTable();
+        $setup->id = 3;
+        if($_POST){
+            $_POST['value'] = $_POST['content'];
+            foreach ($_POST as $k=> $v)
+            {
+                if(in_array($k,$setup->getTableColumns()))
+                {
+                    $setup->$k = $v;
+                }
+            }
+            $res = $setup->updateData();
+            if($res){
+                $url = $this->url()->fromRoute('admin-business',['action'=>'poster']);
+                $this->ajaxReturn(0,'修改成功！',$url);
+            }else{
+                $this->ajaxReturn(10000,'修改失败！');
+            }
+        }
+        $info = $setup->getDetails();
+        $view = new ViewModel(['info'=>$info]);
+        $view->setTemplate('admin/business/poster');
+        return $this->setMenu($view);
+    }
 }
 

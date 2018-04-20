@@ -51,6 +51,11 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
                 'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_mobileAppealList
 List', explode('|', $_SESSION['action_list'])) ? true : false
             ),
+            array(
+                'route' => $this->url('admin-business', array('action' => 'poster')),
+                'name' => '平台海报', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_poster', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
         )
     ),
 
@@ -193,6 +198,8 @@ $navigate_arr = [
     '/business/anavigation' => ['/business/anavigation'=>'导航列表','/business/anavigationDetails' => '编辑导航', '/business/anavigationAdd' => '新增导航'],
 
     '/business/amobileAppealList' => ['/business/amobileAppealList' => '手机申诉管理'],
+
+    '/business/aposter' => ['/business/aposter' => '平台海报'],
 
     '/video' => ['/video' => '视频列表', '/video/avideoAdd' => '视频添加', '/video/avideoDetails' => '视频详情'],
 
