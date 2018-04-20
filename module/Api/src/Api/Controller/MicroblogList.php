@@ -57,6 +57,8 @@ class MicroblogList extends CommonController
         }
         $list = array();
         $image = $this->getImageTable();
+        $viewAlbum = $this->getViewAlbumTable();
+        $viewAlbum->type = 1;
         $praiseTable = $this->getPraiseTable();
         $praiseTable->userId = $this->getUserId();
         $praiseTable->type = 3;
@@ -91,7 +93,6 @@ class MicroblogList extends CommonController
                 //用户头像和小视频
                 if($v->head_image_id || $v->video_id)
                 {
-
                     if($v->head_image_id)//用户头像
                     {
                         $image->id = $v->head_image_id;
@@ -115,8 +116,6 @@ class MicroblogList extends CommonController
                     }
                 }
                 //图片集
-                $viewAlbum = $this->getViewAlbumTable();
-                $viewAlbum->type = 1;
                 $viewAlbum->fromId = $v->id;
                 $album_list = $viewAlbum->getList();
                 $images = [];
@@ -142,6 +141,36 @@ class MicroblogList extends CommonController
                 $praiseTable->fromId = $v->id;
                 $praise_res = $praiseTable->checkUserPraise();
                 if($praise_res)$item['isPraise'] = 2;
+
+                if($action < 4 && $v->parent_id)//父微博
+                {
+                    $this->tableObj->id = $v->parent_id;
+                    $parent_info = $this->tableObj->getDetails();
+                    if($parent_info)
+                    {
+                        $item['parent'] = [
+                            'id' => $v->parent_id,
+                            'content' => $parent_info->content,
+                        ];
+                        if($parent_info->video_id)//小视频
+                        {
+                            $image->id = $v->video_id;
+                            $little_video = $image->getDetails();
+                            if($little_video)$item['parent']['videoPath'] = $little_video->path.$little_video->filename;
+                        }
+                        //图片集
+                        $viewAlbum->fromId = $v->parent_id;
+                        $album_list = $viewAlbum->getList();
+                        $images = [];
+                        if($album_list['total'] > 0)
+                        {
+                            foreach ($album_list['list'] as $m) {
+                                $images[] = $m->path.$m->filename;
+                            }
+                        }
+                        $item['parent']['images'] = $images;
+                    }
+                }
 
                 $list[] = $item;
             }
