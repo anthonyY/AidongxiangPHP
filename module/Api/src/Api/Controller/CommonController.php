@@ -1355,6 +1355,10 @@ class CommonController extends Table
             $image_id = $image->addData();
             if(!$image_id)return false;
         }
+        else
+        {
+            $image_id = $res->id;
+        }
         return ['id'=>$image_id,'path'=>$data['access_url']];
     }
 
