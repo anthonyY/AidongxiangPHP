@@ -16,7 +16,8 @@
                 <th>板块名称</th>
                 <th>图标</th>
                 <th>导航名称</th>
-                <th>跳转链接</th>
+                <th>来源类型</th>
+                <th>外部链接</th>
                 <th>排序序号</th>
                 <th>操作</th>
             </tr>
@@ -42,6 +43,19 @@
                         </td>
                         <td><img width="50" height="50" src="<?php echo '/uploadfiles/' . $v->path . $v->filename ?>"></td>
                         <td><?php echo $v->name ?></td>
+                        <td>
+                            <?php
+                            if ($v->from_type == 1) {
+                                echo '外部链接';
+                            } else if ($v->from_type == 2) {
+                                echo '视频';
+                            } else if ($v->from_type == 3) {
+                                echo '音频';
+                            } else if ($v->from_type == 4) {
+                                echo '资讯';
+                            }
+                            ?>
+                        </td>
                         <td><?php echo $v->link ?></td>
                         <td><?php echo $v->sort ?></td>
                         <td>

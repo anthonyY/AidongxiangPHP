@@ -33,18 +33,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-1 control-label " for="form-field-1">跳转链接：</label>
-
-            <div class="col-sm-9">
-                <input type="url" name="link" required id="form-field-1" placeholder="" class="col-xs-10 col-sm-5">
-                <label class="col-sm-1 control-label " for="form-field-1" style="width:200px;">请输入带有https的链接地址</label>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-1 control-label " for="form-field-1"> 排序序号：</label>
 
             <div class="col-sm-9">
-                <input type="number" name="sort" min="1" required id="form-field-1" placeholder="排序序号" class="col-xs-10 col-sm-5">
+                <input type="number" name="sort" min="1" required id="form-field-1" placeholder="排序序号" class="col-xs-10 col-sm-3">
             </div>
         </div>
         <!-- 一次上传多张图片插件 -->
@@ -55,6 +47,48 @@
                 <div class="mot_tright" id="img_div">
                     <input id="one_img_upload" type="text"/>
                     <div id="res_img"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 跳转类型：</label>
+            <div class="col-sm-9">
+                <select id="from_type" name="from_type" onchange="selectSource(this)">
+                    <option value="1">外部链接</option>
+                    <option value="2">视频</option>
+                    <option value="3">音频</option>
+                    <option value="4">资讯</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="link">
+            <label class="col-sm-1 control-label">跳转链接：</label>
+
+            <div class="col-sm-9">
+                <input type="url" name="link" placeholder="" class="col-xs-10 col-sm-3">
+                <label class="col-sm-1 control-label " style="width:200px;">请输入带有http|https的链接地址</label>
+            </div>
+        </div>
+
+        <div style="display: none" id="local_source">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">搜索：</label>
+
+                <div class="col-sm-9">
+                    <input type="text" id="search_key" placeholder="请先搜索，再选择来源" class="col-xs-10 col-sm-3">
+                    &nbsp;&nbsp;<input type="button" class="btn btn-sm btn-info" value="搜索" onclick="searchSource()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-1 control-label">来源</label>
+
+                <div class="col-sm-9">
+                    <select name="from_id" id="from_id">
+                        <option value="0">数据不存在</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -80,10 +114,44 @@
 
 
 <script type="text/javascript">
-
     $('form').on('submit', function (e) {
         ajaxForm(e);
     });
 
+    function selectSource(obj){
+        var from_type = $(obj).val();
+        if(from_type == 1){
+            $('#link').show();
+            $('#local_source').hide();
+        }else{
+            $('#local_source').show();
+            $('#link').hide();
+        }
+    }
+
+    function searchSource(){
+        var search_key = $('#search_key').val();
+        var from_type = $('#from_type').val();
+        if(!search_key){
+            showMessage('请输入搜索关键字',0);return;
+        }
+        $.post(
+            "<?php echo $this->url('admin-business', ['action'=>'searchList']) ?>",
+            {from_type:from_type,search_key:search_key},
+            function(data){
+                $('#from_id').empty();
+                var html = '';
+                if(data.length > 0){
+                    html = '<option value="0">请选择</option>';
+                    $.each(data,function(i,v){
+                        html += '<option value="'+v.id+'">'+v.name+'</option>'
+                    });
+                }else{
+                    html = '<option value="0">数据不存在</option>';
+                }
+                $('#from_id').append(html);
+            },'json'
+        );
+    }
 </script>
 

@@ -241,7 +241,6 @@ class BusinessController extends CommonController
         $navigation = $this->getNavigationTable();
         $post = $request->getPost()->toArray();
         if($request->isPost()){
-
             //验证数据
             if(empty($post['name'])){
                 $this->ajaxReturn(10000, '导航名称不能为空');
@@ -249,19 +248,54 @@ class BusinessController extends CommonController
             if(empty($post['sort']) || !is_numeric($_POST['sort'])){
                 $this->ajaxReturn(10000, '排序序号不能为空且必须为数字');
             }
-            if(empty($post['link'])){
-                $this->ajaxReturn(10000, '跳转链接不能为空');
-            }
-            if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
-                $this->ajaxReturn(10000, '自定义链接不符合规则');
-            }
             if(empty($post['image_id'])){
                 $this->ajaxReturn(10000, '导航图片不能为空');
             }
 
+            $from_type = $post['from_type'];
+            if(!in_array($from_type,[1,2,3,4]))
+            {
+                $this->ajaxReturn(10000, '非法操作');
+            }
+
+            if($from_type == 1)//外部链接
+            {
+                if(empty($post['link'])){
+                    $this->ajaxReturn(10000, '跳转链接不能为空');
+                }
+                if(!preg_match('{^https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$}', $post['link'])){
+                    $this->ajaxReturn(10000, '自定义链接不符合规则');
+                }
+                $navigation->link = $post['link'];
+            }
+            else
+            {
+                if(!$post['from_id'])
+                {
+                    $this->ajaxReturn(10000, '来源不能为空');
+                }
+
+                if($from_type == 4)//资讯
+                {
+                    $model = $this->getArticleTable();
+                    $model->id = $post['from_id'];
+                }
+                else //视频|音频
+                {
+                    $model = $this->getAudioTable();
+                    $model->id = $post['from_id'];
+                }
+                $info = $model->getDetails();
+                if(!$info)
+                {
+                    $this->ajaxReturn(10000, '来源不存在');
+                }
+                $navigation->fromId = $post['from_id'];
+            }
+
             //添加数据
+            $navigation->fromType = $post['from_type'];
             $navigation->name = $post['name'];
-            $navigation->link = $post['link'];
             $navigation->icon = $post['image_id'];
             $navigation->sort = $post['sort'];
 
@@ -330,6 +364,50 @@ class BusinessController extends CommonController
         $view = new ViewModel(['navigation_info'=>$navigation_info]);
         $view->setTemplate("admin/business/navigationDetails");
         return $this->setMenu($view);
+    }
+
+    /**
+     * 搜索列表（视频，音频，资讯）
+     */
+    public function searchListAction()
+    {
+        $request = $this->getRequest();
+        $post = $request->getPost()->toArray();
+        $from_type = $post['from_type'];
+        $search_key = $post['search_key'];
+        $data = [];
+        if(!in_array($from_type,[2,3,4]) || !$search_key){
+            die(json_encode($data));
+        }
+        if($from_type == 4)//资讯
+        {
+            $article = $this->getViewArticleTable();
+            $article->searchKeyWord = $search_key;
+            $res = $article->getList();
+            foreach ($res['list'] as $v) {
+                $item = [
+                    'id' =>$v->id,
+                    'name' => $v->title,
+                ];
+                $data[] = $item;
+            }
+        }
+        else
+        {
+            $audio = $this->getViewAudioTable();
+            $audio->type = $from_type==2?1:2;
+            $audio->status = 1;
+            $audio->searchKeyWord = $search_key;
+            $res = $audio->getList();
+            foreach ($res['list'] as $v) {
+                $item = [
+                    'id' =>$v->id,
+                    'name' => $v->name,
+                ];
+                $data[] = $item;
+            }
+        }
+        die(json_encode($data));
     }
 
     //手机申诉列表
