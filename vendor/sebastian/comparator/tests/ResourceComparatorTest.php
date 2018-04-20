@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass SebastianBergmann\Comparator\ResourceComparator
+ *
  * @uses SebastianBergmann\Comparator\Comparator
  * @uses SebastianBergmann\Comparator\Factory
  * @uses SebastianBergmann\Comparator\ComparisonFailure
@@ -29,8 +30,8 @@ class ResourceComparatorTest extends TestCase
 
     public function acceptsSucceedsProvider()
     {
-        $tmpfile1 = tmpfile();
-        $tmpfile2 = tmpfile();
+        $tmpfile1 = \tmpfile();
+        $tmpfile2 = \tmpfile();
 
         return [
           [$tmpfile1, $tmpfile1],
@@ -41,7 +42,7 @@ class ResourceComparatorTest extends TestCase
 
     public function acceptsFailsProvider()
     {
-        $tmpfile1 = tmpfile();
+        $tmpfile1 = \tmpfile();
 
         return [
           [$tmpfile1, null],
@@ -52,8 +53,8 @@ class ResourceComparatorTest extends TestCase
 
     public function assertEqualsSucceedsProvider()
     {
-        $tmpfile1 = tmpfile();
-        $tmpfile2 = tmpfile();
+        $tmpfile1 = \tmpfile();
+        $tmpfile2 = \tmpfile();
 
         return [
           [$tmpfile1, $tmpfile1],
@@ -63,8 +64,8 @@ class ResourceComparatorTest extends TestCase
 
     public function assertEqualsFailsProvider()
     {
-        $tmpfile1 = tmpfile();
-        $tmpfile2 = tmpfile();
+        $tmpfile1 = \tmpfile();
+        $tmpfile2 = \tmpfile();
 
         return [
           [$tmpfile1, $tmpfile2],
@@ -75,6 +76,9 @@ class ResourceComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsSucceeds($expected, $actual)
     {
@@ -86,6 +90,9 @@ class ResourceComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsFails($expected, $actual)
     {
@@ -97,6 +104,9 @@ class ResourceComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAssertEqualsSucceeds($expected, $actual)
     {
@@ -113,6 +123,9 @@ class ResourceComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAssertEqualsFails($expected, $actual)
     {

@@ -80,4 +80,12 @@ class ImageGateway extends BaseGateway {
         parent::updateKey($id, $income, $key, $value);
     }
 
+    /**
+     * 检查文件名是否存在
+     * @return array|\ArrayObject|bool|null
+     */
+    public function checkFilename()
+    {
+        return $this->getOne(['filename'=>$this->filename,'delete'=>DELETE_FALSE],['id']);
+    }
 }

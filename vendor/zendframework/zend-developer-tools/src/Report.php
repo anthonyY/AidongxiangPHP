@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Developer Tools for Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendDeveloperTools for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-developer-tools for the canonical source repository
+ * @copyright Copyright (c) 2011-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-developer-tools/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendDeveloperTools;
@@ -140,7 +138,7 @@ class Report implements ReportInterface
      */
     public function hasErrors()
     {
-        return !empty($this->errors);
+        return ! empty($this->errors);
     }
 
     /**
@@ -176,7 +174,6 @@ class Report implements ReportInterface
         if (isset($this->collectors[$name])) {
             return $this->collectors[$name];
         }
-        return;
     }
 
     /**

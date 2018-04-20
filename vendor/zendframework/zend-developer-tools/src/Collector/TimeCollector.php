@@ -1,16 +1,14 @@
 <?php
 /**
- * Zend Developer Tools for Zend Framework (http://framework.zend.com/)
- *
- * @link       http://github.com/zendframework/ZendDeveloperTools for the canonical source repository
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-developer-tools for the canonical source repository
+ * @copyright Copyright (c) 2011-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-developer-tools/blob/master/LICENSE.md New BSD License
  */
 namespace ZendDeveloperTools\Collector;
 
-use Zend\Mvc\MvcEvent;
-use Zend\EventManager\Event;
 use ZendDeveloperTools\EventLogging\EventContextProvider;
+use Zend\EventManager\Event;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Time Data Collector.
@@ -116,7 +114,7 @@ class TimeCollector extends AbstractCollector implements EventCollectorInterface
         $app = $this->data['event']['application'];
 
         $previous = null;
-        while (list($index, $context) = each($app)) {
+        foreach ($app as $index => $context) {
             $result[$index] = $context;
             $result[$index]['elapsed'] = ($previous)
                 ? ($context['time'] - $previous['time'])

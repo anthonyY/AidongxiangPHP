@@ -1,23 +1,21 @@
 <?php
 /**
- * Zend Developer Tools for Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendDeveloperTools for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-developer-tools for the canonical source repository
+ * @copyright Copyright (c) 2011-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-developer-tools/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendDeveloperTools;
 
+use BjyProfiler\Db\Adapter\ProfilingAdapter;
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\ModuleManager\Feature\InitProviderInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use BjyProfiler\Db\Adapter\ProfilingAdapter;
 
 class Module implements
     InitProviderInterface,
@@ -78,17 +76,16 @@ class Module implements
         }
 
         $app = $event->getApplication();
-        $em  = $app->getEventManager();
-        $sem = $em->getSharedManager();
         $sm  = $app->getServiceManager();
 
         $options = $sm->get('ZendDeveloperTools\Config');
 
-        if (!$options->isToolbarEnabled()) {
+        if (! $options->isToolbarEnabled()) {
             return;
         }
 
-        $report = $sm->get('ZendDeveloperTools\Report');
+        $em  = $app->getEventManager();
+        $report = $sm->get(Report::class);
 
         if ($options->canFlushEarly()) {
             $flushListener = $sm->get('ZendDeveloperTools\FlushListener');
@@ -100,15 +97,16 @@ class Module implements
         }
 
         if ($options->eventCollectionEnabled()) {
-            $eventLoggingListener = $sm->get('ZendDeveloperTools\EventLoggingListenerAggregate');
+            $sem = $em->getSharedManager();
+            $eventLoggingListener = $sm->get(Listener\EventLoggingListenerAggregate::class);
             $eventLoggingListener->attachShared($sem);
         }
 
-        $profilerListener = $sm->get('ZendDeveloperTools\ProfilerListener');
+        $profilerListener = $sm->get(Listener\ProfilerListener::class);
         $profilerListener->attach($em);
 
         if ($options->isToolbarEnabled()) {
-            $toolbarListener = $sm->get('ZendDeveloperTools\ToolbarListener');
+            $toolbarListener = $sm->get(Listener\ToolbarListener::class);
             $toolbarListener->attach($em);
         }
 
@@ -129,9 +127,9 @@ class Module implements
     {
         return [
             'invokables' => [
-                'ZendDeveloperToolsTime'        => 'ZendDeveloperTools\View\Helper\Time',
-                'ZendDeveloperToolsMemory'      => 'ZendDeveloperTools\View\Helper\Memory',
-                'ZendDeveloperToolsDetailArray' => 'ZendDeveloperTools\View\Helper\DetailArray',
+                'ZendDeveloperToolsTime'        => View\Helper\Time::class,
+                'ZendDeveloperToolsMemory'      => View\Helper\Memory::class,
+                'ZendDeveloperToolsDetailArray' => View\Helper\DetailArray::class,
             ],
         ];
     }
@@ -143,23 +141,21 @@ class Module implements
     {
         return [
             'aliases' => [
-                'ZendDeveloperTools\ReportInterface' => 'ZendDeveloperTools\Report',
+                'ZendDeveloperTools\ReportInterface' => Report::class,
             ],
             'invokables' => [
-                'ZendDeveloperTools\Report'             => 'ZendDeveloperTools\Report',
-                'ZendDeveloperTools\EventCollector'     => 'ZendDeveloperTools\Collector\EventCollector',
-                'ZendDeveloperTools\ExceptionCollector' => 'ZendDeveloperTools\Collector\ExceptionCollector',
-                'ZendDeveloperTools\RouteCollector'     => 'ZendDeveloperTools\Collector\RouteCollector',
-                'ZendDeveloperTools\RequestCollector'   => 'ZendDeveloperTools\Collector\RequestCollector',
-                'ZendDeveloperTools\ConfigCollector'    => 'ZendDeveloperTools\Collector\ConfigCollector',
-                'ZendDeveloperTools\MailCollector'      => 'ZendDeveloperTools\Collector\MailCollector',
-                'ZendDeveloperTools\MemoryCollector'    => 'ZendDeveloperTools\Collector\MemoryCollector',
-                'ZendDeveloperTools\TimeCollector'      => 'ZendDeveloperTools\Collector\TimeCollector',
-                'ZendDeveloperTools\FlushListener'      => 'ZendDeveloperTools\Listener\FlushListener',
+                Report::class                           => Report::class,
+                'ZendDeveloperTools\ExceptionCollector' => Collector\ExceptionCollector::class,
+                'ZendDeveloperTools\RequestCollector'   => Collector\RequestCollector::class,
+                'ZendDeveloperTools\ConfigCollector'    => Collector\ConfigCollector::class,
+                'ZendDeveloperTools\MailCollector'      => Collector\MailCollector::class,
+                'ZendDeveloperTools\MemoryCollector'    => Collector\MemoryCollector::class,
+                'ZendDeveloperTools\TimeCollector'      => Collector\TimeCollector::class,
+                'ZendDeveloperTools\FlushListener'      => Listener\FlushListener::class,
             ],
             'factories' => [
-                'ZendDeveloperTools\Profiler' => function ($sm) {
-                    $a = new Profiler($sm->get('ZendDeveloperTools\Report'));
+                Profiler::class => function ($sm) {
+                    $a = new Profiler($sm->get(Report::class));
                     $a->setEvent($sm->get('ZendDeveloperTools\Event'));
                     return $a;
                 },
@@ -167,11 +163,11 @@ class Module implements
                     $config = $sm->get('Configuration');
                     $config = isset($config['zenddevelopertools']) ? $config['zenddevelopertools'] : null;
 
-                    return new Options($config, $sm->get('ZendDeveloperTools\Report'));
+                    return new Options($config, $sm->get(Report::class));
                 },
                 'ZendDeveloperTools\Event' => function ($sm) {
                     $event = new ProfilerEvent();
-                    $event->setReport($sm->get('ZendDeveloperTools\Report'));
+                    $event->setReport($sm->get(Report::class));
                     $event->setApplication($sm->get('Application'));
 
                     return $event;
@@ -179,16 +175,16 @@ class Module implements
                 'ZendDeveloperTools\StorageListener' => function ($sm) {
                     return new Listener\StorageListener($sm);
                 },
-                'ZendDeveloperTools\ToolbarListener' => function ($sm) {
+                Listener\ToolbarListener::class => function ($sm) {
                     return new Listener\ToolbarListener(
                         $sm->get('ViewRenderer'),
                         $sm->get('ZendDeveloperTools\Config')
                     );
                 },
-                'ZendDeveloperTools\ProfilerListener' => function ($sm) {
+                Listener\ProfilerListener::class => function ($sm) {
                     return new Listener\ProfilerListener($sm, $sm->get('ZendDeveloperTools\Config'));
                 },
-                'ZendDeveloperTools\EventLoggingListenerAggregate' => function ($sm) {
+                Listener\EventLoggingListenerAggregate::class => function ($sm) {
                     $config = $sm->get('ZendDeveloperTools\Config');
 
                     return new Listener\EventLoggingListenerAggregate(

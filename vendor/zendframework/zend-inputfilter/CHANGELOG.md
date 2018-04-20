@@ -2,6 +2,92 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.8.1 - 2018-01-22
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#160](https://github.com/zendframework/zend-inputfilter/pull/160) adds
+  zend-servicemanager as a direct requirement, rather than a suggestion. The
+  package has not worked without it since [#67](https://github.com/zendframework/zend-inputfilter/pull/67)
+  was merged for the 2.6.1 release.
+
+- [#161](https://github.com/zendframework/zend-inputfilter/pull/161) fixes an
+  issue whereby an input filter receiving a `null` value to `setData()` would
+  raise an exception, instead of being treated as an empty data set.
+
+## 2.8.0 - 2017-12-04
+
+### Added
+
+- [#135](https://github.com/zendframework/zend-inputfilter/pull/135) adds
+  `Zend\InputFilter\OptionalInputFilter`, which allows defining optional sets of
+  data. This acts like a standard input filter, but is considered valid if no
+  data, `null` data, or empty data sets are provided to it; if a non-empty data
+  set is provided, it will run normal validations.
+
+- [#142](https://github.com/zendframework/zend-inputfilter/pull/142) adds
+  support for PHP 7.2.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#142](https://github.com/zendframework/zend-inputfilter/pull/142) removes
+  support for HHVM.
+
+### Fixed
+
+- Nothing.
+
+## 2.7.6 - 2017-12-04
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#156](https://github.com/zendframework/zend-inputfilter/pull/156) fixes an
+  issue introduced in 2.7.5 whereby the filter and validator chains composed in
+  inputs pulled from the `InputFilterPluginManager` were not receiving the
+  default filter and validator plugin manager instances. A solution was created
+  that preserves the original behavior as well as the bugfix that created the
+  regression.
+
 ## 2.7.5 - 2017-11-07
 
 ### Added

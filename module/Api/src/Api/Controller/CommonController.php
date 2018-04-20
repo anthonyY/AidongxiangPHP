@@ -1,6 +1,7 @@
 <?php
 namespace Api\Controller;
 
+use Admin\Model\ImageGateway;
 use AiiLibrary\UploadFile\UploadfileApi;
 use AiiLibray\WxPayApi\AiiWxPay;
 use AiiLibrary\UploadFile\File;
@@ -12,6 +13,7 @@ use Api\Controller\Common\TableRequest;
 use Api\Controller\Common\WhereRequest;
 use Api\Controller\Common\Response;
 use Admin\Controller\CommonController as AdminController;
+use QCloud\Cos\Api;
 
 class CommonController extends Table
 {
@@ -1286,6 +1288,98 @@ class CommonController extends Table
         }
 
         return $results;
+    }
+
+    //腾讯云的对象存储
+    public function uploadFilesByCos($file_key)
+    {
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        $this->file_key = $file_key;
+        $data = array(
+            'ids' => array(),
+            'files' => array(),
+        );
+        if (! isset($_FILES[$this->file_key])) {
+            return $data;
+        }
+        if(is_array($_FILES[$this->file_key]['name']))
+        {
+            foreach($_FILES[$this->file_key]['name'] as $key => $value)
+            {
+                if(! $_FILES[$this->file_key]['error'][$key])
+                {
+                    $res = $this->skdUploadFileByCos($_FILES[$this->file_key]['tmp_name'][$key],$_FILES[$this->file_key]['name'][$key]);
+                    if($res['message'] !== 'SUCCESS')
+                    {
+                        return ['s'=>10000,'d'=>$res['message']];
+                    }
+                    $result = $this->saveFileToImageTableInfo($res['data']);
+                    if(!$result)return ['s'=>10000,'d'=>'上传失败'];
+                    $data['ids'][] = $result['id'];
+                    $data['files'][] = $result;
+                }
+            }
+        }
+        else
+        {
+            if(! $_FILES[$this->file_key]['error'])
+            {
+                $res = $this->skdUploadFileByCos($_FILES[$this->file_key]['tmp_name'],$_FILES[$this->file_key]['name']);
+                if($res['message'] !== 'SUCCESS')
+                {
+                    return ['s'=>10000,'d'=>$res['message']];
+                }
+                $result = $this->saveFileToImageTableInfo($res['data']);
+                if(!$result)return ['s'=>10000,'d'=>'上传失败'];
+                $data['ids'][] = $result['id'];
+                $data['files'][] = $result;
+            }
+        }
+        $this->adapter->getDriver()->getConnection()->commit();
+        return $data;
+    }
+
+    /**
+     * @param $data
+     * @return array|bool
+     * 保存路径到image表
+     */
+    public function saveFileToImageTableInfo($data)
+    {
+        $image = new ImageGateway($this->adapter);
+        $image->filename = $data['access_url'];
+        $res = $image->checkFilename();
+        $image_id= 0;
+        if(!$res)
+        {
+            $image_id = $image->addData();
+            if(!$image_id)return false;
+        }
+        return ['id'=>$image_id,'path'=>$data['access_url']];
+    }
+
+    /**
+     * SDK  文件上传
+     * @param $tmp_file
+     * @param $source_filename
+     * @return array
+     */
+    public function skdUploadFileByCos($tmp_file,$source_filename){
+        $bucket = COS_BUCKET;
+        $config = array(
+            'app_id' =>  COS_APP_ID,
+            'secret_id' => COS_SECRET_ID,
+            'secret_key' =>  COS_SECRET_KEY,
+            'region' =>  COS_REGION,   // bucket所属地域：华北 'tj' 华东 'sh' 华南 'gz'
+            'timeout' => COS_TIMEOUT
+        );
+
+        date_default_timezone_set('PRC');
+        $cosApi = new Api($config);
+        $foleder = 'littleVideo';
+        $dst= $foleder.'/'.$source_filename;
+        $result = $cosApi->upload($bucket, $tmp_file, $dst);
+        return $result;
     }
 
 

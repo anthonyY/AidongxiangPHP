@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass SebastianBergmann\Comparator\ArrayComparator
+ *
  * @uses SebastianBergmann\Comparator\Comparator
  * @uses SebastianBergmann\Comparator\Factory
  * @uses SebastianBergmann\Comparator\ComparisonFailure
@@ -129,6 +130,9 @@ class ArrayComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsFails($expected, $actual)
     {
@@ -140,6 +144,11 @@ class ArrayComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $delta
+     * @param mixed $canonicalize
      */
     public function testAssertEqualsSucceeds($expected, $actual, $delta = 0.0, $canonicalize = false)
     {
@@ -156,6 +165,11 @@ class ArrayComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $delta
+     * @param mixed $canonicalize
      */
     public function testAssertEqualsFails($expected, $actual, $delta = 0.0, $canonicalize = false)
     {

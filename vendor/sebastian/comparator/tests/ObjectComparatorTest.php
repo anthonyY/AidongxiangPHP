@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -10,11 +10,12 @@
 
 namespace SebastianBergmann\Comparator;
 
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @coversDefaultClass SebastianBergmann\Comparator\ObjectComparator
+ *
  * @uses SebastianBergmann\Comparator\Comparator
  * @uses SebastianBergmann\Comparator\Factory
  * @uses SebastianBergmann\Comparator\ComparisonFailure
@@ -102,6 +103,9 @@ class ObjectComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsSucceeds($expected, $actual)
     {
@@ -113,6 +117,9 @@ class ObjectComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsFails($expected, $actual)
     {
@@ -124,6 +131,10 @@ class ObjectComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $delta
      */
     public function testAssertEqualsSucceeds($expected, $actual, $delta = 0.0)
     {
@@ -140,6 +151,11 @@ class ObjectComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $message
+     * @param mixed $delta
      */
     public function testAssertEqualsFails($expected, $actual, $message, $delta = 0.0)
     {

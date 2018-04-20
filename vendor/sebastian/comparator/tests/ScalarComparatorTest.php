@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass SebastianBergmann\Comparator\ScalarComparator
+ *
  * @uses SebastianBergmann\Comparator\Comparator
  * @uses SebastianBergmann\Comparator\Factory
  * @uses SebastianBergmann\Comparator\ComparisonFailure
@@ -54,7 +55,7 @@ class ScalarComparatorTest extends TestCase
           ['string', []],
           [new ClassWithToString, new ClassWithToString],
           [false, new ClassWithToString],
-          [tmpfile(), tmpfile()]
+          [\tmpfile(), \tmpfile()]
         ];
     }
 
@@ -93,7 +94,7 @@ class ScalarComparatorTest extends TestCase
           ['STRING', 'string', $stringException],
           ['string', 'other string', $stringException],
           // https://github.com/sebastianbergmann/phpunit/issues/1023
-          ['9E6666666','9E7777777', $stringException],
+          ['9E6666666', '9E7777777', $stringException],
           [new ClassWithToString, 'does not match', $otherException],
           ['does not match', new ClassWithToString, $otherException],
           [0, 'Foobar', $otherException],
@@ -111,6 +112,9 @@ class ScalarComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsSucceeds($expected, $actual)
     {
@@ -122,6 +126,9 @@ class ScalarComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsFails($expected, $actual)
     {
@@ -133,6 +140,10 @@ class ScalarComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $ignoreCase
      */
     public function testAssertEqualsSucceeds($expected, $actual, $ignoreCase = false)
     {
@@ -149,6 +160,10 @@ class ScalarComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param mixed $message
      */
     public function testAssertEqualsFails($expected, $actual, $message)
     {

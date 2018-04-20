@@ -1,28 +1,26 @@
 <?php
 /**
- * Zend Developer Tools for Zend Framework (http://framework.zend.com/)
- *
- * @link       http://github.com/zendframework/ZendDeveloperTools for the canonical source repository
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-developer-tools for the canonical source repository
+ * @copyright Copyright (c) 2011-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-developer-tools/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendDeveloperTools\Listener;
 
-use Zend\Mvc\MvcEvent;
 use ZendDeveloperTools\Options;
 use ZendDeveloperTools\Profiler;
+use ZendDeveloperTools\Report;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Profiler Listener
  *
  * Listens to the MvcEvent::EVENT_FINISH event and starts collecting data.
- *
  */
 class ProfilerListener implements ListenerAggregateInterface
 {
@@ -72,8 +70,8 @@ class ProfilerListener implements ListenerAggregateInterface
     {
         $strict     = $this->options->isStrict();
         $collectors = $this->options->getCollectors();
-        $report     = $this->serviceLocator->get('ZendDeveloperTools\Report');
-        $profiler   = $this->serviceLocator->get('ZendDeveloperTools\Profiler');
+        $report     = $this->serviceLocator->get(Report::class);
+        $profiler   = $this->serviceLocator->get(Profiler::class);
 
         $profiler->setErrorMode($strict);
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -10,11 +10,12 @@
 
 namespace SebastianBergmann\Comparator;
 
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @coversDefaultClass SebastianBergmann\Comparator\TypeComparator
+ *
  * @uses SebastianBergmann\Comparator\Comparator
  * @uses SebastianBergmann\Comparator\Factory
  * @uses SebastianBergmann\Comparator\ComparisonFailure
@@ -51,7 +52,7 @@ class TypeComparatorTest extends TestCase
           [1.0, 2.0],
           ['hello', 'world'],
           ['', ''],
-          [[], [1,2,3]]
+          [[], [1, 2, 3]]
         ];
     }
 
@@ -69,6 +70,9 @@ class TypeComparatorTest extends TestCase
     /**
      * @covers       ::accepts
      * @dataProvider acceptsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAcceptsSucceeds($expected, $actual)
     {
@@ -80,6 +84,9 @@ class TypeComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAssertEqualsSucceeds($expected, $actual)
     {
@@ -96,6 +103,9 @@ class TypeComparatorTest extends TestCase
     /**
      * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
+     *
+     * @param mixed $expected
+     * @param mixed $actual
      */
     public function testAssertEqualsFails($expected, $actual)
     {

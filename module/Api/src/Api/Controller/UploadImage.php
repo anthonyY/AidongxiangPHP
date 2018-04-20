@@ -20,7 +20,7 @@ class UploadImage extends CommonController
         $response = $this->getAiiResponse();
 
         $request->action = $request->action ? $request->action : 1;
-        if(!in_array($request->action,[1,2]))
+        if(!in_array($request->action,[1,2,3]))
         {
             return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
@@ -34,11 +34,22 @@ class UploadImage extends CommonController
             }
             elseif (2 == $request->action)
             {
-                // 上传视频
+                // 上传视频(本地)
                 $data = $this->Uploadfile(LOCAL_SAVEPATH, false, 3,50*1024);
                 $files = $this->saveFileInfo($data);
             }
-            elseif (3 == $request->action) {
+            elseif(3 == $request->action)
+            {
+                //对象存储（腾讯云）
+                $files = $this->uploadFilesByCos($this->file_key);
+                if(isset($files['s']) && $files['s'])
+                {
+                    $response->status = $files['s'];
+                    $response->description = $files['d'];
+                    return $response;
+                }
+            }
+            elseif (4 == $request->action) {
                 // 文档
                 $data = $this->Uploadfile(LOCAL_SAVEPATH, false, 4);
                 $files = $this->saveFileInfo($data);
