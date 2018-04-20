@@ -56,6 +56,7 @@ class MicroblogList extends CommonController
             }
         }
         $list = array();
+        $user_table = $this->getUserTable();
         $image = $this->getImageTable();
         $viewAlbum = $this->getViewAlbumTable();
         $viewAlbum->type = 1;
@@ -151,7 +152,11 @@ class MicroblogList extends CommonController
                         $item['parent'] = [
                             'id' => $v->parent_id,
                             'content' => $parent_info->content,
+                            'user' => ['id'=>$parent_info->user_id,'nickName'=>'']
                         ];
+                        $user_table->id = $parent_info->user_id;
+                        $parent_user_info = $user_table->getDetails();
+                        if($parent_user_info)$item['parent']['user']['nickName'] = $parent_user_info->nick_name;
                         if($parent_info->video_id)//小视频
                         {
                             $image->id = $v->video_id;
