@@ -22,7 +22,7 @@ class UserResetPassword extends User
             return STATUS_PARAMETERS_INCOMPLETE;
         }
 
-        $type = 2;
+        $type = 3;
         $this->checkSmsComplete($type, $request->smscodeId, $mobile); // 注册，检查是否有效，无效返回1010，请求超时
 
         $this->tableObj = $this->getUserTable();
