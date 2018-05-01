@@ -157,7 +157,7 @@ class SMSCode extends User
             }
             $user_info = $this->getUserInfo($request->type, $request->mobile);
             if($user_info){
-                $this->userId = $user_info->user_id;
+                $this->userId = $user_info->id;
             }
             $code = $this->makeSmsCode() . '';
             $sms_code_table = $this->getSmsCodeTable();
