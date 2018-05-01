@@ -177,7 +177,7 @@ class ViewFavoriteGateway extends BaseGateway {
         $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
         if($this->type)$where->equalTo('type',$this->type);
         if($this->audioType)$where->equalTo('audio_type',$this->audioType);
-        return $this->getAll();
+        return $this->getAll($where);
     }
 
 }
