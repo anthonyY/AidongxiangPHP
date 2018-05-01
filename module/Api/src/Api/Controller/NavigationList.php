@@ -32,7 +32,7 @@ class NavigationList extends CommonController
                         'name' => $val->name,
                         'link' => $val->link,
                         'fromType' => $val->from_type,
-                        'from_id' => $val->from_id,
+                        'fromId' => $val->from_id,
                     );
                     $list[] = $item;
              }
