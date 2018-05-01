@@ -108,11 +108,14 @@ class VideoController extends CommonController
             if(empty($post['audio_length'])){
                 $this->ajaxReturn(10000, '视频时长错误');
             }
-            if(empty($post['auditions_path'])){
-                $this->ajaxReturn(10000, '试播视频路径不能为空');
-            }
-            if(empty($post['auditions_length'])){
-                $this->ajaxReturn(10000, '试播视频时长错误');
+            if($post['pay_type']  == 2)
+            {
+                if(empty($post['auditions_path'])){
+                    $this->ajaxReturn(10000, '试播视频路径不能为空');
+                }
+                if(empty($post['auditions_length'])){
+                    $this->ajaxReturn(10000, '试播视频时长错误');
+                }
             }
             if(empty($post['description'])){
                 $this->ajaxReturn(10000, '视频简介不能为空');
@@ -125,14 +128,27 @@ class VideoController extends CommonController
             {
                 $audio->payType = 2;
                 $audio->price = $post['price'];
+                $audio->auditionsPath = $post['auditions_path'];
+                $audio->auditionsLength = $post['auditions_length'];
+            }
+            else
+            {
+                if($post['auditions_path'])
+                {
+                    $audio->auditionsPath = $post['auditions_path'];
+                    $audio->auditionsLength = $post['auditions_length'];
+                }
+                else
+                {
+                    $audio->auditionsPath = $post['full_path'];
+                    $audio->auditionsLength = $post['audio_length'];
+                }
             }
             $audio->imageId = $post['image_id'];
             $audio->size = $post['size'];
             $audio->filename = $post['filename'];
             $audio->fullPath = $post['full_path'];
             $audio->audioLength = $post['audio_length'];
-            $audio->auditionsPath = $post['auditions_path'];
-            $audio->auditionsLength = $post['auditions_length'];
             $audio->description = $post['description'];
 
             //保存
@@ -197,11 +213,14 @@ class VideoController extends CommonController
             if(empty($post['audio_length'])){
                 $this->ajaxReturn(10000, '视频时长错误');
             }
-            if(empty($post['auditions_path'])){
-                $this->ajaxReturn(10000, '试播视频路径不能为空');
-            }
-            if(empty($post['auditions_length'])){
-                $this->ajaxReturn(10000, '试播视频时长错误');
+            if($post['pay_type']  == 2)
+            {
+                if(empty($post['auditions_path'])){
+                    $this->ajaxReturn(10000, '试播视频路径不能为空');
+                }
+                if(empty($post['auditions_length'])){
+                    $this->ajaxReturn(10000, '试播视频时长错误');
+                }
             }
             if(empty($post['description'])){
                 $this->ajaxReturn(10000, '视频简介不能为空');
@@ -214,14 +233,27 @@ class VideoController extends CommonController
             {
                 $audio->payType = 2;
                 $audio->price = $post['price'];
+                $audio->auditionsPath = $post['auditions_path'];
+                $audio->auditionsLength = $post['auditions_length'];
+            }
+            else
+            {
+                if($post['auditions_path'])
+                {
+                    $audio->auditionsPath = $post['auditions_path'];
+                    $audio->auditionsLength = $post['auditions_length'];
+                }
+                else
+                {
+                    $audio->auditionsPath = $post['full_path'];
+                    $audio->auditionsLength = $post['audio_length'];
+                }
             }
             $audio->imageId = $post['image_id'];
             $audio->size = $post['size'];
             $audio->filename = $post['filename'];
             $audio->fullPath = $post['full_path'];
             $audio->audioLength = $post['audio_length'];
-            $audio->auditionsPath = $post['auditions_path'];
-            $audio->auditionsLength = $post['auditions_length'];
             $audio->description = $post['description'];
 
             //保存
