@@ -163,4 +163,19 @@ class UserGateway extends BaseGateway {
         $where->equalTo('delete',DELETE_FALSE)->notEqualTo('id',$user_id)->equalTo('mobile',$mobile);
         return $this->getOne($where);
     }
+
+    public function passwordReset()
+    {
+        $user_info = $this->getOne(['mobile'=>$this->mobile,'delete'=>DELETE_FALSE],['id','status']);
+        if(!$user_info)
+        {
+            return ['s'=>STATUS_USER_NOT_EXIST];
+        }
+        if($user_info->status != 1)
+        {
+            return ['s'=>STATUS_USER_LOCKED];
+        }
+        $this->update(['password'=>$this->password],['id'=>$user_info->id]);
+        return ['s'=>STATUS_SUCCESS];
+    }
 }
