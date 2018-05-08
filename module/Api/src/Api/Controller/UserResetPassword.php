@@ -27,7 +27,7 @@ class UserResetPassword extends User
 
         $this->tableObj = $this->getUserTable();
         $this->tableObj->mobile = $mobile;
-        $this->tableObj->password = strtoupper(md5(strtoupper($password)));
+        $this->tableObj->password = strtolower(md5(strtolower($password)));
         $res = $this->tableObj->passwordReset();
         if(!$res['s'])
         {
