@@ -202,14 +202,14 @@
                     theTime1 = parseInt(theTime1%60);
                 }
             }
-            var result = parseInt(theTime)>10?parseInt(theTime):"0"+theTime;
+            var result = parseInt(theTime)>9?parseInt(theTime):"0"+theTime;
 
             if(true) {
                 //result = ""+parseInt(theTime)
-                result = parseInt(theTime1)>10?""+parseInt(theTime1)+":"+result:"0"+parseInt(theTime1)+":"+result;
+                result = parseInt(theTime1)>9?""+parseInt(theTime1)+":"+result:"0"+parseInt(theTime1)+":"+result;
             }
             if(true) {
-                result = parseInt(theTime2)>10?""+parseInt(theTime2)+":"+result:"0"+parseInt(theTime2)+":"+result;
+                result = parseInt(theTime2)>9?""+parseInt(theTime2)+":"+result:"0"+parseInt(theTime2)+":"+result;
             }
             return result;
         }
