@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
         
+use Admin\Model\ViewReportGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;
 use Admin\Model\AdminGateway;
@@ -71,6 +72,7 @@ class Table extends AbstractActionController
     protected $ViewFavoriteTable;
     protected $ViewWatchRecordTable;
     protected $ViewFocusRelationTable;
+    protected $ViewReportTable;
 
     public function __construct()
     {
@@ -431,5 +433,13 @@ class Table extends AbstractActionController
             $this->ViewFocusRelationTable = new ViewFocusRelationGateway($this->adapter);
         }
         return $this->ViewFocusRelationTable;
+    }
+    protected function getViewReportTable()
+    {
+        if (! $this->ViewReportTable)
+        {
+            $this->ViewReportTable = new ViewReportGateway($this->adapter);
+        }
+        return $this->ViewReportTable;
     }
 }

@@ -507,6 +507,53 @@ class BusinessController extends CommonController
         $this->ajaxReturn($res['s'],$res['d']);
     }
 
+    //举报列表
+    public function reportListAction()
+    {
+        $this->checkLogin('admin_business_reportList');
+        $page = $this->params("page");
+        $ViewReport = $this->getViewReportTable();
+        $category_table = $this->getCategoryTable();
+        $category_table->type = 4;
+        $ViewReport->page = $page;
+        $category_id = 0;
+        $type = 0;
+
+        $get = [];
+        if($_GET){
+            $get = $_GET;
+            $category_id = isset($get['category_id'])?$get['category_id']:0;
+            $type = isset($get['type'])?$get['type']:0;
+            $ViewReport->type = $type;
+            $ViewReport->categoryId = $category_id;
+        }
+
+        $list = $ViewReport->getList();
+        $categoryList = $category_table->getList();
+        $MicroblogTable = $this->getMicroblogTable();
+        $CommentTable = $this->getCommentTable();
+        foreach ($list['list'] as $v) {
+            $obj_name = '';
+            if($v['type'] == 1)
+            {
+                $MicroblogTable->id = $v['from_id'];
+                $res = $MicroblogTable->getDetails();
+                if($res)$obj_name = $res->content;
+            }
+            elseif($v['type'] == 2)
+            {
+                $CommentTable->id = $v['from_id'];
+                $res = $CommentTable->getDetails();
+                if($res)$obj_name = $res->content;
+            }
+            $v['obj_name'] = $obj_name;
+        }
+
+        $view = new ViewModel(array('list'=>$list['list'],'paginator'=>$list['paginator'],'condition'=>array("action"=>'reportList'),'type'=>$type,'category_id'=>$category_id, 'where'=>$get,'categoryList'=>$categoryList['list']));
+        $view->setTemplate("admin/business/reportList");
+        return $this->setMenu($view);
+    }
+
     /**
      * @return ViewModel
      * @throws \Exception

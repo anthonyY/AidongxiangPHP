@@ -48,8 +48,12 @@ List', explode('|', $_SESSION['action_list'])) ? true : false
             array(
                 'route' => $this->url('admin-business', array('action' => 'mobileAppealList')),
                 'name' => '手机申诉列表', 'other' => '',
-                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_mobileAppealList
-List', explode('|', $_SESSION['action_list'])) ? true : false
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_mobileAppealList', explode('|', $_SESSION['action_list'])) ? true : false
+            ),
+            array(
+                'route' => $this->url('admin-business', array('action' => 'reportList')),
+                'name' => '举报列表', 'other' => '',
+                'authority' => ($_SESSION['action_list'] == 'all') || in_array('admin_business_reportList', explode('|', $_SESSION['action_list'])) ? true : false
             ),
             array(
                 'route' => $this->url('admin-business', array('action' => 'poster')),
@@ -198,6 +202,8 @@ $navigate_arr = [
     '/business/anavigation' => ['/business/anavigation'=>'导航列表','/business/anavigationDetails' => '编辑导航', '/business/anavigationAdd' => '新增导航'],
 
     '/business/amobileAppealList' => ['/business/amobileAppealList' => '手机申诉管理'],
+
+    '/business/areportList' => ['/business/areportList' => '举报列表'],
 
     '/business/aposter' => ['/business/aposter' => '平台海报'],
 
