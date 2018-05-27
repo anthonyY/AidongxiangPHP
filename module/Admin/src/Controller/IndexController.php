@@ -126,7 +126,7 @@ class IndexController extends CommonController
     //修改密码
     public function changePasswordAction()
     {
-//        $this->checkLogin('admin_index_changePassword');
+        $this->checkLogin('admin_setting_changePassword');
         if ($_POST) {
             if (!$_POST['oldpassword']) {
                 $this->ajaxReturn(0, '请输入旧密码！');
