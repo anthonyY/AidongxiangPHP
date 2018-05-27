@@ -466,7 +466,7 @@ class BusinessController extends CommonController
     //手机申诉列表
     public function mobileAppealListAction()
     {
-        $this->checkLogin('admin_business_mobileAppeal');
+        $this->checkLogin('admin_business_mobileAppealList');
         $page = $this->params("page");
         $ViewMobileAppeal = $this->getViewMobileAppealTable();
         $ViewMobileAppeal->page = $page;
