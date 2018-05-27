@@ -236,6 +236,7 @@ class SettingController extends CommonController
         $admin->id = $id;
         $adminInfo = $admin->getDetails();
         if($_POST){
+            var_dump($_POST);exit;
             if(empty($_POST['realName'])){
                 $this->ajaxReturn(10000,'姓名不能为空！');
             }
