@@ -74,14 +74,14 @@ class SettingController extends CommonController
 
     //新增职务
     public function addRoleAction(){
-        $this->checkLogin('admin_setting_addRole');
+        $this->checkLogin('admin_setting_adminCategory');
         $role = $this->getAdminCategoryTable();
         if($_POST){
             if(empty($_POST['name']) || $_POST['name'] == '超级管理员'){
-                $this->ajaxReturn(0,'职务名称不能为空或超级管理员！');
+                $this->ajaxReturn(10000,'职务名称不能为空或超级管理员！');
             }
             if(empty($_POST['actionLists'])){
-                $this->ajaxReturn(0,'权限菜单不能为空！');
+                $this->ajaxReturn(10000,'权限菜单不能为空！');
             }
             $actionList = array_unique(explode('|',implode('|',$_POST['actionLists'])));
             $_POST['actionList'] =  implode('|',$actionList);
@@ -95,9 +95,9 @@ class SettingController extends CommonController
             $res = $role->addData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'adminCategory']);
-                $this->ajaxReturn(1,'添加成功！',$url);
+                $this->ajaxReturn(0,'添加成功！',$url);
             }else{
-                $this->ajaxReturn(0,'添加失败！');
+                $this->ajaxReturn(10000,'添加失败！');
             }
         }
         $action = $this->getModuleTable();
@@ -110,16 +110,16 @@ class SettingController extends CommonController
 
     //查看职务详情
     public function viewRoleAction(){
-        $this->checkLogin('admin_setting_viewRole');
+        $this->checkLogin('admin_setting_adminCategory');
         $roleId = $this->params('id');
         $role = $this->getAdminCategoryTable();
         $role->id = $roleId;
         if($_POST){
             if(empty($_POST['name']) || $_POST['name'] == '超级管理员'){
-                $this->ajaxReturn(0,'职务名称不能为空或超级管理员！');
+                $this->ajaxReturn(10000,'职务名称不能为空或超级管理员！');
             }
             if(empty($_POST['actionLists'])){
-                $this->ajaxReturn(0,'权限菜单不能为空！');
+                $this->ajaxReturn(10000,'权限菜单不能为空！');
             }
             $actionList = array_unique(explode('|',implode('|',$_POST['actionLists'])));
             $_POST['actionList'] =  implode('|',$actionList);
@@ -133,9 +133,9 @@ class SettingController extends CommonController
             $res = $role->updateData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'adminCategory']);
-                $this->ajaxReturn(1,'修改成功！',$url);
+                $this->ajaxReturn(0,'修改成功！',$url);
             }else{
-                $this->ajaxReturn(0,'修改失败！');
+                $this->ajaxReturn(10000,'修改失败！');
             }
         }
         $roleInfo = $role->getDetails();
@@ -150,7 +150,7 @@ class SettingController extends CommonController
     
     //删除职务
     public function deleteRoleAction(){
-        $this->checkLogin('admin_setting_deleteRole');
+        $this->checkLogin('admin_setting_adminCategory');
         $roleId = $_POST['id'];
         $admin = $this->getAdminTable();
         $admin->adminCategoryId = $roleId;
@@ -175,33 +175,33 @@ class SettingController extends CommonController
         $admin = $this->getAdminTable();
         if($_POST){
             if(empty($_POST['realName'])){
-                $this->ajaxReturn(0,'姓名不能为空！');
+                $this->ajaxReturn(10000,'姓名不能为空！');
             }
             if(empty($_POST['mobile'])){
-                $this->ajaxReturn(0,'手机号码不能为空！');
+                $this->ajaxReturn(10000,'手机号码不能为空！');
             }
             if(empty($_POST['name'])){
-                $this->ajaxReturn(0,'登录帐号不能为空！');
+                $this->ajaxReturn(10000,'登录帐号不能为空！');
             }
             if(empty($_POST['password'])){
-                $this->ajaxReturn(0,'密码不能为空！');
+                $this->ajaxReturn(10000,'密码不能为空！');
             }
             if(empty($_POST['repassword'])){
-                $this->ajaxReturn(0,'确认密码不能为空！');
+                $this->ajaxReturn(10000,'确认密码不能为空！');
             }
             if(empty($_POST['adminCategoryId'])){
-                $this->ajaxReturn(0,'职务不能为空！');
+                $this->ajaxReturn(10000,'职务不能为空！');
             }
             if($_POST['password'] != $_POST['repassword']){
-                $this->ajaxReturn(0,'两次密码不一致！');
+                $this->ajaxReturn(10000,'两次密码不一致！');
             }
             $admin->mobile = $_POST['mobile'];
             $admin->name = $_POST['name'];
             if($admin->queryName()){
-                $this->ajaxReturn(0,'登录帐号已存在！');
+                $this->ajaxReturn(10000,'登录帐号已存在！');
             }
             if($admin->queryMobile()){
-                $this->ajaxReturn(0,'手机号码已被绑定！');
+                $this->ajaxReturn(10000,'手机号码已被绑定！');
             }
             foreach ($_POST as $k=> $v)
             {
@@ -213,9 +213,9 @@ class SettingController extends CommonController
             $res = $admin->addData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'adminList']);
-                $this->ajaxReturn(1,'添加成功！',$url);
+                $this->ajaxReturn(0,'添加成功！',$url);
             }else{
-                $this->ajaxReturn(0,'添加失败！');
+                $this->ajaxReturn(10000,'添加失败！');
             }
         }
         $role = $this->getAdminCategoryTable();
@@ -237,24 +237,24 @@ class SettingController extends CommonController
         $adminInfo = $admin->getDetails();
         if($_POST){
             if(empty($_POST['realName'])){
-                $this->ajaxReturn(0,'姓名不能为空！');
+                $this->ajaxReturn(10000,'姓名不能为空！');
             }
             if(empty($_POST['mobile'])){
-                $this->ajaxReturn(0,'手机号码不能为空！');
+                $this->ajaxReturn(10000,'手机号码不能为空！');
             }
             if(empty($_POST['name'])){
-                $this->ajaxReturn(0,'登录帐号不能为空！');
+                $this->ajaxReturn(10000,'登录帐号不能为空！');
             }
             if(empty($_POST['adminCategoryId'])){
-                $this->ajaxReturn(0,'职务不能为空！');
+                $this->ajaxReturn(10000,'职务不能为空！');
             }
             $admin->mobile = $_POST['mobile'];
             $admin->name = $_POST['name'];
             if($admin->queryName()){
-                $this->ajaxReturn(0,'登录帐号已存在！');
+                $this->ajaxReturn(10000,'登录帐号已存在！');
             }
             if($admin->queryMobile()){
-                $this->ajaxReturn(0,'手机号码已被绑定！');
+                $this->ajaxReturn(10000,'手机号码已被绑定！');
             }
             foreach ($_POST as $k=> $v)
             {
@@ -266,9 +266,9 @@ class SettingController extends CommonController
             $res = $admin->updateData();
             if($res){
                 $url = $this->url()->fromRoute('admin-setting',['action'=>'adminList']);
-                $this->ajaxReturn(1,'修改成功！',$url);
+                $this->ajaxReturn(0,'修改成功！',$url);
             }else{
-                $this->ajaxReturn(0,'修改失败！');
+                $this->ajaxReturn(10000,'修改失败！');
             }
         }
         $role = $this->getAdminCategoryTable();
@@ -285,6 +285,7 @@ class SettingController extends CommonController
     //协议管理
     public function agreementAction()
     {
+        $this->checkLogin('admin_setting_agreement');
         $setup = $this->getSetupTable();
         $setup->id = 1;
         if($_POST){
@@ -313,6 +314,7 @@ class SettingController extends CommonController
     //隐私协议
     public function privacyAgreementAction()
     {
+        $this->checkLogin('admin_setting_privacyAgreement');
         $setup = $this->getSetupTable();
         $setup->id = 2;
         if($_POST){

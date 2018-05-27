@@ -220,7 +220,7 @@ class BusinessController extends CommonController
 
     //导航删除
     public function navigationDelAction(){
-        $this->checkLogin('admin_business_index');
+        $this->checkLogin('admin_business_navigation');
         $navigation_id = $_POST['id'];
         $navigation = $this->getNavigationTable();
         $navigation->type = 1;
@@ -236,7 +236,7 @@ class BusinessController extends CommonController
 
     //新增导航
     public function navigationAddAction(){
-        $this->checkLogin('admin_business_index');
+        $this->checkLogin('admin_business_navigation');
         $request = $this->getRequest();
         $navigation = $this->getNavigationTable();
         $post = $request->getPost()->toArray();
@@ -316,7 +316,7 @@ class BusinessController extends CommonController
 
     //导航详情
     public function navigationDetailsAction(){
-        $this->checkLogin('admin_business_index');
+        $this->checkLogin('admin_business_navigation');
         $request = $this->getRequest();
         $navigation_id = $this->params('id');
         $navigationView = $this->getViewNavigationTable();

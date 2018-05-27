@@ -54,7 +54,7 @@ class IndexController extends CommonController
 
     public function indexAction()
     {
-        $this->checkLogin('admin_index_index');
+//        $this->checkLogin('admin_index_index');
         $view = new ViewModel();
         $view->setTemplate("admin/index/index");
         return $this->setMenu($view);
@@ -126,7 +126,7 @@ class IndexController extends CommonController
     //修改密码
     public function changePasswordAction()
     {
-        $this->checkLogin('admin_index_changePassword');
+//        $this->checkLogin('admin_index_changePassword');
         if ($_POST) {
             if (!$_POST['oldpassword']) {
                 $this->ajaxReturn(0, '请输入旧密码！');
