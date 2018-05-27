@@ -54,8 +54,10 @@ class IndexController extends CommonController
 
     public function indexAction()
     {
-//        $this->checkLogin('admin_index_index');
-        $view = new ViewModel();
+        $this->checkLogin('admin_index_index');
+        $UserTable = $this->getUserTable();
+        $result = $UserTable->getAllData();
+        $view = new ViewModel(['data'=>$result]);
         $view->setTemplate("admin/index/index");
         return $this->setMenu($view);
     }

@@ -810,7 +810,7 @@ class CommonController extends Table
                 $url = $this->url()->fromRoute('admin',['action'=>'login']);
                 $this->showMessage('该帐号已被删除或禁用！',false,$url);
             }
-			if(!$this->admin_priv($action_list)){
+			if(!$this->admin_priv($action_list) && $action_list !== 'admin_index_index'){
 				echo "<script>alert('对不起，你无此操作权限！！');history.back(-1);</script>";
 				exit();
 			}

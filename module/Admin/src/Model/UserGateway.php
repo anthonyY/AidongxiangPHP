@@ -1,5 +1,6 @@
 <?php
 namespace Admin\Model;
+use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Where;
 
 /**
@@ -177,5 +178,43 @@ class UserGateway extends BaseGateway {
         }
         $this->update(['password'=>$this->password],['id'=>$user_info->id]);
         return ['s'=>STATUS_SUCCESS];
+    }
+
+    /**
+     * 获取各对象总数
+     * @return array
+     */
+    public function getAllData()
+    {
+        $data = [
+            'totalUser' => 0,
+            'totalVideo' => 0,
+            'totalAudio' => 0,
+            'totalMicroblog' => 0,
+            'totalArticle' => 0,
+            'totalComment' => 0,
+        ];
+        $audio = new AudioGateway($this->adapter);
+        $microblog = new MicroblogGateway($this->adapter);
+        $article = new ArticleGateway($this->adapter);
+        $comment = new CommentGateway($this->adapter);
+        $res = $this->getOne(['delete'=>DELETE_FALSE],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalUser'] = $res['sum_total'];
+
+        $res = $audio->getOne(['delete'=>DELETE_FALSE,'type'=>1],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalVideo'] = $res['sum_total'];
+
+        $res = $audio->getOne(['delete'=>DELETE_FALSE,'type'=>2],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalAudio'] = $res['sum_total'];
+
+        $res = $microblog->getOne(['delete'=>DELETE_FALSE],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalMicroblog'] = $res['sum_total'];
+
+        $res = $article->getOne(['delete'=>DELETE_FALSE],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalArticle'] = $res['sum_total'];
+
+        $res = $comment->getOne(['delete'=>DELETE_FALSE],[new Expression('SUM(1) AS sum_total')]);
+        if(isset($res['sum_total']) && $res['sum_total'] > 0)$data['totalComment'] = $res['sum_total'];
+        return $data;
     }
 }

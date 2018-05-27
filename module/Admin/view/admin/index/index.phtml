@@ -1,1 +1,134 @@
-test
+<style type="text/css" href="">
+    textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+        background-color: #ffffff;
+        border: none;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        -webkit-transition: none;
+        -moz-transition: none;
+        -ms-transition: none;
+        -o-transition: none;
+        transition: none;
+        margin-bottom: 0;
+    }
+    .text input[type="text"]{
+        display: inline-block;
+        height: 100%;
+        padding: 0;
+        font-size: 14px;
+        width: 100%;
+        background: #f2f2f2;
+        text-align: center;
+    }
+    .index_content{
+        border: 1px solid #ddd;
+        height:200px;
+        background-color: #fbfbfb;
+    }
+
+    .index_content p{
+        margin: 20px 30px;
+        font-size: 16px;
+    }
+    .index_content ul{
+        height:60px;
+        margin-left: 30px;
+        margin-top: 100px;
+    }
+    .index_content ul li{
+        float: left;
+        margin-right: 70px;
+        font-size: 14px;
+    }
+    .index_attention{
+        border: 1px solid #ddd;
+        /*height:200px;*/
+        background-color: #fbfbfb;
+    }
+    .index_attention p{
+        border-bottom: 1px solid #ddd;
+        padding: 10px 30px;
+        font-size: 16px;
+    }
+    .index_attention ol{
+        height: 100px;
+        margin-left: 30px;
+    }
+    .breadcrumb li{
+        width: 100%;
+    }
+    .breadcrumb p{
+        width: 50%;
+        margin-bottom: 0px;
+        float: left;
+        font-size: 14px;
+    }
+    .breadcrumb div{
+        width: 50%;
+        float: right;
+        text-align: right;
+
+    }
+</style>
+<script type="text/javascript" src="<?php echo $this->basePath();?>/adminStyle/template/js/thescript.js"></script>
+<article class="pannel-body">
+
+    <section class="bs-example4 mt20">
+        <div class="table-responsive">
+            <div class="index_content">
+                <table class="table table-bordered">
+                    <tbody class="departmentlist">
+                    <tr class="text">
+                        <td>注册用户：<?php echo $data['totalUser']?></td>
+                        <td>视频总数：<?php echo $data['totalVideo']?></td>
+                        <td>音频总数：<?php echo $data['totalAudio']?></td>
+                    </tr>
+                    <tr class="text">
+                        <td>微博总数：<?php echo $data['totalMicroblog']?></td>
+                        <td>资讯总数：<?php echo $data['totalArticle']?></td>
+                        <td>评论总数：<?php echo $data['totalComment']?></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="bs-example4 mt20">
+        <div class="table-responsive">
+            <div class="index_attention">
+                <p><i class="glyphicon icon-info-sign"></i><span style="margin-left: 10px;">注意事项：</span></p>
+                <ol>
+                    <li>1、未经允许，不许泄露登录密码；</li>
+                    <li>2、操作请严格按照流程</li>
+                    <li>3、如有任何疑问，请联系超级管理员！</li>
+                </ol>
+            </div>
+
+        </div>
+    </section>
+</article>
+<script type="text/javascript">
+    $('.add-btn').bind('click',function() {
+        $('tbody').find('tr:last').find('input[type=text]').attr("disabled","disabled").css({"cursor":"default","background":"#fff"});
+        var i ='<tr class="text"><td style="display: none;"><input type="hidden" /></td><td><input class="input_txt" type="text" placeholder="请输入年级"></td><td style="width: 150px;"><input class="btn btn-info compile-btn" type="button" data-status="1" value="编辑" onclick="deleteRow(this)"></td></tr>';
+        $(this).parents('section').siblings('section').find('tbody').append(i);
+    });
+    function deleteRow(r)
+    {
+        $(r).parents('td').siblings('td').find('input').removeAttr('disabled').css({'cursor':'text','background':'#f2f2f2'});
+    };
+    // 初始化刷新不可编辑
+    $(function(){
+        $('tbody select').attr("disabled","disabled").css({"cursor":"default","background":"#fff"});
+        $('tbody input[type=text]').attr("disabled","disabled").css({"cursor":"default","background":"#fff"});
+    });
+    $('.btn-primary').click(function(){
+        $('tbody').find('tr').find('input[type=text]').attr("disabled","disabled").css({"cursor":"default","background":"#fff"});
+    });
+</script>
