@@ -33,7 +33,7 @@ class UserRegister extends User
         if($action == 2)
         {
             //第三方注册绑定参数判断
-            if((!$request->unionId && !$request->openId) || !$request->partner || !in_array($request->partner,array(1,2)))
+            if((!$request->unionId && !$request->openId) || !$request->partner || !in_array($request->partner,array(1,2,3)))
             {
                 return STATUS_PARAMETERS_CONDITIONAL_ERROR;
             }
