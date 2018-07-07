@@ -35,7 +35,7 @@ class UserPartnerLogin extends User
             if(isset($request->$v) && $request->$v) $user_partner_table->$v = $request->$v;
         }
 
-        if((!$user_partner_table->unionId && !$user_partner_table->openId) || !$user_partner_table->partner  || !in_array($request->partner,array(1,2)))
+        if((!$user_partner_table->unionId && !$user_partner_table->openId) || !$user_partner_table->partner  || !in_array($request->partner,array(1,2,3)))
         {
             return STATUS_PARAMETERS_CONDITIONAL_ERROR;
         }
