@@ -182,6 +182,21 @@
                     ],
                 ],
 
+                //管理模块
+                'admin-wechat' => [
+                    'type'    => Segment::class,
+                    'options' => ['route' => MODULE_ADMIN . '/wechat[/a:action][/p:page][/i:id]',
+                        'constraints' => array(
+                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'page' => '[0-9]+'
+                        ),
+                        'defaults' => [
+                            'controller' => Controller\WechatController::class,
+                            'action'     => 'index',
+                        ],
+                    ],
+                ],
             ],
         ],
         'controller_plugins' => array(
@@ -202,6 +217,7 @@
                 Controller\UserController::class => InvokableFactory::class,
                 Controller\VideoController::class => InvokableFactory::class,
                 Controller\CosController::class => InvokableFactory::class,
+                Controller\WechatController::class => InvokableFactory::class,
             ],
         ],
         'view_manager' => [
