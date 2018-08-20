@@ -36,17 +36,27 @@ class WechatController extends CommonController
             case 'event':
                 $event = $this->wechat->getRevEvent();
                 if($event && isset($event['event'])){
-                    $path = UPLOAD_PATH;
-                    $file = $this->createQrcodeByLink('http://baidu.com',$path);
-                    if(!$file)$this->wechat->text('生成二维码失败')->reply();
-                    $res = $this->uploadMedia($file);
-                    if(!$res)$this->wechat->text('上传素材失败')->reply();
+                    //点击事件
                     if($event['event'] === 'CLICK' && $event['key'] === 'V1001_spread'){
+                        $path = UPLOAD_PATH;
+                        $file = $this->createQrcodeByLink('http://baidu.com',$path);
+                        if(!$file)$this->wechat->text('生成二维码失败')->reply();
+                        $res = $this->uploadMedia($file);
+                        if(!$res)$this->wechat->text('上传素材失败')->reply();
                         $this->wechat->image($res['media_id'])->reply();
+                    }
+
+                    //关注事件
+                    if($event['event'] === 'subscribe'){
+                        $fromUser = $this->wechat->getRev()->getRevFrom();
+                        if($fromUser){
+                            $this->wechat->text('用户的OPENID是：'.$fromUser)->reply();
+                        }
                     }
                 }
                 break;
         }
+        die("SUCCESS");
     }
 
     /**
