@@ -407,7 +407,7 @@ class SMSCode extends User
 //                $result = $push->pushSingleDevice($mobile, 16, $code);
                 $sms = new SmsSingleSender(SMS_APP_ID,SMS_APP_KEY);
                 $result = $sms->sendWithParam("86", $mobile, SMS_TEMPLATE_ID,
-                    [$code], SMS_SIGN, "", "");
+                    [$code,SMSCODE_EXPIRE."秒"], SMS_SIGN, "", "");
                 $result = json_decode($result,true);
                 $return = (isset($result['result']) && $result['result'] == 0) ? true : false;
             }

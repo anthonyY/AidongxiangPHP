@@ -147,7 +147,7 @@ define('SMS_APP_ID','1400146703');// 1400开头
 define('SMS_APP_KEY','94a5f3ebc413007299986f87d0a3d1ce');
 
 // 短信模板ID，需要在短信应用中申请
-define('SMS_TEMPLATE_ID',203303);// NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
+define('SMS_TEMPLATE_ID',205115);// NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
 
 // 签名
 define('SMS_SIGN' ,"苗侗风情"); // NOTE: 这里的签名只是示例，请使用真实的已申请的签名，签名参数使用的是`签名内容`，而不是`签名ID`
