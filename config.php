@@ -23,10 +23,10 @@ define('MODULE_ADMINWAP', 'adminwap.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '
 define('MODULE_WWW', 'www.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/www');
 define('SITE_URL', 'http://'.$_SERVER['SERVER_NAME']);
 
-define("DB_HOST", '139.199.14.52');     //数据链接IP
-define("DB_NAME", 'test_aidongxiang');     //数据库名
+define("DB_HOST", '127.0.0.1');     //数据链接IP
+define("DB_NAME", 'aidongxiang');     //数据库名
 define("DB_USER", 'root');     //数据库用户名
-define("DB_PASSWORD", '159753ysa');//192.168.1.14数据库密码
+define("DB_PASSWORD", '');//192.168.1.14数据库密码
 define("DB_PREFIX", 'adx_');     //数据表前缀
 define("DB_CHARSET", 'utf8mb4'); // 数据库编码utf8mb4
 define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
@@ -122,7 +122,7 @@ define('PUSH_LOG_SWITCH' , true);
  * false：不发送短信，都反馈发送成功
  * @var true|false
  */
-define('SMSCODE_SWITCH' , false);
+define('SMSCODE_SWITCH' , true);
 /**
  * true：验证短信，false：短信验证（无论输什么）都会通过。
  * @var true|false
@@ -139,6 +139,18 @@ define('SMSCODE_EXPIRE' , 60);
  * @var boolen
  */
 define('QUICK_SMSCODE_SWITCH', false);
+
+// 短信应用SDK AppID
+define('SMS_APP_ID','1400146703');// 1400开头
+
+// 短信应用SDK AppKey
+define('SMS_APP_KEY','94a5f3ebc413007299986f87d0a3d1ce');
+
+// 短信模板ID，需要在短信应用中申请
+define('SMS_TEMPLATE_ID',203303);// NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
+
+// 签名
+define('SMS_SIGN' ,"苗侗风情"); // NOTE: 这里的签名只是示例，请使用真实的已申请的签名，签名参数使用的是`签名内容`，而不是`签名ID`
 
 /**
  * 客天下API API加密KEY

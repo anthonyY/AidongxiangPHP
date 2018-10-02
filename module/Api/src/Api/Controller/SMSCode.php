@@ -4,6 +4,7 @@ namespace Api\Controller;
 use AiiLibrary\AiiUtility\AiiPush\AiiMyFile;
 use Api\Controller\Request\SMSCodeRequest;
 use AiiLibrary\AiiUtility\AiiPush\AiiPush;
+use Qcloud\Sms\SmsSingleSender;
 use Zend\Db\Sql\Where;
 
 /**
@@ -172,7 +173,7 @@ class SMSCode extends User
                 }
             }
             // 短信内容
-            $res = $this->smsPush("{$code}为您的登录验证码，请于10分钟内填写。如非本人操作，请忽略本短信。", $request->mobile); // 发送
+            $res = $this->smsPush($code, $request->mobile); // 发送
             if(!$res){
                 return STATUS_UNKNOWN;
             }
@@ -391,20 +392,24 @@ class SMSCode extends User
     }*/
 
     /**
-     * @param $content
+     * @param $code
      * @param $mobile
      * @return bool
      */
-    public function smsPush($content, $mobile)
+    public function smsPush($code, $mobile)
     {
-        $push = new AiiPush();
+//        $push = new AiiPush();
         $return = false;
         if (SMSCODE_SWITCH)
         {
             if ($mobile)
             {
-                $result = $push->pushSingleDevice($mobile, 16, $content);
-                $return = (isset($result['success']) && $result['success']) ? true : false;
+//                $result = $push->pushSingleDevice($mobile, 16, $code);
+                $sms = new SmsSingleSender(SMS_APP_ID,SMS_APP_KEY);
+                $result = $sms->sendWithParam("86", $mobile, SMS_TEMPLATE_ID,
+                    [$code], SMS_SIGN, "", "");
+                $result = json_decode($result,true);
+                $return = (isset($result['result']) && $result['result'] == 0) ? true : false;
             }
         }
         else
@@ -418,16 +423,16 @@ class SMSCode extends User
             {
                 if ($result)
                 {
-                    $temp = '短信，短信发送成功， mobile：' . $mobile . '，content：' . $content;
+                    $temp = '短信，短信发送成功， mobile：' . $mobile . '，code：' . $code;
                 }
                 else
                 {
-                    $temp = '短信，短信发送失败不能进行验证， mobile：' . $mobile . '，content：' . $content;
+                    $temp = '短信，短信发送失败不能进行验证， mobile：' . $mobile . '，code：' . $code;
                 }
             }
             else
             {
-                $temp = '短信，没有开启短信发送，mobile：' . $mobile . '，content：' . $content;
+                $temp = '短信，没有开启短信发送，mobile：' . $mobile . '，code：' . $code;
             }
             $myfile = new AiiMyFile();
             $myfile->setFileToPublicLog()->putAtStart($temp);

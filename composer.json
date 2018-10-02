@@ -29,7 +29,8 @@
         "zendframework/zend-servicemanager-di": "^1.0",
         "zendframework/zend-captcha": "^2.7",
         "zendframework/zend-paginator": "^2.7",
-        "qcloud/cos-sdk-v4": ">=1.0"
+        "qcloud/cos-sdk-v4": ">=1.0",
+        "qcloudsms/qcloudsms_php": "^0.1.4"
     },
     "autoload": {
         "psr-4": {
