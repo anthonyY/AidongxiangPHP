@@ -273,9 +273,9 @@
                 var files = e.target.files[0];
                 var file_name = files.name;
                 var path = '/video/full/'+output+'/'+file_name;
-                //console.log(files);
-                if(files.type != 'video/mp4'){
-                    layer.msg('请选择mp4文件');
+                console.log(files);
+                if(files.type != 'video/mp4' && files.type != 'video/avi'){
+                    layer.msg('请选择mp4/avi文件');
                     return false;
                 }
                 if(files && files.size > 0){
@@ -299,9 +299,9 @@
                 var files = e.target.files[0];
                 var file_name = files.name;
                 var path = '/video/auditions/'+output+'/'+file_name;
-                //console.log(files);
-                if(files.type != 'video/mp4'){
-                    layer.msg('请选择mp4文件');
+                console.log(files);
+                if(files.type != 'video/mp4' && files.type != 'video/avi'){
+                    layer.msg('请选择mp4/avi文件');
                     return false;
                 }
                 if(files && files.size > 0){

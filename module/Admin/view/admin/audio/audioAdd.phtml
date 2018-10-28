@@ -299,7 +299,7 @@
                 var files = e.target.files[0];
                 var file_name = files.name;
                 var path = '/audio/auditions/'+output+'/'+file_name;
-                //console.log(files);
+                console.log(files);
                 if(files.type != 'audio/mp3'){
                     layer.msg('请选择mp3文件');
                     return false;
