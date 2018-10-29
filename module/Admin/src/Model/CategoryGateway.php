@@ -209,7 +209,7 @@ class CategoryGateway extends BaseGateway {
             return ['s'=>10000,'d'=>'参数错误'];
         }
         $audio = new AudioGateway($this->adapter);
-        $video_exist = $audio->getOne(['category_id'=>$this->id]);
+        $video_exist = $audio->getOne(['delete'=>DELETE_FALSE,'category_id'=>$this->id]);
         if($video_exist)
         {
             return ['s'=>10000,'d'=>'该分类下还有视频，不能删除'];
@@ -233,7 +233,7 @@ class CategoryGateway extends BaseGateway {
             return ['s'=>10000,'d'=>'参数错误'];
         }
         $audio = new AudioGateway($this->adapter);
-        $video_exist = $audio->getOne(['category_id'=>$this->id]);
+        $video_exist = $audio->getOne(['delete'=>DELETE_FALSE,'category_id'=>$this->id]);
         if($video_exist)
         {
             return ['s'=>10000,'d'=>'该分类下还有音频，不能删除'];
@@ -257,7 +257,7 @@ class CategoryGateway extends BaseGateway {
             return ['s'=>10000,'d'=>'参数错误'];
         }
         $article = new ArticleGateway($this->adapter);
-        $article_exist = $article->getOne(['category_id'=>$this->id]);
+        $article_exist = $article->getOne(['delete'=>DELETE_FALSE,'category_id'=>$this->id]);
         if($article_exist)
         {
             return ['s'=>10000,'d'=>'该分类下还有资讯，不能删除'];
