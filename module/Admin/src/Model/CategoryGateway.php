@@ -214,7 +214,7 @@ class CategoryGateway extends BaseGateway {
         {
             return ['s'=>10000,'d'=>'该分类下还有视频，不能删除'];
         }
-        $this->delete = 1;
+        $this->delete = DELETE_TRUE;
         if($this->updateData())
         {
             return ['s'=>0,'d'=>'操作成功'];
@@ -238,7 +238,7 @@ class CategoryGateway extends BaseGateway {
         {
             return ['s'=>10000,'d'=>'该分类下还有音频，不能删除'];
         }
-        $this->delete = 1;
+        $this->delete = DELETE_TRUE;
         if($this->updateData())
         {
             return ['s'=>0,'d'=>'操作成功'];
@@ -262,7 +262,7 @@ class CategoryGateway extends BaseGateway {
         {
             return ['s'=>10000,'d'=>'该分类下还有资讯，不能删除'];
         }
-        $this->delete = 1;
+        $this->delete = DELETE_TRUE;
         if($this->updateData())
         {
             return ['s'=>0,'d'=>'操作成功'];
