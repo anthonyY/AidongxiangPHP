@@ -60,6 +60,13 @@ class AudioDetails extends CommonController
             'audioLength' => $details->pay_type==2?($isBuy==2?$details->audio_length:$details->auditions_length):$details->audio_length,
         );
 
+        if($details->pay_type == 2 || $isBuy == 2){
+            $AudioTable = $this->getAudioTable();
+            $AudioTable->id = $id;
+            $AudioTable->playNum = $details->play_num + 1;
+            if($AudioTable->updateData())$audio['playNum'] = $details->play_num + 1;
+        }
+
         $praiseTable = $this->getPraiseTable();
         $praiseTable->userId = $this->getUserId();
         $praiseTable->type = 1;
