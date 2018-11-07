@@ -60,7 +60,7 @@ class AudioDetails extends CommonController
             'audioLength' => $details->pay_type==2?($isBuy==2?$details->audio_length:$details->auditions_length):$details->audio_length,
         );
 
-        if($details->pay_type == 2 || $isBuy == 2){
+        if($details->pay_type == 1 || $isBuy == 2){//免费的或者已购买的（观看完整视频才增加播放量）
             $AudioTable = $this->getAudioTable();
             $AudioTable->id = $id;
             $AudioTable->playNum = $details->play_num + 1;
