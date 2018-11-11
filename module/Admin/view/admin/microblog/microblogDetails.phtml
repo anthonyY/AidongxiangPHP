@@ -103,7 +103,7 @@
                 <div>
                     <?php foreach ($image_list as $v) {?>
                         <div style="display: inline-block;">
-                            <img src="<?php echo UPLOADFILIS_ROOT.$v['path'].$v['filename'] ?>"  width = '100px'>
+                            <img src="<?php echo strpos($v['filename'],'http')===false?UPLOADFILIS_ROOT.$v['path'].$v['filename']:$v['filename'] ?>"  width = '100px'>
                         </div>
                     <?php }?>
                 </div>
