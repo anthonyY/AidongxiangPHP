@@ -223,6 +223,7 @@ class MicroblogList extends CommonController
                     $praiseTable->fromId = $v->from_id;
                     $praise_res = $praiseTable->checkUserPraise();
                     if($praise_res)$item['isPraise'] = 2;
+                    $list[] = $item;
                 }
             }
         }
