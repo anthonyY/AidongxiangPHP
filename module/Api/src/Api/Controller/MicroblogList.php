@@ -55,6 +55,10 @@ class MicroblogList extends CommonController
                 $user_id = $this->getUserId();
             }
         }
+        if($action == 2){
+            $user_id = $this->getUserId();
+            $user_id = $user_id ? $user_id : 0;
+        }
         $list = array();
         $user_table = $this->getUserTable();
         $image = $this->getImageTable();
