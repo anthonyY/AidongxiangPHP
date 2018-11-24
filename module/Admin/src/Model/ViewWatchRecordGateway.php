@@ -176,7 +176,7 @@ class ViewWatchRecordGateway extends BaseGateway {
         $where = new Where();
         $where->equalTo('delete',DELETE_FALSE)->equalTo('user_id',$this->userId);
         if($this->audioType)$where->equalTo('audio_type',$this->audioType);
-        return $this->getAll();
+        return $this->getAll($where);
     }
 
 }
