@@ -99,7 +99,8 @@
                     <a class="btn btn-xs btn-info" id="full_audio_upload">上完整音频</a>
                     &nbsp;|--文件地址：<span id="full_path_span"><input type="text" readonly id="full_path" name="full_path"  /></span>
                     |--时长：<span id="audio_length_spans"><input type="text" style="width: 80px;" readonly id="audio_length" name="audio_length"></span>
-                    |--进度 <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                    |--进度 <p id="full-progress-p" style="display: inline-block;width: 100px;"><span id="full-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p> <span class="full-progress-loading"> <b></b> <img
+                                src="/adminStyle/images/loading/5-121204194110-52.gif" alt="" style="display: none"></span>
                 </div>
             </div>
         </div>
@@ -113,7 +114,8 @@
                     <a class="btn btn-xs btn-info" id="auditions_audio_upload">上传试播音频</a>
                     &nbsp;|--文件地址：<span id="auditions_path_span"><input type="text" readonly id="auditions_path" name="auditions_path"  /></span>
                     |--时长：<span id="auditions_length_span"><input type="text" style="width: 80px;" readonly id="auditions_length" name="auditions_length"></span>
-                    |--进度 <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p>
+                    |--进度 <p id="auditions-progress-p" style="display: inline-block;width: 100px;"><span id="auditions-progress-span" style="display:inline-block;width: 0%;height: 20px;background: darkgrey;margin-bottom: -5px;"></span></p> <span class="auditions-progress-loading"> <b></b> <img
+                                src="/adminStyle/images/loading/5-121204194110-52.gif" alt="" style="display: none"></span>
                 </div>
             </div>
         </div>
@@ -225,6 +227,8 @@
             //加入到隐藏audio标签
             $("#auditions_path_span").append("<audio id='auditions_audio' src="+data+"></audio>");
             getTime(2);
+            $('.auditions-progress-loading img').hide();
+            $('#auditions_audio_upload').attr("disabled",false);
         };
 
         var fullSuccessCallBack = function (result) {
@@ -238,6 +242,8 @@
             //加入到隐藏audio标签
             $("#full_path_span").append("<audio id='full_audio' src="+data+"></audio>");
             getTime(1);
+            $('.full-progress-loading img').hide();
+            $('#full_audio_upload').attr("disabled",false);
         };
 
 
@@ -249,6 +255,8 @@
             //$("#result").val(result.responseText || 'error');
             console.log(result.message);
             // $('#full-progress-p').hide();
+            $('.full-progress-loading img').hide();
+            $('#full_audio_upload').attr("disabled",false);
             layer.msg('完整音频上传失败');
         };
 
@@ -257,15 +265,19 @@
             //$("#result").val(result.responseText || 'error');
             console.log(result.message);
             // $('#auditions-progress-p').hide();
+            $('.auditions-progress-loading img').hide();
+            $('#auditions_audio_upload').attr("disabled",false);
             layer.msg('试播音频上传失败');
         };
 
         var fullProgressCallBack = function(curr){
             $('#full-progress-p span').css('width',(curr*100)+'%');
+            $('.full-progress-loading b').html((curr.toFixed(4))*100+'%');
         };
 
         var auditionsProgressCallBack = function(curr){
             $('#auditions-progress-p span').css('width',(curr*100)+'%');
+            $('.auditions-progress-loading b').html((curr.toFixed(4))*100+'%');
         };
 
         $('#full_audio_upload').on('click', function () {
@@ -279,6 +291,8 @@
                     return false;
                 }
                 if(files && files.size > 0){
+                    $('#full_audio_upload').attr("disabled",true);
+                    $('.full-progress-loading img').show();
                     $('#size').val(files.size);
                     $('#filename').val(file_name);
                     //开始上传
@@ -287,6 +301,12 @@
                     layer.msg('请选择上传文件');
                 }
             })
+
+            if($(this).attr('disabled') == 'disabled'){
+                layer.msg('文件正在拼命上传，请耐心等候！');
+                return false;
+            }
+
             setTimeout(function () {
                 $('#full_audio_input').click();
             }, 0);
@@ -305,12 +325,20 @@
                     return false;
                 }
                 if(files && files.size > 0){
+                    $('#auditions_audio_upload').attr("disabled",true);
+                    $('.auditions-progress-loading img').show();
                     //开始上传
                     cos.sliceUploadFile(auditionsSuccessCallBack, auditionsErrorCallBack, auditionsProgressCallBack,bucket,path,files,0);
                 }else{
                     layer.msg('请选择上传文件');
                 }
             })
+
+            if($(this).attr('disabled') == 'disabled'){
+                layer.msg('文件正在拼命上传，请耐心等候！');
+                return false;
+            }
+
             setTimeout(function () {
                 $('#auditions_audio_input').click();
             }, 0);
