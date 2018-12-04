@@ -151,7 +151,8 @@
     var d = new Date();
     var month = d.getMonth()+1;
     var day = (d.getDate()<10 ? '0' : '') + d.getDate();
-    var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month + day ;
+    // var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month + day ;
+    var output = d.getFullYear() + '' +    (month<10 ? '0' : '') + month;
     jQuery(function($) {
         //腾讯云 获取签名
         var url = '<?php echo $this->url('admin-cos', ['action' => 'getSign'])?>';
