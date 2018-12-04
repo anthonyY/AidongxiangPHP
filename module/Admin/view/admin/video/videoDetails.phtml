@@ -133,7 +133,7 @@
         </div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-2 col-md-9">
-                <button class="btn btn-info" type="submit">
+                <button class="btn btn-info form-submit" type="submit">
                     <i class="ace-icon fa fa-check bigger-110"></i>
                     保存
                 </button>
@@ -239,7 +239,7 @@
             var a = JSON.stringify(result);
             console.log(result);
             //$("#result").val(JSON.stringify(result));
-            layer.msg('完整视频上传成功');
+            layer.msg('完整视频上传成功，5秒后自动提交');
             //加入到隐藏input
             var data = result.data ?  result.data.access_url : "";
             $('#full_path').val(data);
@@ -248,6 +248,10 @@
             getTime(1);
             $('.full-progress-loading img').hide();
             $('#full_video_upload').attr("disabled",false);
+            //自动提交表单
+            setTimeout(function(){
+                $('.form-submit').click();
+            },5000);
         };
 
 

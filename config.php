@@ -23,10 +23,10 @@ define('MODULE_ADMINWAP', 'adminwap.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '
 define('MODULE_WWW', 'www.ktx.com' == $_SERVER['SERVER_NAME'] ? '' : '/www');
 define('SITE_URL', 'http://'.$_SERVER['SERVER_NAME']);
 
-define("DB_HOST", '139.199.14.52');     //数据链接IP
+define("DB_HOST", '127.0.0.1');     //数据链接IP
 define("DB_NAME", 'aidongxiang');     //数据库名
 define("DB_USER", 'root');     //数据库用户名
-define("DB_PASSWORD", '123456');//192.168.1.14数据库密码
+define("DB_PASSWORD", '');//192.168.1.14数据库密码
 define("DB_PREFIX", 'adx_');     //数据表前缀
 define("DB_CHARSET", 'utf8mb4'); // 数据库编码utf8mb4
 define("DB_SET_NAME", 'UTF8MB4'); // 数据库编码UTF8MB4
